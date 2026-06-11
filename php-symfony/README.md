@@ -62,7 +62,13 @@ composer install
 
 **Option A** — Symfony CLI (recommended):
 
-The Symfony CLI automatically loads `.env` and handles routing correctly.
+Create and update `.env` file:
+
+```bash
+cp .env.dist .env
+```
+
+Start the server (Symfony CLI automatically loads `.env` and handles routing correctly):
 
 ```bash
 rm -rf var/log/ var/cache/
@@ -228,7 +234,7 @@ The `sonar-project.properties` in this directory is pre-configured.
 ### GitHub Advanced Security / CodeQL (free for public repos)
 
 No local setup needed — just push to a public GitHub repo.
-The CI workflow at `.github/workflows/php.yml` includes a SonarCloud job.
+The CI workflow at `.github/workflows/ci.yml` includes a SonarCloud job.
 
 To add CodeQL:
 
@@ -240,13 +246,14 @@ To add CodeQL:
 
 Tool                    | Install                | PHP support | CWE-918 | CWE-532 | CWE-396 | Notes
 ------------------------|------------------------|-------------|---------|---------|---------|-------------------------------------------------------------
-**Semgrep OSS**         | `pipx install semgrep` | Yes         | No       | No       | No       | 0 findings with community rules; custom rules required
-**Bearer CLI**          | `apt install bearer`   | Yes         | No       | No       | No       | 0 findings (70 checks run)
+**Semgrep OSS**         | `pipx install semgrep` | Yes         | No      | No      | No      | 0 findings with community rules; custom rules required
+**Bearer CLI**          | `apt install bearer`   | Yes         | No      | No      | No      | 0 findings (70 checks run)
 **Psalm**               | `composer require`     | PHP-only    | —       | —       | —       | Blocked: requires PHP 8.3.16, Ubuntu 24.04 ships 8.3.6
-**SonarQube Community** | Docker                 | Yes         | No       | No       | No       | Only flagged generic RuntimeException (code smell)
+**SonarQube Community** | Docker                 | Yes         | No      | No      | No      | Only flagged generic RuntimeException (code smell)
 **SonarCloud**          | SaaS                   | Yes         | ?       | ?       | ?       | Not yet tested
+**GitLab Ultimate**     | SaaS                   | Yes         | ?       | ?       | ?       | Not yet tested
 **GitHub CodeQL**       | SaaS (GHAS)            | Yes         | ?       | ?       | ?       | Not yet tested
-**PHPStan**             | `composer require`     | PHP-only    | No       | No       | No       | Type checker, not a security SAST — will not find these CWEs
+**PHPStan**             | `composer require`     | PHP-only    | No      | No      | No      | Type checker, not a security SAST — will not find these CWEs
 
 ## Other leads investigated
 
