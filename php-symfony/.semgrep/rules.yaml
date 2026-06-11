@@ -1,0 +1,41 @@
+rules:
+  # ─── SSRF: unvalidated string concatenated into HTTP request URL ──────────────
+  - id: ssrf-url-concatenation
+    patterns:
+      - pattern: $CLIENT->request($METHOD, $BASE . $ENDPOINT, ...)
+      - pattern-not: |
+          $ENDPOINT = filter_var($ENDPOINT, FILTER_VALIDATE_URL);
+          ...
+          $CLIENT->request($METHOD, $BASE . $ENDPOINT, ...)
+    message: >
+      Potential SSRF: '$ENDPOINT' is concatenated into a request URL without
+      validation. An attacker who controls this value can redirect the request
+      to internal hosts (e.g. cloud metadata endpoints).
+    languages: [php]
+    severity: ERROR
+    metadata:
+      cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
+      owasp: "A10:2021 – Server-Side Request Forgery"
+
+  # ─── Sensitive data leaking into log messages ─────────────────────────────────
+  - id: sensitive-data-in-log
+    patterns:
+      - pattern: $LOGGER->$LEVEL(sprintf(..., $E->getMessage()))
+    message: >
+      Exception message logged via sprintf() may expose sensitive values
+      (API keys, tokens) embedded in the exception chain.
+    languages: [php]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-532: Insertion of Sensitive Information into Log File"
+
+  # ─── Overly broad Throwable catch ─────────────────────────────────────────────
+  - id: catch-throwable
+    pattern: "catch (\\Throwable $E) { ... }"
+    message: >
+      Catching \\Throwable swallows PHP Errors (OOM, type errors, etc.), which
+      masks programming bugs. Prefer catching \\Exception or a specific subtype.
+    languages: [php]
+    severity: WARNING
+    metadata:
+      cwe: "CWE-396: Declaration of Catch for Generic Exception"

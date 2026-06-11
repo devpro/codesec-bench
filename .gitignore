@@ -141,3 +141,26 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# PHP
+vendor/
+
+# Symfony
+**/var/cache/
+**/var/log/
+
+# Composer
+composer.lock
+
+# PHPUnit
+.phpunit.result.cache
+coverage/
+
+# Sonar
+.sonar/
+.scannerwork/
+
+# IDE
+.idea/
+.vscode/
+*.swp
