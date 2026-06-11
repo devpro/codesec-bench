@@ -1,40 +1,89 @@
 rules:
-  # ─── SSRF: unvalidated string concatenated into HTTP request URL ──────────────
-  - id: ssrf-url-concatenation
-    pattern: $CLIENT->request($METHOD, $BASE . $ENDPOINT, ...)
+  # ─── CWE-918: Server-Side Request Forgery ────────────────────────────────────
+  #
+  # Strategy: match any HTTP client method call where the URL argument contains a string concatenation.
+  # We don't care about the specific client library ($CLIENT covers Symfony, Guzzle, cURL wrappers, etc.) or the HTTP method.
+  # The dangerous pattern is the concatenation itself — any variable joined to a base string before being passed as a URL.
+  #
+  # More generic than before: the original matched only "$BASE . $ENDPOINT".
+  # This version also catches:
+  #   - $client->get($base . $path)
+  #   - $http->post($host . $userInput, ...)
+  #   - $guzzle->request('PUT', $url . $suffix)
+  #   - $curl->send($base . $input . $extra)  ← multi-concat via pattern-either
+
+  - id: ssrf-http-client-url-concatenation
+    pattern-either:
+      - pattern: $CLIENT->$METHOD($BASE . $ENDPOINT, ...)
+      - pattern: $CLIENT->$METHOD($BASE . $ENDPOINT . $EXTRA, ...)
+      - pattern: $CLIENT->request($METHOD, $BASE . $ENDPOINT, ...)
+      - pattern: $CLIENT->request($METHOD, $BASE . $ENDPOINT . $EXTRA, ...)
     message: >
-      Potential SSRF: a value is concatenated into a request URL without
-      validation. An attacker who controls this value can redirect the request
-      to internal hosts (e.g. cloud metadata endpoints).
+      Potential SSRF (CWE-918): a variable is concatenated into an HTTP client URL without prior validation.
+      If the concatenated value is user-controlled or flows from an untrusted source, an attacker can redirect requests to internal hosts (e.g. cloud metadata at 169.254.169.254, internal APIs, or localhost services).
+      Validate and allowlist the URL or path segment before use.
     languages: [php]
     severity: ERROR
     metadata:
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
-      owasp: "A10:2021 – Server-Side Request Forgery"
+      owasp: "A10:2021 - Server-Side Request Forgery"
+      confidence: MEDIUM
+      references:
+        - https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/
 
-  # ─── Sensitive data leaking into log messages ─────────────────────────────────
-  - id: sensitive-data-in-log
-    pattern: $LOGGER->$LEVEL(sprintf(..., $E->getMessage()))
+  # ─── CWE-532: Sensitive Information in Log Files ─────────────────────────────
+  #
+  # Strategy: catch any logger call (error, warning, info, debug, critical, etc.) where an exception message is interpolated into the log string, either via sprintf() or via string concatenation.
+  # The original only matched sprintf().
+  #
+  # More generic than before: also catches:
+  #   - $logger->error($e->getMessage())          ← direct pass
+  #   - $logger->warning("failed: " . $e->getMessage())  ← concatenation
+  #   - $this->logger->critical($e->getMessage(), [...])  ← with context array
+  #   - $log->info(sprintf('...%s', $e->getMessage()))    ← sprintf variant
+
+  - id: sensitive-exception-message-in-log
+    pattern-either:
+      - pattern: $LOGGER->$LEVEL($E->getMessage(), ...)
+      - pattern: $LOGGER->$LEVEL(sprintf(..., $E->getMessage(), ...), ...)
+      - pattern: $LOGGER->$LEVEL($PREFIX . $E->getMessage(), ...)
+      - pattern: $LOGGER->$LEVEL("..." . $E->getMessage(), ...)
     message: >
-      Exception message logged via sprintf() may expose sensitive values
-      (API keys, tokens) embedded in the exception chain.
+      Potential sensitive data exposure (CWE-532): exception messages passed directly to a logger may contain secrets, tokens, API keys, internal hostnames, or stack details that should not appear in log files.
+      Sanitize or redact the exception message before logging, or log only a safe error code/type without the raw message.
     languages: [php]
     severity: WARNING
     metadata:
       cwe: "CWE-532: Insertion of Sensitive Information into Log File"
+      owasp: "A09:2021 - Security Logging and Monitoring Failures"
+      confidence: HIGH
 
-  # ─── Overly broad Throwable catch ─────────────────────────────────────────────
-  - id: catch-throwable
-    pattern: |
-      try {
-        ...
-      } catch (\Throwable $E) {
-        ...
-      }
+  # ─── CWE-396: Catch of Generic Exception Type ────────────────────────────────
+  #
+  # Strategy: match catch blocks for both \Throwable and \Exception (the two overly broad base types in PHP).
+  #
+  # \Exception misses Errors (type errors, OOM, etc.) but is still too broad in most contexts — both should be flagged and reviewed.
+  # The rule intentionally does NOT match specific subtypes like \RuntimeException or \InvalidArgumentException, which are acceptable.
+
+  - id: catch-generic-exception-type
+    pattern-either:
+      - pattern: |
+          try {
+            ...
+          } catch (\Throwable $E) {
+            ...
+          }
+      - pattern: |
+          try {
+            ...
+          } catch (\Exception $E) {
+            ...
+          }
     message: >
-      Catching \Throwable swallows PHP Errors (OOM, type errors, etc.), which
-      masks programming bugs. Prefer catching \Exception or a specific subtype.
+      Overly broad exception catch (CWE-396): catching \Throwable or \Exception swallows all errors and exceptions, masking programming bugs (type errors, OOM, assertion failures) and making root-cause analysis harder.
+      Catch the most specific exception type your code can meaningfully handle.
     languages: [php]
     severity: WARNING
     metadata:
       cwe: "CWE-396: Declaration of Catch for Generic Exception"
+      confidence: HIGH

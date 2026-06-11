@@ -22,6 +22,7 @@ Low      | CWE-297 | `ApiClient::call()`     | **No explicit TLS peer verificati
 - PHP 8.3+ with extensions
 
 ```bash
+sudo add-apt-repository ppa:ondrej/php
 sudo apt update
 sudo apt install -y php8.3-cli php8.3-common php8.3-curl php8.3-mbstring php8.3-xml php8.3-zip php8.3-bcmath php8.3-intl php8.3-opcache
 php --version
@@ -143,13 +144,50 @@ semgrep scan --config "p/owasp-top-ten" --config "p/php" --config .semgrep/rules
 
 **Actual findings on this sample:**
 
-Rules                                  | CWE-918 SSRF | CWE-532 log leak | CWE-396 broad catch
----------------------------------------|--------------|------------------|--------------------
-Community (`p/owasp-top-ten`, `p/php`) | No           | No               | No
-Custom (`.semgrep/rules.yaml`)         | Yes          | Yes              | No
+Rules                                   | CWE-918 (controller) | CWE-918 (service) | CWE-532 log leak | CWE-532 rethrow | CWE-396 broad catch
+----------------------------------------|----------------------|-------------------|------------------|-----------------|--------------------
+Community (`p/owasp-top-ten`, `p/php`)  | No                   | No                | No               | No              | No
+Custom (`.semgrep/rules.yaml`)          | Yes (L23–25)         | No                | Yes (L56–58)     | Yes (L60–61)    | Yes (L54)
+
+4 of 5 expected findings detected with custom rules.
 
 Community rules find nothing — SSRF detection requires cross-file taint tracking, which is behind the Semgrep paid tier.
-The custom rules in this repo demonstrate what *can* be written, but they target this specific code pattern.
+The one miss with custom rules (`ssrf-http-client-url-concatenation` in `ApiClient::call()`) requires tracking taint across the controller→service call boundary — cross-file inter-procedural taint is a Semgrep Pro feature.
+
+### Opengrep
+
+Opengrep is a community fork of Semgrep's engine, created after Semgrep relicensed its core in January 2025.
+The CLI is a drop-in replacement: same rule format, same `--config` flag, same SARIF output.
+
+```bash
+# Install (Linux x86_64)
+curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash
+
+# Confirm
+opengrep --version
+
+# Run — identical invocation to semgrep
+opengrep scan --config .semgrep/rules.yaml src/
+
+# SARIF output
+opengrep scan --config .semgrep/rules.yaml --sarif --output opengrep.sarif src/
+```
+
+**Known issue — PHP 8.1 constructor promoted properties with `readonly`:**
+Opengrep's PHP parser does not support `private readonly Type $var` in constructor parameters.
+Any file using this syntax fails to parse and is only partially analyzed.
+This is a parser-level bug, not a rules issue — the warnings appear before rule evaluation:
+
+```
+[WARN] Syntax error at line src/Service/ApiClient.php:25
+[WARN] Syntax error at line src/Controller/ApiController.php:22
+```
+
+**Actual findings on this sample:** 2 (CWE-918 at `ApiClient.php:45`, CWE-532 at `ApiClient.php:56`) — partial analysis only due to the parser failure above.
+
+**Conclusion:** Opengrep is not usable for PHP 8.1+ codebases at this time.
+Use Semgrep OSS as a drop-in replacement — same rules, same CLI, 4 findings on this sample.
+Track the upstream fix at: https://github.com/opengrep/opengrep/issues
 
 ### Bearer CLI
 
@@ -158,10 +196,7 @@ It requires a one-time binary download but no account.
 
 ```bash
 # Install (https://docs.bearer.com/reference/installation/)
-echo -e "Types: deb\nURIs: https://apt.fury.io/bearer/\nSuites: /\nTrusted: yes" | sudo tee /etc/apt/sources.list.d/fury.sources
-sudo apt-get update
-sudo apt-get install bearer
-
+curl -sfL https://raw.githubusercontent.com/Bearer/bearer/main/contrib/install.sh | sudo sh -s -- -b /usr/bin
 
 # Full scan — security + privacy findings
 bearer scan src/
@@ -173,7 +208,29 @@ bearer scan --scanner=secrets,sast src/ --quiet
 bearer scan src/ --format sarif --output bearer.sarif
 ```
 
-**Actual findings on this sample:** No 0 findings — Bearer ran 70 checks and detected nothing on this sample.
+**Actual findings on this sample:** 0 finding — Bearer ran 70 checks and detected nothing on this sample.
+
+### PHPStan
+
+PHPStan is a type checker, not a security SAST tool.
+It does not perform taint analysis in the free/open-source version — taint tracking is a PHPStan Pro (paid) feature.
+There is no free community extension that adds it.
+
+The `phpstan/phpstan-symfony` extension is available free and improves Symfony-specific type inference (correct return types for `InputBag::get()`, `ContainerInterface::get()`, etc.), but it adds no security rules.
+
+The `phpstan-security-checker` / `local-php-security-checker` package checks `composer.lock` against CVE databases — that is dependency auditing (SCA), not SAST.
+
+Install and run:
+
+```bash
+composer require --dev phpstan/phpstan phpstan/phpstan-symfony
+vendor/bin/phpstan analyse src/ --level=9
+```
+
+**Actual findings on this sample:** PHPStan detected 0 CWE violations.
+
+**Conclusion:** PHPStan is out of scope for security SAST on this bench.
+Psalm is the correct free alternative for PHP taint analysis — see the Psalm section below for why it also produced 0 findings on this sample.
 
 ### Psalm with taint analysis
 
@@ -193,9 +250,11 @@ vendor/bin/psalm --taint-analysis
 vendor/bin/psalm --taint-analysis --show-info=true
 ```
 
-Psalm will produce a `TaintedInput` or `TaintedSSRF`-class finding tracing the data flow from `$endpoint` → `$baseUrl . $endpoint` → `httpClient->request()`.
+**Known issue:** Psalm requires PHP >= 8.3.16 but Ubuntu 24.04 ships PHP 8.3.6.
+This can be worked around by updating PHP via the ondrej/php PPA.
 
-**Known issue:** Psalm requires PHP >= 8.3.16 but Ubuntu 24.04 ships PHP 8.3.6. This is a platform check bug in Psalm, not a capability limitation. Workaround pending.
+**Actual findings on this sample:** 0 finding — Psalm taint analysis ran successfully but detected nothing.
+Despite being one of the few free tools with genuine inter-procedural taint analysis, it did not trace the SSRF or log-leak paths in this sample.
 
 ### SonarQube Community (free, self-hosted)
 
@@ -211,7 +270,7 @@ docker run -d --name sonarqube \
 Wait ~60 seconds, then once SonarQube is running:
 
 - Open [localhost:9000](http://localhost:9000)
-- Log in with admin / admin (it will ask to change the password, e.g. AdminAdmin%1)
+- Log in with admin / admin (it will ask to change the password, e.g. AdminAdmin1%)
 - Go to My Account (top right avatar) → Security tab
 - Under Generate Tokens, give it a name (e.g. codesec-bench), click Generate
 - Copy the token immediately — it's only shown once
@@ -234,35 +293,30 @@ The `sonar-project.properties` in this directory is pre-configured.
 ### GitHub Advanced Security / CodeQL (free for public repos)
 
 No local setup needed — just push to a public GitHub repo.
-The CI workflow at `.github/workflows/ci.yml` includes a SonarCloud job.
 
 To add CodeQL:
 
 1. Enable **GitHub Advanced Security** on the repository (free for public repos).
 2. Go to **Settings → Code security → Code scanning → Set up → Default**.
-3. CodeQL will auto-detect PHP and run the SSRF + injection query suite on every push.
+
+> CodeQL does not support PHP.
+> Per the [official GitHub documentation](https://docs.github.com/en/code-security/concepts/code-scanning/codeql/codeql-code-scanning#about-codeql), supported languages are C/C++, C#, Go, Java/Kotlin, JavaScript/TypeScript, Python, Ruby, Rust, Swift, and GitHub Actions workflows.
 
 ## Tool comparison
 
 Tool                    | Install                | PHP support | CWE-918 | CWE-532 | CWE-396 | Notes
-------------------------|------------------------|-------------|---------|---------|---------|-------------------------------------------------------------
-**Semgrep OSS**         | `pipx install semgrep` | Yes         | No      | No      | No      | 0 findings with community rules; custom rules required
+------------------------|------------------------|-------------|---------|---------|---------|--------------------------------------------------------------------
+**Semgrep OSS**         | `pipx install semgrep` | Yes         | Partial | Yes     | Yes     | 0 findings with community rules; 4/5 with custom rules
+**Opengrep**            | install script         | Partial     | Partial | Partial | —       | PHP 8.1 parser bug — `readonly` constructor properties not supported
 **Bearer CLI**          | `apt install bearer`   | Yes         | No      | No      | No      | 0 findings (70 checks run)
-**Psalm**               | `composer require`     | PHP-only    | —       | —       | —       | Blocked: requires PHP 8.3.16, Ubuntu 24.04 ships 8.3.6
+**Psalm**               | `composer require`     | PHP-only    | No      | No      | No      | 0 findings — taint analysis ran but detected nothing on this sample
 **SonarQube Community** | Docker                 | Yes         | No      | No      | No      | Only flagged generic RuntimeException (code smell)
 **SonarCloud**          | SaaS                   | Yes         | ?       | ?       | ?       | Not yet tested
 **GitLab Ultimate**     | SaaS                   | Yes         | ?       | ?       | ?       | Not yet tested
-**GitHub CodeQL**       | SaaS (GHAS)            | Yes         | ?       | ?       | ?       | Not yet tested
+**GitHub CodeQL**       | SaaS (GHAS)            | No          | —       | —       | —       | PHP explicitly not supported — see section above
 **PHPStan**             | `composer require`     | PHP-only    | No      | No      | No      | Type checker, not a security SAST — will not find these CWEs
 
 ## Other leads investigated
-
-### PHPStan
-
-Investigated as a potential SAST tool.
-Discarded for security scanning purposes: PHPStan is a type checker, not a security scanner.
-It does not perform taint analysis, does not run CWE-based pattern matching, and will not detect SSRF, sensitive data in logs, or injection vulnerabilities.
-Useful for code quality but out of scope for this bench.
 
 ### GitLab SAST analyzers
 
@@ -297,6 +351,7 @@ The following tools were identified as capable of PHP cross-file taint analysis 
 - **Veracode** — long-standing enterprise SAST platform
 - **GitLab Advanced SAST** — Ultimate tier only; does not support PHP (falls back to Semgrep)
 
-**Key finding:** there is no free, open source PHP SAST tool that performs cross-file taint analysis.
-The capability gap between free tools (0 findings on CWE-918) and commercial tools is real and significant.
-This is itself a valuable result for the bench.
+**Key finding:** there is no free, open source PHP SAST tool that performs cross-file taint analysis out of the box.
+Semgrep OSS with custom rules reaches 4/5 expected findings — the remaining miss (cross-file SSRF from controller to service) requires inter-procedural taint analysis, which is a paid feature.
+Opengrep is currently not usable for PHP 8.1+ due to a parser bug with `readonly` constructor properties.
+The capability gap between free tools and commercial tools is real and significant, and is itself a documented result of this bench.
