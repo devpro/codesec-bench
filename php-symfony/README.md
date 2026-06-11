@@ -22,6 +22,7 @@ Low      | CWE-297 | `ApiClient::call()`     | **No explicit TLS peer verificati
 - PHP 8.3+ with extensions
 
 ```bash
+sudo add-apt-repository ppa:ondrej/php
 sudo apt update
 sudo apt install -y php8.3-cli php8.3-common php8.3-curl php8.3-mbstring php8.3-xml php8.3-zip php8.3-bcmath php8.3-intl php8.3-opcache
 php --version
@@ -149,7 +150,9 @@ Community (`p/owasp-top-ten`, `p/php`) | No           | No               | No
 Custom (`.semgrep/rules.yaml`)         | Yes          | Yes              | No
 
 Community rules find nothing — SSRF detection requires cross-file taint tracking, which is behind the Semgrep paid tier.
-The custom rules in this repo demonstrate what *can* be written, but they target this specific code pattern.
+Custom rules catch inline concatenation only — assigning the concatenated URL to an intermediate variable defeats detection entirely.
+This is a fundamental Semgrep OSS limitation: it matches syntax, not data flow.
+Real SSRF detection requires taint-aware analysis across statements, which requires Semgrep Pro.
 
 ### Bearer CLI
 
@@ -158,9 +161,7 @@ It requires a one-time binary download but no account.
 
 ```bash
 # Install (https://docs.bearer.com/reference/installation/)
-echo -e "Types: deb\nURIs: https://apt.fury.io/bearer/\nSuites: /\nTrusted: yes" | sudo tee /etc/apt/sources.list.d/fury.sources
-sudo apt-get update
-sudo apt-get install bearer
+curl -sfL https://raw.githubusercontent.com/Bearer/bearer/main/contrib/install.sh | sudo sh -s -- -b /usr/bin
 
 # Full scan — security + privacy findings
 bearer scan src/
@@ -172,7 +173,7 @@ bearer scan --scanner=secrets,sast src/ --quiet
 bearer scan src/ --format sarif --output bearer.sarif
 ```
 
-**Actual findings on this sample:** No 0 findings — Bearer ran 70 checks and detected nothing on this sample.
+**Actual findings on this sample:** 0 finding — Bearer ran 70 checks and detected nothing on this sample.
 
 ### Psalm with taint analysis
 
@@ -193,8 +194,10 @@ vendor/bin/psalm --taint-analysis --show-info=true
 ```
 
 **Known issue:** Psalm requires PHP >= 8.3.16 but Ubuntu 24.04 ships PHP 8.3.6.
-This is a platform check bug in Psalm, not a capability limitation.
-Workaround pending.
+This can be worked around by updating PHP via the ondrej/php PPA.
+
+**Actual findings on this sample:** 0 finding — Psalm taint analysis ran successfully but detected nothing.
+Despite being one of the few free tools with genuine inter-procedural taint analysis, it did not trace the SSRF or log-leak paths in this sample.
 
 ### SonarQube Community (free, self-hosted)
 
@@ -233,25 +236,26 @@ The `sonar-project.properties` in this directory is pre-configured.
 ### GitHub Advanced Security / CodeQL (free for public repos)
 
 No local setup needed — just push to a public GitHub repo.
-The CI workflow at `.github/workflows/ci.yml` includes a SonarCloud job.
 
 To add CodeQL:
 
 1. Enable **GitHub Advanced Security** on the repository (free for public repos).
 2. Go to **Settings → Code security → Code scanning → Set up → Default**.
-3. CodeQL will auto-detect PHP and run the SSRF + injection query suite on every push.
+
+> CodeQL does not support PHP.
+> Per the [official GitHub documentation](https://docs.github.com/en/code-security/concepts/code-scanning/codeql/codeql-code-scanning#about-codeql), supported languages are C/C++, C#, Go, Java/Kotlin, JavaScript/TypeScript, Python, Ruby, Rust, Swift, and GitHub Actions workflows.
 
 ## Tool comparison
 
 Tool                    | Install                | PHP support | CWE-918 | CWE-532 | CWE-396 | Notes
-------------------------|------------------------|-------------|---------|---------|---------|-------------------------------------------------------------
+------------------------|------------------------|-------------|---------|---------|---------|--------------------------------------------------------------------
 **Semgrep OSS**         | `pipx install semgrep` | Yes         | No      | No      | No      | 0 findings with community rules; custom rules required
 **Bearer CLI**          | `apt install bearer`   | Yes         | No      | No      | No      | 0 findings (70 checks run)
-**Psalm**               | `composer require`     | PHP-only    | —       | —       | —       | Blocked: requires PHP 8.3.16, Ubuntu 24.04 ships 8.3.6
+**Psalm**               | `composer require`     | PHP-only    | No      | No      | No      | 0 findings — taint analysis ran but detected nothing on this sample
 **SonarQube Community** | Docker                 | Yes         | No      | No      | No      | Only flagged generic RuntimeException (code smell)
 **SonarCloud**          | SaaS                   | Yes         | ?       | ?       | ?       | Not yet tested
 **GitLab Ultimate**     | SaaS                   | Yes         | ?       | ?       | ?       | Not yet tested
-**GitHub CodeQL**       | SaaS (GHAS)            | Yes         | ?       | ?       | ?       | Not yet tested
+**GitHub CodeQL**       | SaaS (GHAS)            | No          | —       | —       | —       | PHP explicitly not supported — see section above
 **PHPStan**             | `composer require`     | PHP-only    | No      | No      | No      | Type checker, not a security SAST — will not find these CWEs
 
 ## Other leads investigated
@@ -297,5 +301,5 @@ The following tools were identified as capable of PHP cross-file taint analysis 
 - **GitLab Advanced SAST** — Ultimate tier only; does not support PHP (falls back to Semgrep)
 
 **Key finding:** there is no free, open source PHP SAST tool that performs cross-file taint analysis.
-The capability gap between free tools (0 findings on CWE-918) and commercial tools is real and significant.
+The capability gap between free tools (0 finding on CWE-918) and commercial tools is real and significant.
 This is itself a valuable result for the bench.
