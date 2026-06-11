@@ -148,6 +148,7 @@ vendor/
 # Symfony
 **/var/cache/
 **/var/log/
+**/public/bundles/
 
 # Composer
 composer.lock
@@ -155,6 +156,8 @@ composer.lock
 # PHPUnit
 .phpunit.result.cache
 coverage/
+phpunit.xml
+.phpunit.cache/
 
 # Sonar
 .sonar/

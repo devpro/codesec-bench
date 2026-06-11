@@ -60,19 +60,20 @@ composer install
 
 ### 2. Start the web server
 
-**Option A — Symfony CLI (recommended)**
+**Option A** — Symfony CLI (recommended):
 
 The Symfony CLI automatically loads `.env` and handles routing correctly.
 
 ```bash
-# Install once: https://symfony.com/download
+rm -rf var/log/ var/cache/
+php bin/console cache:clear
 symfony server:start
 ```
 
-**Option B — Shell env export + PHP built-in server**
+**Option B** — Shell env export + PHP built-in server:
 
-The PHP built-in server does not load `.env` on its own. Export the variables
-in your shell first, then start the server.
+The PHP built-in server does not load `.env` on its own.
+Export the variables in the shell first, then start the server.
 
 ```bash
 export APP_ENV=dev
@@ -82,9 +83,6 @@ export SERVICE_API_KEY=demo-api-key
 
 php -S localhost:8000 public/index.php
 ```
-
-> Note: `php -S localhost:8000 -t public/` alone will fail with
-> "Missing required environment variable" because `.env` is never loaded.
 
 ### 3. Hit the endpoints
 
@@ -113,17 +111,19 @@ vendor/bin/phpunit
 
 ## SAST scanning
 
-### Semgrep OSS (free, no account needed)
+### Semgrep OSS
 
-Semgrep is the fastest way to get findings locally. No signup required for OSS rules.
+Semgrep is the fastest way to get findings locally (see [Quickstart](https://docs.semgrep.dev/getting-started/quickstart)).
+No signup required for OSS rules.
 
 ```bash
-# Install (pick one)
-pip install semgrep                         # via pip
-brew install semgrep                        # macOS
-docker pull semgrep/semgrep                 # Docker
+# install through pipx (https://pipx.pypa.io/stable/how-to/install-pipx/)
+sudo apt install pipx
+pipx ensurepath
+pipx install semgrep
 
-cd php-symfony
+# confirm installation succeeded by printing the currently installed version
+semgrep --version
 
 # Run the OWASP / security-audit rule packs against the project
 semgrep scan --config "p/owasp-top-ten" --config "p/php" src/
@@ -131,38 +131,31 @@ semgrep scan --config "p/owasp-top-ten" --config "p/php" src/
 # Run custom rules from this repo
 semgrep scan --config .semgrep/rules.yaml src/
 
-# Run both together
-semgrep scan --config "p/owasp-top-ten" --config "p/php" --config .semgrep/rules.yaml src/
-
-# Output as SARIF (for GitHub Code Scanning upload)
-semgrep scan --config "p/owasp-top-ten" --config "p/php" --sarif --output semgrep.sarif src/
-
-# Docker alternative (no local install)
-docker run --rm -v "$(pwd):/src" semgrep/semgrep \
-  semgrep scan --config "p/owasp-top-ten" --config "p/php" /src/src
+# Output as SARIF
+semgrep scan --config "p/owasp-top-ten" --config "p/php" --config .semgrep/rules.yaml --sarif --output semgrep.sarif src/
 ```
 
-Expected key findings from Semgrep:
+**Actual findings on this sample:**
 
-- `php.lang.security.curl.ssrf` or similar — SSRF in `ApiClient`
-- `php.lang.security.audit.sqli` suite — may flag string concatenation patterns
+Rules                                  | CWE-918 SSRF | CWE-532 log leak | CWE-396 broad catch
+---------------------------------------|--------------|------------------|--------------------
+Community (`p/owasp-top-ten`, `p/php`) | No           | No               | No
+Custom (`.semgrep/rules.yaml`)         | Yes          | Yes              | No
 
-### Bearer CLI (free, data-flow focus — best for CWE-532 log leaks)
+Community rules find nothing — SSRF detection requires cross-file taint tracking, which is behind the Semgrep paid tier.
+The custom rules in this repo demonstrate what *can* be written, but they target this specific code pattern.
 
-Bearer is particularly strong at detecting sensitive data flowing into logs and
-external calls. It requires a one-time binary download but no account.
+### Bearer CLI
+
+Bearer is particularly strong at detecting sensitive data flowing into logs and external calls.
+It requires a one-time binary download but no account.
 
 ```bash
-# Install
-curl -sfL https://raw.githubusercontent.com/Bearer/bearer/main/contrib/install.sh | sh
+# Install (https://docs.bearer.com/reference/installation/)
+echo -e "Types: deb\nURIs: https://apt.fury.io/bearer/\nSuites: /\nTrusted: yes" | sudo tee /etc/apt/sources.list.d/fury.sources
+sudo apt-get update
+sudo apt-get install bearer
 
-# Or via Homebrew
-brew install bearer/tap/bearer
-
-# Or via Docker
-docker pull bearer/bearer
-
-cd php-symfony
 
 # Full scan — security + privacy findings
 bearer scan src/
@@ -172,23 +165,15 @@ bearer scan --scanner=secrets,sast src/ --quiet
 
 # SARIF output
 bearer scan src/ --format sarif --output bearer.sarif
-
-# Docker alternative
-docker run --rm -v "$(pwd)/src:/tmp/scan" bearer/bearer scan /tmp/scan
 ```
 
-Expected key findings from Bearer:
+**Actual findings on this sample:** No 0 findings — Bearer ran 70 checks and detected nothing on this sample.
 
-- `php_lang_logger` — `$e->getMessage()` passed to logger (CWE-532)
-- `php_lang_http_insecure` — unvalidated URL parameter (CWE-918)
-
-### Psalm with taint analysis (free, PHP-native data-flow)
+### Psalm with taint analysis
 
 Psalm traces taint sources through the call graph, making it the clearest tool for explaining to developers _why_ the SSRF exists.
 
 ```bash
-cd php-symfony
-
 # Add Psalm as a dev dependency (one-time)
 composer require --dev vimeo/psalm
 
@@ -204,20 +189,30 @@ vendor/bin/psalm --taint-analysis --show-info=true
 
 Psalm will produce a `TaintedInput` or `TaintedSSRF`-class finding tracing the data flow from `$endpoint` → `$baseUrl . $endpoint` → `httpClient->request()`.
 
+**Known issue:** Psalm requires PHP >= 8.3.16 but Ubuntu 24.04 ships PHP 8.3.6. This is a platform check bug in Psalm, not a capability limitation. Workaround pending.
+
 ### SonarQube Community (free, self-hosted)
 
+Start SonarQube locally via Docker:
+
 ```bash
-# Start SonarQube locally via Docker
 docker run -d --name sonarqube \
   -p 9000:9000 \
   -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true \
   sonarqube:community
+```
 
-# Wait ~60 s, then open http://localhost:9000
-# Default credentials: admin / admin (change on first login)
+Wait ~60 seconds, then once SonarQube is running:
 
-# Run the scanner from the php-symfony directory
-cd php-symfony
+- Open [localhost:9000](http://localhost:9000)
+- Log in with admin / admin (it will ask to change the password, e.g. AdminAdmin%1)
+- Go to My Account (top right avatar) → Security tab
+- Under Generate Tokens, give it a name (e.g. codesec-bench), click Generate
+- Copy the token immediately — it's only shown once
+
+Run the scanner from the php-symfony directory:
+
+```bash
 docker run --rm \
   --network host \
   -e SONAR_HOST_URL=http://localhost:9000 \
@@ -227,6 +222,8 @@ docker run --rm \
 ```
 
 The `sonar-project.properties` in this directory is pre-configured.
+
+**Actual findings on this sample:** Only flagged a generic `RuntimeException` (code smell, not a security finding). CWE-918 and CWE-532 were not detected.
 
 ### GitHub Advanced Security / CodeQL (free for public repos)
 
@@ -241,12 +238,58 @@ To add CodeQL:
 
 ## Tool comparison
 
-Tool                    | Install               | PHP support | Highlights for this sample
-------------------------|-----------------------|-------------|-------------------------------------------------------
-**Semgrep OSS**         | `pip install semgrep` | Yes         | Fastest local feedback; custom rules as YAML
-**Bearer CLI**          | one binary            | Yes         | Best at CWE-532 log-leak detection
-**Psalm**               | `composer require`    | PHP-only    | Full data-flow trace for SSRF (taint source → sink)
-**SonarQube Community** | Docker                | Yes         | Broadest OWASP coverage; PR decoration
-**SonarCloud**          | SaaS                  | Yes         | Zero infra; integrates with GitHub Actions
-**GitHub CodeQL**       | SaaS (GHAS)           | Yes         | Deep SSRF/injection queries; free for public repos
-**PHPStan**             | `composer require`    | PHP-only    | Level 9 + `phpstan-security-advisories` for known CVEs
+Tool                    | Install                | PHP support | CWE-918 | CWE-532 | CWE-396 | Notes
+------------------------|------------------------|-------------|---------|---------|---------|-------------------------------------------------------------
+**Semgrep OSS**         | `pipx install semgrep` | Yes         | No       | No       | No       | 0 findings with community rules; custom rules required
+**Bearer CLI**          | `apt install bearer`   | Yes         | No       | No       | No       | 0 findings (70 checks run)
+**Psalm**               | `composer require`     | PHP-only    | —       | —       | —       | Blocked: requires PHP 8.3.16, Ubuntu 24.04 ships 8.3.6
+**SonarQube Community** | Docker                 | Yes         | No       | No       | No       | Only flagged generic RuntimeException (code smell)
+**SonarCloud**          | SaaS                   | Yes         | ?       | ?       | ?       | Not yet tested
+**GitHub CodeQL**       | SaaS (GHAS)            | Yes         | ?       | ?       | ?       | Not yet tested
+**PHPStan**             | `composer require`     | PHP-only    | No       | No       | No       | Type checker, not a security SAST — will not find these CWEs
+
+## Other leads investigated
+
+### PHPStan
+
+Investigated as a potential SAST tool.
+Discarded for security scanning purposes: PHPStan is a type checker, not a security scanner.
+It does not perform taint analysis, does not run CWE-based pattern matching, and will not detect SSRF, sensitive data in logs, or injection vulnerabilities.
+Useful for code quality but out of scope for this bench.
+
+### GitLab SAST analyzers
+
+Investigated to reproduce what GitLab uses under the hood, rather than using GitLab itself.
+
+- **Free tier (all plans):** GitLab's PHP SAST is the Semgrep-based analyzer with GitLab-managed rules — the same Semgrep OSS engine already tested here. No additional coverage.
+- **GitLab Advanced SAST (Ultimate only):** Provides cross-file and cross-function taint analysis.
+Built on technology acquired from Oxeye — a proprietary closed-source engine. PHP is not supported; PHP falls back to the Semgrep analyzer.
+Cannot be reproduced independently.
+- **Former PHP-specific analyzer (`phpcs-security-audit`):** Reached End of Support in GitLab 17.0 and was replaced by the Semgrep-based analyzer.
+No longer maintained.
+
+**Conclusion:** nothing in GitLab's free PHP SAST stack goes beyond what Semgrep OSS already provides.
+The paid taint analysis engine does not cover PHP.
+
+### MegaLinter (security flavor)
+
+Investigated as a meta-tool that orchestrates multiple scanners in a single Docker run.
+The security flavor (`oxsecurity/megalinter-security`) was reviewed.
+
+For PHP it includes phpcs, phpstan, psalm, and phplint — but the security flavor specifically only covers bash (shellcheck), Python (bandit), and repository-level tools: trivy, semgrep, gitleaks, trufflehog, checkov, devskim, osv-scanner.
+No PHP application SAST in the security flavor.
+
+The repository-level tools (trivy, gitleaks, trufflehog) are relevant for SCA and secrets scanning — a different category worth exploring in a dedicated sample. Discarded for this PHP SAST sample.
+
+### Commercial tools (not tested)
+
+The following tools were identified as capable of PHP cross-file taint analysis but were not tested as they require paid licenses:
+
+- **Snyk Code** — AI-assisted SAST with PHP support; free tier limited
+- **Checkmarx One** — enterprise SAST with broad language coverage
+- **Veracode** — long-standing enterprise SAST platform
+- **GitLab Advanced SAST** — Ultimate tier only; does not support PHP (falls back to Semgrep)
+
+**Key finding:** there is no free, open source PHP SAST tool that performs cross-file taint analysis.
+The capability gap between free tools (0 findings on CWE-918) and commercial tools is real and significant.
+This is itself a valuable result for the bench.
