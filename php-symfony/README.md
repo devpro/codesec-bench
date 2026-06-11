@@ -162,7 +162,6 @@ echo -e "Types: deb\nURIs: https://apt.fury.io/bearer/\nSuites: /\nTrusted: yes"
 sudo apt-get update
 sudo apt-get install bearer
 
-
 # Full scan — security + privacy findings
 bearer scan src/
 
@@ -193,9 +192,9 @@ vendor/bin/psalm --taint-analysis
 vendor/bin/psalm --taint-analysis --show-info=true
 ```
 
-Psalm will produce a `TaintedInput` or `TaintedSSRF`-class finding tracing the data flow from `$endpoint` → `$baseUrl . $endpoint` → `httpClient->request()`.
-
-**Known issue:** Psalm requires PHP >= 8.3.16 but Ubuntu 24.04 ships PHP 8.3.6. This is a platform check bug in Psalm, not a capability limitation. Workaround pending.
+**Known issue:** Psalm requires PHP >= 8.3.16 but Ubuntu 24.04 ships PHP 8.3.6.
+This is a platform check bug in Psalm, not a capability limitation.
+Workaround pending.
 
 ### SonarQube Community (free, self-hosted)
 
@@ -211,7 +210,7 @@ docker run -d --name sonarqube \
 Wait ~60 seconds, then once SonarQube is running:
 
 - Open [localhost:9000](http://localhost:9000)
-- Log in with admin / admin (it will ask to change the password, e.g. AdminAdmin%1)
+- Log in with admin / admin (it will ask to change the password, e.g. AdminAdmin1%)
 - Go to My Account (top right avatar) → Security tab
 - Under Generate Tokens, give it a name (e.g. codesec-bench), click Generate
 - Copy the token immediately — it's only shown once
