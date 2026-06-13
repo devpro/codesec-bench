@@ -320,7 +320,7 @@ Tool                    | Install                | PHP support | CWE-918 | CWE-5
 
 ### GitLab SAST analyzers
 
-Investigated to reproduce what GitLab uses under the hood, rather than using GitLab itself.
+Investigated to reproduce what GitLab provides ([SAST analyzers](https://docs.gitlab.com/user/application_security/sast/analyzers/)).
 
 - **Free tier (all plans):** GitLab's PHP SAST is the Semgrep-based analyzer with GitLab-managed rules — the same Semgrep OSS engine already tested here. No additional coverage.
 - **GitLab Advanced SAST (Ultimate only):** Provides cross-file and cross-function taint analysis.
