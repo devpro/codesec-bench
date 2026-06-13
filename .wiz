@@ -1,0 +1,4 @@
+ignore:
+  global_paths:
+    "php*/var/**/*": {}
+    "php*/vendor/**/*": {}
