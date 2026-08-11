@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/devpro/codesec-bench/schema/case.schema.json",
+  "title": "codesec-bench case manifest",
+  "type": "object",
+  "required": ["id", "title", "category", "difficulty", "cwe", "expected"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*/[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "<stack>/<case-id>, unique across the repository"
+    },
+    "title": { "type": "string", "minLength": 10 },
+    "category": { "enum": ["sast", "secrets", "sca", "iac"] },
+    "difficulty": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "cwe": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "pattern": "^CWE-[0-9]+$" }
+    },
+    "owasp": { "type": "string" },
+    "description": { "type": "string" },
+    "expected": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "cwe", "severity", "file", "line"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "cwe": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "type": "string", "pattern": "^CWE-[0-9]+$" }
+          },
+          "severity": { "enum": ["critical", "high", "medium", "low"] },
+          "file": { "type": "string" },
+          "line": { "type": "integer", "minimum": 1 },
+          "anchor": { "type": "string" },
+          "tolerance": { "type": "integer", "minimum": 0, "default": 3 },
+          "requires": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "safe": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["file"],
+        "additionalProperties": false,
+        "properties": {
+          "file": { "type": "string" },
+          "lines": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": { "type": "integer", "minimum": 1 }
+          },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+id: php-symfony
+title: Symfony 7.4 HTTP client wrapper
+language: php
+language_version: "8.3"
+framework: Symfony 7.4
+runnable: true
+
+# Paths a scanner is pointed at, relative to the sample root.
+scan_roots:
+  - src
+
+# Rule packs to run in addition to each tool's defaults.
+rules:
+  semgrep:
+    - .semgrep/rules.yaml

@@ -9,45 +9,92 @@ on:
       - main
   workflow_dispatch: {}
 
+env:
+  TASK_VERSION: v3.52.0
+
 jobs:
-  php-symfony-tests:
+  validate:
+    name: Validate manifests and check the matrix is current
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: php-symfony
 
     steps:
       - uses: actions/checkout@v4
 
-      # TODO
-      # - name: Setup PHP
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: "8.3"
-      #     tools: composer:v2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
 
-      # - name: Install dependencies
-      #   run: composer install --prefer-dist --no-progress
+      - name: Install dependencies
+        run: npm ci
 
-      # - name: Run tests
-      #   run: vendor/bin/phpunit
+      # Installed from the official GitHub release with a checksum check rather than through a third party action, to keep the supply chain surface to GitHub itself.
+      # Worth extracting into devpro/github-workflow-parts alongside the tflint and terraform setup actions.
+      - name: Install Task
+        env:
+          TASK_ARCHIVE: task_linux_amd64.tar.gz
+        run: |
+          BASE_URL="https://github.com/go-task/task/releases/download/${TASK_VERSION}"
 
-  # sonar:
-  #   runs-on: ubuntu-latest
-  #   needs: php-symfony-tests
-  #   defaults:
-  #     run:
-  #       working-directory: php-symfony
+          curl -sSL -O "${BASE_URL}/${TASK_ARCHIVE}"
+          curl -sSL -O "${BASE_URL}/task_checksums.txt"
 
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 0
+          grep " ${TASK_ARCHIVE}$" task_checksums.txt | sha256sum --check --status
 
-  #     - name: SonarCloud scan
-  #       uses: SonarSource/sonarcloud-github-action@v3
-  #       with:
-  #         projectBaseDir: php-symfony
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          tar -xzf "${TASK_ARCHIVE}" task
+          sudo install -m 0755 task /usr/local/bin/task
+          rm -f "${TASK_ARCHIVE}" task_checksums.txt task
+          task --version
+
+      # Validation catches a manifest whose line anchors have drifted away from the code.
+      # Scoring runs against the committed SARIF files rather than rescanning, so this job needs no scanners and stays fast.
+      # The diff check is what stops docs/matrix.md from drifting away from the results it claims to summarise.
+      - name: Validate and score
+        run: task check
+
+  scan:
+    name: Rescan and compare against the committed results
+    runs-on: ubuntu-latest
+    # Scanner versions and upstream rule packs move independently of this repository, so drift here is informative rather than a build break.
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Task
+        env:
+          TASK_ARCHIVE: task_linux_amd64.tar.gz
+        run: |
+          BASE_URL="https://github.com/go-task/task/releases/download/${TASK_VERSION}"
+
+          curl -sSL -O "${BASE_URL}/${TASK_ARCHIVE}"
+          curl -sSL -O "${BASE_URL}/task_checksums.txt"
+
+          grep " ${TASK_ARCHIVE}$" task_checksums.txt | sha256sum --check --status
+
+          tar -xzf "${TASK_ARCHIVE}" task
+          sudo install -m 0755 task /usr/local/bin/task
+          rm -f "${TASK_ARCHIVE}" task_checksums.txt task
+          task --version
+
+      # Scanners are installed as binaries rather than run as container images, matching how they run locally.
+      - name: Install scanners
+        run: |
+          pipx install semgrep
+          curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash
+          echo "${HOME}/.opengrep/cli/latest" >> "${GITHUB_PATH}"
+
+      - name: Scan and score
+        run: |
+          task scan
+          task score
+
+      # The versions on the runner differ from the versions that produced the committed results, so a diff is expected and is the point of the job.
+      - name: Report drift against the committed results
+        run: git diff --stat -- results docs/matrix.md

@@ -1,0 +1,39 @@
+id: php-symfony/sensitive-data-in-logs
+title: Exception messages carrying credentials are written to logs and returned to the caller
+category: sast
+difficulty: 2
+cwe: [CWE-532, CWE-209]
+owasp: "A09:2021"
+
+description: >
+  The request is sent with an API key and a bearer token in its headers.
+  When it fails, the raw exception message is logged and then wrapped into an exception that reaches the HTTP response.
+  Symfony HTTP client messages embed the request URL and, on some failures, the headers, so secrets land in the log file and in the error body.
+
+expected:
+  - id: log-leak
+    cwe: [CWE-532]
+    severity: medium
+    file: src/Service/ApiClient.php
+    line: 56
+    anchor: "$this->logger->error("
+    tolerance: 4
+    requires: none
+    note: >
+      Detectable with a purely syntactic rule matching a logger call on an exception message.
+      A tool that misses this one is not doing security analysis at all.
+
+  - id: rethrow-leak
+    cwe: [CWE-209, CWE-532]
+    severity: medium
+    file: src/Service/ApiClient.php
+    line: 60
+    anchor: "throw new ApiException("
+    tolerance: 4
+    requires: none
+    note: >
+      The wrapped message is serialised into the JSON error response by the controller, exposing internals to the caller rather than to the log.
+
+safe:
+  - file: src/Safe/SafeApiClient.php
+    note: Logs the exception class only, and returns a fixed message that carries no upstream detail.

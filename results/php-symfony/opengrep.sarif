@@ -1,0 +1,254 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": [
+            {
+              "descriptor": {
+                "id": "Syntax error"
+              },
+              "level": "warning",
+              "message": {
+                "text": "Syntax error at line src/Controller/ApiController.php:22:\n `readonly` was unexpected"
+              }
+            },
+            {
+              "descriptor": {
+                "id": "Syntax error"
+              },
+              "level": "warning",
+              "message": {
+                "text": "Syntax error at line src/Safe/SafeApiClient.php:35:\n `readonly` was unexpected"
+              }
+            },
+            {
+              "descriptor": {
+                "id": "Syntax error"
+              },
+              "level": "warning",
+              "message": {
+                "text": "Syntax error at line src/Safe/SafeApiController.php:25:\n `readonly` was unexpected"
+              }
+            },
+            {
+              "descriptor": {
+                "id": "Syntax error"
+              },
+              "level": "warning",
+              "message": {
+                "text": "Syntax error at line src/Service/ApiClient.php:25:\n `readonly` was unexpected"
+              }
+            }
+          ]
+        }
+      ],
+      "results": [
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "b496680a5aa63a19ed0767817f44bcc2989ab6819099a2d872ecdd470a5178f6bcca6545fb8dad747907e768f7e5da87f9ae718692a09b60cfbaaa30888b89ad_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Safe/SafeApiClient.php",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 90,
+                  "endLine": 61,
+                  "snippet": {
+                    "text": "            $response = $this->httpClient->request('GET', $baseUrl . $endpoint, $options);"
+                  },
+                  "startColumn": 25,
+                  "startLine": 61
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Potential SSRF (CWE-918): a variable is concatenated into an HTTP client URL without prior validation. If the concatenated value is user-controlled or flows from an untrusted source, an attacker can redirect requests to internal hosts (e.g. cloud metadata at 169.254.169.254, internal APIs, or localhost services). Validate and allowlist the URL or path segment before use.\n"
+          },
+          "properties": {},
+          "ruleId": "semgrep.ssrf-http-client-url-concatenation"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "97e7ea02ce0472369dd436829aa1cc90853d0e15cb7f676672d68efcdf39ea22d1bc8a33130fb1d0cbbc5492245c4b84f499222eba2487ad67472a69ced7761d_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Service/ApiClient.php",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 90,
+                  "endLine": 45,
+                  "snippet": {
+                    "text": "            $response = $this->httpClient->request('GET', $baseUrl . $endpoint, $options);"
+                  },
+                  "startColumn": 25,
+                  "startLine": 45
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Potential SSRF (CWE-918): a variable is concatenated into an HTTP client URL without prior validation. If the concatenated value is user-controlled or flows from an untrusted source, an attacker can redirect requests to internal hosts (e.g. cloud metadata at 169.254.169.254, internal APIs, or localhost services). Validate and allowlist the URL or path segment before use.\n"
+          },
+          "properties": {},
+          "ruleId": "semgrep.ssrf-http-client-url-concatenation"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "4e046cfb5281fddfbef9c219d3aeb22b961838bbadc3183f3b9524c228f2cf0105cfcadd75a1b91af3f9c98814cf1b4e98daca907e9d7fc2489287c419d0ab85_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Service/ApiClient.php",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 32,
+                  "endLine": 54,
+                  "snippet": {
+                    "text": "        } catch (\\Throwable $e) {"
+                  },
+                  "startColumn": 11,
+                  "startLine": 54
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Overly broad exception catch (CWE-396): catching \\Throwable or \\Exception swallows all errors and exceptions, masking programming bugs (type errors, OOM, assertion failures) and making root-cause analysis harder. Catch the most specific exception type your code can meaningfully handle.\n"
+          },
+          "properties": {},
+          "ruleId": "semgrep.catch-generic-exception-type"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "bea0de682fb280ba5166f9c306fbe40f144dbf28e5c91c616d8a70df1c9c6ab452905357067fb3c1d9e1410722e225850b809d9e533f665c2ee495bdd56733f5_0"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Service/ApiClient.php",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 14,
+                  "endLine": 58,
+                  "snippet": {
+                    "text": "            $this->logger->error(\n                sprintf('API response error on %s: %s', $endpoint, $e->getMessage())\n            );"
+                  },
+                  "startColumn": 13,
+                  "startLine": 56
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Potential sensitive data exposure (CWE-532): exception messages passed directly to a logger may contain secrets, tokens, API keys, internal hostnames, or stack details that should not appear in log files. Sanitize or redact the exception message before logging, or log only a safe error code/type without the raw message.\n"
+          },
+          "properties": {},
+          "ruleId": "semgrep.sensitive-exception-message-in-log"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "Opengrep OSS",
+          "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Overly broad exception catch (CWE-396): catching \\Throwable or \\Exception swallows all errors and exceptions, masking programming bugs (type errors, OOM, assertion failures) and making root-cause analysis harder. Catch the most specific exception type your code can meaningfully handle.\n"
+              },
+              "help": {
+                "markdown": "Overly broad exception catch (CWE-396): catching \\Throwable or \\Exception swallows all errors and exceptions, masking programming bugs (type errors, OOM, assertion failures) and making root-cause analysis harder. Catch the most specific exception type your code can meaningfully handle.\n",
+                "text": "Overly broad exception catch (CWE-396): catching \\Throwable or \\Exception swallows all errors and exceptions, masking programming bugs (type errors, OOM, assertion failures) and making root-cause analysis harder. Catch the most specific exception type your code can meaningfully handle.\n"
+              },
+              "id": "semgrep.catch-generic-exception-type",
+              "name": "semgrep.catch-generic-exception-type",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-396: Declaration of Catch for Generic Exception",
+                  "HIGH CONFIDENCE",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Opengrep Finding: semgrep.catch-generic-exception-type"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Potential sensitive data exposure (CWE-532): exception messages passed directly to a logger may contain secrets, tokens, API keys, internal hostnames, or stack details that should not appear in log files. Sanitize or redact the exception message before logging, or log only a safe error code/type without the raw message.\n"
+              },
+              "help": {
+                "markdown": "Potential sensitive data exposure (CWE-532): exception messages passed directly to a logger may contain secrets, tokens, API keys, internal hostnames, or stack details that should not appear in log files. Sanitize or redact the exception message before logging, or log only a safe error code/type without the raw message.\n",
+                "text": "Potential sensitive data exposure (CWE-532): exception messages passed directly to a logger may contain secrets, tokens, API keys, internal hostnames, or stack details that should not appear in log files. Sanitize or redact the exception message before logging, or log only a safe error code/type without the raw message.\n"
+              },
+              "id": "semgrep.sensitive-exception-message-in-log",
+              "name": "semgrep.sensitive-exception-message-in-log",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-532: Insertion of Sensitive Information into Log File",
+                  "HIGH CONFIDENCE",
+                  "OWASP-A09:2021 - Security Logging and Monitoring Failures",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Opengrep Finding: semgrep.sensitive-exception-message-in-log"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Potential SSRF (CWE-918): a variable is concatenated into an HTTP client URL without prior validation. If the concatenated value is user-controlled or flows from an untrusted source, an attacker can redirect requests to internal hosts (e.g. cloud metadata at 169.254.169.254, internal APIs, or localhost services). Validate and allowlist the URL or path segment before use.\n"
+              },
+              "help": {
+                "markdown": "Potential SSRF (CWE-918): a variable is concatenated into an HTTP client URL without prior validation. If the concatenated value is user-controlled or flows from an untrusted source, an attacker can redirect requests to internal hosts (e.g. cloud metadata at 169.254.169.254, internal APIs, or localhost services). Validate and allowlist the URL or path segment before use.\n\n\n<b>References:</b>\n - [https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/](https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/)\n",
+                "text": "Potential SSRF (CWE-918): a variable is concatenated into an HTTP client URL without prior validation. If the concatenated value is user-controlled or flows from an untrusted source, an attacker can redirect requests to internal hosts (e.g. cloud metadata at 169.254.169.254, internal APIs, or localhost services). Validate and allowlist the URL or path segment before use.\n"
+              },
+              "id": "semgrep.ssrf-http-client-url-concatenation",
+              "name": "semgrep.ssrf-http-client-url-concatenation",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-918: Server-Side Request Forgery (SSRF)",
+                  "MEDIUM CONFIDENCE",
+                  "OWASP-A10:2021 - Server-Side Request Forgery",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Opengrep Finding: semgrep.ssrf-http-client-url-concatenation"
+              }
+            }
+          ],
+          "semanticVersion": "1.22.0"
+        }
+      }
+    }
+  ],
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json"
+}

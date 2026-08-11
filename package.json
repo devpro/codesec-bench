@@ -1,0 +1,20 @@
+{
+  "name": "codesec-bench",
+  "version": "0.1.0",
+  "description": "Harness for evaluating code security tools against curated vulnerability cases",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "validate": "node scripts/validate_cases.mjs",
+    "score": "node scripts/score.mjs",
+    "matrix": "node scripts/render_matrix.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "js-yaml": "^4.1.0"
+  }
+}

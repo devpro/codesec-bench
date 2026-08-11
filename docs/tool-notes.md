@@ -1,0 +1,127 @@
+# Tool notes
+
+Measured behaviour, with the command that produced it.
+Anything in this file was observed on this repository, not read from a vendor page.
+
+Tools run as locally installed binaries.
+No third party container image is used, so each result is tied to the version recorded in its SARIF output rather than to a pinned image tag.
+The versions in [matrix.md](matrix.md) are the ones that produced the committed results.
+
+## Installing the tools
+
+```bash
+# Semgrep OSS
+pipx install semgrep
+
+# Opengrep
+curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash
+
+# Bearer CLI
+curl -sfL https://raw.githubusercontent.com/Bearer/bearer/main/contrib/install.sh | sudo sh -s -- -b /usr/bin
+```
+
+## Semgrep OSS
+
+Measured on 1.166.0, and on 1.104.0 where noted.
+
+### PHP try/catch cannot be matched structurally
+
+Every structural pattern for a catch clause returns zero results, including a bare `try { ... }`:
+
+```yaml
+- pattern: try { ... } catch (\Throwable $E) { ... }   # 0 findings
+- pattern: catch (\Throwable $E) { ... }               # 0 findings
+- pattern: catch (Throwable $E) { ... }                # 0 findings
+- pattern: try { ... }                                 # 0 findings
+```
+
+Only a regex works:
+
+```yaml
+- pattern-regex: 'catch\s*\(\s*\\?(Throwable|Exception)\s+\$\w+\s*\)'   # matches
+```
+
+Verified on a two file fixture containing nothing but a try/catch, so the sample code is not the cause.
+Reproduced identically on Semgrep 1.166.0 and Opengrep 1.22.0.
+
+The consequence is that CWE-396 in PHP is only reachable through `pattern-regex`, which also matches inside comments and string literals.
+
+The rule shipped in `samples/php-symfony/.semgrep/rules.yaml` used the structural form and silently found nothing until this was measured, while the documentation claimed it detected the case.
+That is the reason this repository generates its tables instead of writing them by hand.
+
+### The readonly promoted property parse bug is fixed in recent versions
+
+Semgrep 1.104.0 fails to parse PHP 8.1 constructor promoted properties:
+
+```text
+[WARN] Syntax error at line src/Service/ApiClient.php:25
+Partially scanned: 4 files only partially analyzed due to parsing or internal Semgrep errors
+```
+
+Line 25 is `private readonly HttpClientInterface $httpClient,`.
+
+Semgrep 1.166.0 reports `<none>` partially analyzed on the same sample, so the bug is fixed.
+This repository previously documented the bug as specific to Opengrep.
+It was not: it affected Semgrep too, and the accurate statement is that it is version dependent.
+
+### Community packs find nothing on PHP
+
+```bash
+semgrep scan --config p/php --config p/owasp-top-ten src
+```
+
+Zero results on the PHP sample.
+SSRF detection needs cross-file taint tracking, which is a paid tier feature.
+
+## Opengrep
+
+Measured on 1.22.0.
+
+Opengrep scores identically to Semgrep with the same custom rules: 3 of 5 detected, 1 false positive.
+It is a drop-in replacement for this workload, with the same rule format, the same `--config` flag and the same SARIF output.
+
+### The readonly parse bug is still present, and does not matter here
+
+```text
+[WARN] Syntax error at line src/Service/ApiClient.php:25
+[WARN] Syntax error at line src/Controller/ApiController.php:22
+Partially scanned: 4 files only partially analyzed due to parsing or internal Opengrep errors
+```
+
+Opengrep 1.22.0 still fails on `private readonly Type $var`, unlike current Semgrep.
+
+This repository previously concluded that Opengrep "is not usable for PHP 8.1+ codebases at this time".
+That conclusion is wrong.
+Analysis recovers after the failed constructor and continues through the rest of the file, and Opengrep finds every result Semgrep finds on this sample.
+
+Partial analysis is still a real risk, since a defect inside an unparsed region would be missed silently.
+The honest statement is that coverage is incomplete and the tool does not fail loudly about it, not that the tool is unusable.
+
+## Bearer CLI
+
+**Does not complete on this sample.**
+Excluded from the default tool set, and still runnable through `task scan:one SAMPLE=php-symfony TOOL=bearer`.
+
+Bearer 2.0.2 ran for more than twenty-five minutes on six PHP files without producing output, holding two `processing-worker` processes the whole time, and had to be killed.
+A scanner that cannot finish on a sample this small is not usable in a bench that runs every tool over every sample.
+
+For reference, Bearer 1.47.0 did finish on the same code and reported zero results with `--scanner secrets,sast`.
+Bearer is documented as strong on sensitive data flowing into logs, and the sample contains an exception message carrying an API key being written to a logger, so that was a genuine miss rather than an unsupported category.
+
+Bearer also emits no version in its SARIF driver metadata, so a result from it cannot be tied to a version without a separate lookup.
+
+`scripts/run_scan.sh` applies a `SCAN_TIMEOUT` ceiling, 1800 seconds by default, so a scanner behaving this way now fails the scan rather than stalling the pipeline.
+
+## Tools evaluated and set aside
+
+Tool                       | Reason
+---------------------------|-------------------------------------------------------------------------------------------------
+PHPStan                    | Type checker, no taint analysis outside the paid tier, no security rules in the free extensions
+Psalm                      | Has genuine inter-procedural taint analysis, produced zero findings on the PHP sample
+CodeQL                     | Does not support PHP at all
+MegaLinter security flavor | Ships no PHP application SAST, only repository level tools
+
+## Commercial tools
+
+Identified as capable of PHP cross-file taint analysis, not tested because they require paid licences: Snyk Code, Checkmarx One, Veracode.
+GitLab Advanced SAST is Ultimate tier only and does not cover PHP, which falls back to the Semgrep analyzer already measured here.

@@ -1,0 +1,23 @@
+id: php-symfony/broad-exception-catch
+title: Catch of Throwable swallows programming errors alongside transport failures
+category: sast
+difficulty: 1
+cwe: [CWE-396]
+
+description: >
+  Catching Throwable captures Error as well as Exception, so type errors, out of memory conditions and assertion failures are reported to the caller as an upstream API failure.
+  This is a single syntactic construct with no dataflow involved, which makes it the control case of this sample: a tool that misses it is not analysing PHP at all.
+
+expected:
+  - id: broad-catch
+    cwe: [CWE-396, CWE-397]
+    severity: low
+    file: src/Service/ApiClient.php
+    line: 54
+    anchor: "} catch (\\Throwable $e) {"
+    tolerance: 2
+    requires: none
+
+safe:
+  - file: src/Safe/SafeApiClient.php
+    note: Catches TransportExceptionInterface, the narrowest type that covers the failure being handled.

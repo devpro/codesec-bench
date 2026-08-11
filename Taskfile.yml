@@ -1,0 +1,66 @@
+version: '3'
+
+vars:
+  SAMPLES:
+    sh: ls -d samples/*/ 2>/dev/null | xargs -n1 basename | tr '\n' ' '
+  # bearer is deliberately not in the default set: 2.0.2 does not complete on the PHP sample.
+  # It stays available through 'task scan:one TOOL=bearer'. See docs/tool-notes.md.
+  TOOLS: semgrep-community semgrep-custom opengrep
+
+tasks:
+  default:
+    cmds:
+      - task --list
+
+  validate:
+    desc: Check every case manifest against the schema, the files and the line anchors
+    cmds:
+      - node scripts/validate_cases.mjs
+
+  scan:
+    desc: Run every tool against every sample
+    cmds:
+      - for: {var: SAMPLES}
+        task: scan:sample
+        vars: {SAMPLE: '{{.ITEM}}'}
+
+  scan:sample:
+    desc: Run every tool against one sample (SAMPLE=<id>)
+    requires:
+      vars: [SAMPLE]
+    cmds:
+      - for: {var: TOOLS}
+        cmd: ./scripts/run_scan.sh {{.SAMPLE}} {{.ITEM}}
+
+  scan:one:
+    desc: Run a single tool against a single sample (SAMPLE=<id> TOOL=<tool>)
+    requires:
+      vars: [SAMPLE, TOOL]
+    cmds:
+      - ./scripts/run_scan.sh {{.SAMPLE}} {{.TOOL}}
+
+  score:
+    desc: Score the committed SARIF files against the case manifests and regenerate the matrix
+    cmds:
+      - node scripts/score.mjs
+      - node scripts/render_matrix.mjs
+
+  ci:
+    desc: "Full pipeline: validate manifests, scan everything, score, regenerate the matrix"
+    cmds:
+      - task: validate
+      - task: scan
+      - task: score
+
+  check:
+    desc: Validate and score without rescanning, which is what CI needs on a documentation change
+    cmds:
+      - task: validate
+      - task: score
+      - git diff --exit-code docs/matrix.md || { echo "docs/matrix.md is stale, commit the regenerated file"; exit 1; }
+
+  clean:
+    desc: Remove generated scan output, keeping the committed SARIF files
+    cmds:
+      - rm -f samples/*/.scan.sarif
+      - rm -rf samples/*/.scannerwork

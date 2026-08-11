@@ -65,20 +65,12 @@ rules:
   # \Exception misses Errors (type errors, OOM, etc.) but is still too broad in most contexts — both should be flagged and reviewed.
   # The rule intentionally does NOT match specific subtypes like \RuntimeException or \InvalidArgumentException, which are acceptable.
 
+  # Measured on Semgrep 1.104.0: PHP try/catch cannot be matched structurally.
+  # Every structural form returns zero, including a bare `try { ... }`, so the catch clause is not reachable through the PHP AST mapping at all.
+  # A regex is the only expression that works here, at the cost of matching inside comments and strings.
+  # This limitation is itself a bench result, recorded in docs/tool-notes.md.
   - id: catch-generic-exception-type
-    pattern-either:
-      - pattern: |
-          try {
-            ...
-          } catch (\Throwable $E) {
-            ...
-          }
-      - pattern: |
-          try {
-            ...
-          } catch (\Exception $E) {
-            ...
-          }
+    pattern-regex: 'catch\s*\(\s*\\?(Throwable|Exception)\s+\$\w+\s*\)'
     message: >
       Overly broad exception catch (CWE-396): catching \Throwable or \Exception swallows all errors and exceptions, masking programming bugs (type errors, OOM, assertion failures) and making root-cause analysis harder.
       Catch the most specific exception type your code can meaningfully handle.

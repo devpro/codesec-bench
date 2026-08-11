@@ -1,0 +1,42 @@
+id: php-symfony/ssrf-crossfile
+title: SSRF through an endpoint path that crosses a controller and a service
+category: sast
+difficulty: 4
+cwe: [CWE-918]
+owasp: "A10:2021"
+
+description: >
+  A query parameter is read by a controller and handed to a service in another file, which concatenates it onto a base URL and issues the request.
+  Nothing validates the value, so an attacker controls the path and, with a leading scheme or a traversal sequence, the host.
+  The two halves of the flow live in different files and different classes, which is what makes this case a level 4.
+
+expected:
+  - id: ssrf-source
+    cwe: [CWE-918, CWE-20]
+    severity: high
+    file: src/Controller/ApiController.php
+    line: 30
+    anchor: "$request->query->getString('endpoint'"
+    tolerance: 3
+    requires: taint-source-recognition
+    note: >
+      The Symfony InputBag is the taint source.
+      A tool that does not model Symfony request objects sees an ordinary method call and reports nothing.
+
+  - id: ssrf-sink
+    cwe: [CWE-918]
+    severity: high
+    file: src/Service/ApiClient.php
+    line: 45
+    anchor: "$this->httpClient->request('GET', $baseUrl . $endpoint"
+    tolerance: 3
+    requires: cross-file-taint
+    note: >
+      Reporting the concatenation alone is possible with a syntactic rule.
+      Proving it is reachable from user input requires following the call from ApiController into ApiClient, across files.
+
+safe:
+  - file: src/Safe/SafeApiClient.php
+    note: The same request call, reached only after the endpoint is checked against an allowlist.
+  - file: src/Safe/SafeApiController.php
+    note: The same taint source, constrained before it leaves the controller.

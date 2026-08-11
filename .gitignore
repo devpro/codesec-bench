@@ -167,3 +167,7 @@ phpunit.xml
 .idea/
 .vscode/
 *.swp
+
+# Transient scan output, the committed copy lives under results/
+samples/*/.scan.sarif
+samples/*/.scannerwork/

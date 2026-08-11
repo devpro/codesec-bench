@@ -3,3 +3,9 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+safe_controllers:
+    resource:
+        path: ../src/Safe/
+        namespace: App\Safe
+    type: attribute
