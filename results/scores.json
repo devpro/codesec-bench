@@ -333,6 +333,188 @@
           "unexpected_details": []
         }
       }
+    },
+    {
+      "sample": "python-flask",
+      "title": "Flask reporting service with five cases across the difficulty ladder",
+      "language": "python",
+      "case_count": 5,
+      "expectation_count": 10,
+      "tools": {
+        "semgrep-community": {
+          "version": "1.166.0",
+          "cases": [
+            {
+              "case": "python-flask/command-injection-helper",
+              "difficulty": 3,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "command-construction",
+                  "status": "missed",
+                  "requires": "cross-function-taint",
+                  "severity": "critical",
+                  "location": "src/shell.py:17",
+                  "evidence": null
+                },
+                {
+                  "expectation": "shell-execution",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "critical",
+                  "location": "src/shell.py:24",
+                  "evidence": {
+                    "rule": "python.lang.security.audit.subprocess-shell-true.subprocess-shell-true",
+                    "line": 24,
+                    "cwe": [
+                      "CWE-78"
+                    ]
+                  }
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/hardcoded-credential",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "database-password",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/config.py:8",
+                  "evidence": null
+                },
+                {
+                  "expectation": "api-token",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/config.py:9",
+                  "evidence": {
+                    "rule": "generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key",
+                    "line": 9,
+                    "cwe": [
+                      "CWE-798"
+                    ]
+                  }
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/path-traversal-crossfile",
+              "difficulty": 4,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "traversal-source",
+                  "status": "missed",
+                  "requires": "taint-source-recognition",
+                  "severity": "high",
+                  "location": "src/app.py:35",
+                  "evidence": null
+                },
+                {
+                  "expectation": "traversal-sink",
+                  "status": "missed",
+                  "requires": "cross-file-taint",
+                  "severity": "high",
+                  "location": "src/files.py:23",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/sanitizer-bypass-traversal",
+              "difficulty": 5,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "inadequate-sanitizer",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/files.py:17",
+                  "evidence": null
+                },
+                {
+                  "expectation": "guarded-sink",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/files.py:37",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/sql-injection-fstring",
+              "difficulty": 2,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "query-construction",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "critical",
+                  "location": "src/db.py:24",
+                  "evidence": null
+                },
+                {
+                  "expectation": "query-execution",
+                  "status": "detected",
+                  "requires": "intra-procedural-taint",
+                  "severity": "critical",
+                  "location": "src/db.py:25",
+                  "evidence": {
+                    "rule": "python.lang.security.audit.formatted-sql-query.formatted-sql-query",
+                    "line": 25,
+                    "cwe": [
+                      "CWE-89"
+                    ]
+                  }
+                }
+              ],
+              "false_positive_details": []
+            }
+          ],
+          "totals": {
+            "expected": 10,
+            "detected": 3,
+            "partial": 0,
+            "missed": 7,
+            "false_positives": 0,
+            "unexpected": 0,
+            "recall": 0.3
+          },
+          "unexpected_details": []
+        }
+      }
     }
   ]
 }

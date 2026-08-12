@@ -1,0 +1,38 @@
+id: python-flask/sql-injection-fstring
+title: SQL injection through an f-string interpolated owner name
+category: sast
+difficulty: 2
+cwe: [CWE-89]
+owasp: "A03:2021"
+
+description: >
+  A query parameter is interpolated into a SELECT statement with an f-string and executed.
+  A single quote in the owner name ends the literal and everything after it is executed as SQL.
+  The parameter, the string construction and the execution all sit inside one function, so no call graph is needed.
+
+expected:
+  - id: query-construction
+    cwe: [CWE-89]
+    severity: critical
+    file: src/db.py
+    line: 24
+    anchor: 'query = f"SELECT id, title, owner FROM reports WHERE owner ='
+    tolerance: 0
+    requires: none
+    note: >
+      An f-string containing a SELECT is one of the most heavily covered patterns in every Python rule pack.
+
+  - id: query-execution
+    cwe: [CWE-89]
+    severity: critical
+    file: src/db.py
+    line: 25
+    anchor: "cursor.execute(query)"
+    tolerance: 0
+    requires: intra-procedural-taint
+    note: >
+      Reporting the execute call rather than the string requires following query one statement, which separates rules that match a literal shape from rules that track a variable.
+
+safe:
+  - file: src/safe/db.py
+    note: The same statement with the owner bound as a parameter.

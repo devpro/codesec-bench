@@ -1,0 +1,44 @@
+id: python-flask/sanitizer-bypass-traversal
+title: Traversal guard that removes parent sequences once and can be defeated by nesting them
+category: sast
+difficulty: 5
+cwe: [CWE-22]
+owasp: "A01:2021"
+
+description: >
+  The name is passed through _strip_traversal before use, which removes "../" from the string.
+  The replacement runs once, so a sequence that reappears after its own removal survives: "....//" has its inner "../" deleted and becomes "../".
+  An input of "....//....//etc/passwd" therefore reaches open() as "../../etc/passwd".
+
+  This is the hardest shape in the bench.
+  A tool must decide that a transformation is not an effective sanitizer, rather than treat any function applied to tainted data as one.
+  Tools that model sanitizers by name or by presence will mark the flow clean and report nothing, which is a silent false negative rather than a visible gap.
+
+expected:
+  - id: inadequate-sanitizer
+    cwe: [CWE-22, CWE-20]
+    severity: high
+    file: src/files.py
+    line: 17
+    anchor: 'return name.replace("../", "")'
+    tolerance: 2
+    requires: sanitizer-reasoning
+    note: >
+      Flagging the guard itself is the clearest possible result, since it names the actual mistake.
+      No free tool is expected to do this.
+
+  - id: guarded-sink
+    cwe: [CWE-22]
+    severity: high
+    file: src/files.py
+    line: 37
+    anchor: "path = os.path.join(REPORTS_DIR, safe_name)"
+    tolerance: 3
+    requires: sanitizer-reasoning
+    note: >
+      A tool with no sanitizer model at all may report this by accident, simply because it tracks taint and does not recognise the replace call as cleansing.
+      That counts as a detection here: the bench measures outcomes, not intent.
+
+safe:
+  - file: src/safe/files.py
+    note: Decides containment on the resolved path after normalisation, which no traversal sequence defeats.

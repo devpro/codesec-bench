@@ -31,11 +31,12 @@ mkdir -p "${OUT_DIR}"
 OUT="${OUT_DIR}/${TOOL}.sarif"
 TMP="${SAMPLE_DIR}/.scan.sarif"
 
+# A configured but uninstalled tool is a skip, not a failure.
+# Breaking the whole run would deny the remaining tools their columns, and an absent column already says truthfully that there is no data for that tool.
 require() {
   command -v "$1" >/dev/null 2>&1 || {
-    echo "${1} is not installed or not on PATH." >&2
-    echo "Install instructions: docs/tool-notes.md" >&2
-    exit 127
+    echo "    ${1} is not installed, skipping. Install instructions: docs/tool-notes.md" >&2
+    exit 0
   }
 }
 
@@ -44,40 +45,51 @@ require() {
 SCAN_TIMEOUT="${SCAN_TIMEOUT:-1800}"
 run() { timeout --signal=TERM --kill-after=30s "${SCAN_TIMEOUT}" "$@" || true; }
 
+# Which tools apply to a sample, and with which rule packs, comes from its sample.yaml rather than from a language specific branch here.
+# Exit code 3 means the tool is not configured for this sample, which is a skip rather than a failure: PHP rule packs make no sense on a Flask app.
+if ! ARGS=$(node "${REPO_ROOT}/scripts/sample_meta.mjs" "${SAMPLE}" args "${TOOL}"); then
+  status=$?
+  if [ "${status}" -eq 3 ]; then
+    echo "==> ${TOOL} on ${SAMPLE}: not configured for this sample, skipping"
+    exit 0
+  fi
+  exit "${status}"
+fi
+
+ROOTS=$(node "${REPO_ROOT}/scripts/sample_meta.mjs" "${SAMPLE}" roots)
+
 echo "==> ${TOOL} on ${SAMPLE}"
 cd "${SAMPLE_DIR}"
 
+# ARGS and ROOTS are deliberately unquoted: both are space separated lists that must expand into separate arguments.
+# shellcheck disable=SC2086
 case "${TOOL}" in
-  semgrep-community)
+  semgrep-community | semgrep-custom)
     require semgrep
-    SEMGREP_SEND_METRICS=off run semgrep scan \
-      --config p/php --config p/owasp-top-ten \
-      --sarif --output "${TMP}" --quiet src
-    ;;
-
-  semgrep-custom)
-    require semgrep
-    SEMGREP_SEND_METRICS=off run semgrep scan \
-      --config .semgrep/rules.yaml \
-      --sarif --output "${TMP}" --quiet src
+    SEMGREP_SEND_METRICS=off run semgrep scan ${ARGS} \
+      --sarif --output "${TMP}" --quiet ${ROOTS}
     ;;
 
   opengrep)
     require opengrep
-    run opengrep scan \
-      --config .semgrep/rules.yaml \
-      --sarif --output "${TMP}" --quiet src
+    run opengrep scan ${ARGS} \
+      --sarif --output "${TMP}" --quiet ${ROOTS}
+    ;;
+
+  bandit)
+    require bandit
+    run bandit --recursive ${ARGS} --format sarif --output "${TMP}" ${ROOTS}
     ;;
 
   bearer)
     require bearer
-    run bearer scan src \
+    run bearer scan ${ROOTS} ${ARGS} \
       --scanner secrets,sast --format sarif --output "${TMP}" --quiet
     ;;
 
   *)
     echo "Unknown tool: ${TOOL}" >&2
-    echo "Known tools: semgrep-community semgrep-custom opengrep bearer" >&2
+    echo "Known tools: semgrep-community semgrep-custom opengrep bandit bearer" >&2
     exit 1
     ;;
 esac

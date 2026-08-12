@@ -86,10 +86,24 @@ Any tool result landing in a `safe` range is a false positive for that case.
 ## Line numbers drift
 
 `line` points at a specific line of a real file, so editing the code above it invalidates the manifest.
-`task validate` compares each expectation against an anchor string when one is given, and fails when the anchor is no longer on the expected line.
-Adding `anchor` to an expectation is strongly recommended:
+`task validate` compares each expectation against an anchor string, and fails when the anchor is no longer on the expected line.
+`anchor` is effectively mandatory: an expectation without one is reported as unverifiable.
 
 ```yaml
     line: 45
     anchor: "$this->httpClient->request('GET', $baseUrl . $endpoint"
 ```
+
+## Tolerance windows must not overlap
+
+`task validate` rejects two expectations in the same file whose tolerance windows touch.
+
+This is the subtlest way the bench can lie about a tool.
+Two expectations one line apart, each with tolerance 1, both accept a finding on either line, so a tool reporting only one of them gets credited for both.
+
+That happened for real.
+A secrets rule firing on the API token line was also credited as detecting the database password on the line above, turning a genuine 3 of 10 into a flattering 5 of 10.
+
+The scorer assigns findings to expectations one to one and prefers the closest match, which limits the damage, but it cannot stop a spare finding spilling onto a neighbour.
+Rejecting the overlap at validation time is what actually prevents it.
+Set `tolerance: 0` for expectations on adjacent lines.

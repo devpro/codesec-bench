@@ -1,0 +1,39 @@
+id: python-flask/hardcoded-credential
+title: Database password and API token committed as source literals
+category: sast
+difficulty: 1
+cwe: [CWE-798]
+owasp: "A07:2021"
+
+description: >
+  Two secrets are assigned as string literals at module level.
+  Anyone with repository access has them, they appear in every clone and in the history forever, and rotating them requires a code change and a deployment.
+  There is no dataflow to follow and no framework to model: this is a literal in an assignment.
+
+expected:
+  - id: database-password
+    cwe: [CWE-798, CWE-259]
+    severity: high
+    file: src/config.py
+    line: 8
+    anchor: 'DATABASE_PASSWORD = "pr0d-Reporting-2024!"'
+    tolerance: 0
+    requires: none
+    note: >
+      The calibration case for this sample.
+      A tool that misses this finds nothing at all, so its zero elsewhere carries no information.
+
+  - id: api-token
+    cwe: [CWE-798, CWE-259]
+    severity: high
+    file: src/config.py
+    line: 9
+    anchor: "SERVICE_API_TOKEN ="
+    tolerance: 0
+    requires: none
+    note: >
+      A high entropy literal with a recognisable prefix, which secret scanners key on and which generic SAST rules often miss because the variable name says token rather than password.
+
+safe:
+  - file: src/safe/config.py
+    note: The same names, populated from the environment.

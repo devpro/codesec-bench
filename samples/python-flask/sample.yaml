@@ -1,0 +1,24 @@
+id: python-flask
+title: Flask reporting service with five cases across the difficulty ladder
+language: python
+language_version: "3.12"
+framework: Flask 3
+runnable: true
+
+# Paths a scanner is pointed at, relative to the sample root.
+scan_roots:
+  - src
+
+# Tools that apply to this sample, with the arguments each one needs.
+# A tool absent from this map is skipped for this sample.
+# p/default and p/secrets are included deliberately.
+# Restricting the community column to the language pack alone understates it: p/python finds one of the ten expected findings here, and adding p/default and p/secrets raises that to four.
+# The community tier is measured at its best rather than at its narrowest.
+tools:
+  semgrep-community:
+    - --config=p/default
+    - --config=p/python
+    - --config=p/flask
+    - --config=p/secrets
+    - --config=p/owasp-top-ten
+  bandit: []

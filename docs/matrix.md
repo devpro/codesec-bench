@@ -41,3 +41,38 @@ Tool              | Version | Detected | Partial | Missed | Recall | False posit
 opengrep          | 1.22.0  | 3/5      | 0       | 2      | 60%    | 1               | 0
 semgrep-community | 1.166.0 | 0/5      | 0       | 5      | 0%     | 0               | 0
 semgrep-custom    | 1.166.0 | 3/5      | 0       | 2      | 60%    | 1               | 0
+
+## python-flask
+
+Flask reporting service with five cases across the difficulty ladder
+
+### Cases
+
+Case                                                                                    | Difficulty               | CWE     | Expected findings
+----------------------------------------------------------------------------------------|--------------------------|---------|------------------
+[command-injection-helper](../samples/python-flask/cases/command-injection-helper/)     | 3 cross-function         | CWE-78  | 2
+[hardcoded-credential](../samples/python-flask/cases/hardcoded-credential/)             | 1 syntax                 | CWE-798 | 2
+[path-traversal-crossfile](../samples/python-flask/cases/path-traversal-crossfile/)     | 4 cross-file             | CWE-22  | 2
+[sanitizer-bypass-traversal](../samples/python-flask/cases/sanitizer-bypass-traversal/) | 5 framework or sanitizer | CWE-22  | 2
+[sql-injection-fstring](../samples/python-flask/cases/sql-injection-fstring/)           | 2 intra-procedural       | CWE-89  | 2
+
+### Detection by expectation
+
+Case                       | Expectation          | Requires                 | semgrep-community
+---------------------------|----------------------|--------------------------|------------------
+command-injection-helper   | command-construction | cross-function-taint     | no
+command-injection-helper   | shell-execution      | none                     | yes
+hardcoded-credential       | database-password    | none                     | no
+hardcoded-credential       | api-token            | none                     | yes
+path-traversal-crossfile   | traversal-source     | taint-source-recognition | no
+path-traversal-crossfile   | traversal-sink       | cross-file-taint         | no
+sanitizer-bypass-traversal | inadequate-sanitizer | sanitizer-reasoning      | no
+sanitizer-bypass-traversal | guarded-sink         | sanitizer-reasoning      | no
+sql-injection-fstring      | query-construction   | none                     | no
+sql-injection-fstring      | query-execution      | intra-procedural-taint   | yes
+
+### Totals
+
+Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
+------------------|---------|----------|---------|--------|--------|-----------------|-----------
+semgrep-community | 1.166.0 | 3/10     | 0       | 7      | 30%    | 0               | 0

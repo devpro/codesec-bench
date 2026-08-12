@@ -15,7 +15,7 @@ expected:
     file: src/Service/ApiClient.php
     line: 54
     anchor: "} catch (\\Throwable $e) {"
-    tolerance: 2
+    tolerance: 0
     requires: none
 
 safe:

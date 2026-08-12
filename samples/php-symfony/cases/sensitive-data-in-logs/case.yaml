@@ -17,7 +17,7 @@ expected:
     file: src/Service/ApiClient.php
     line: 56
     anchor: "$this->logger->error("
-    tolerance: 4
+    tolerance: 1
     requires: none
     note: >
       Detectable with a purely syntactic rule matching a logger call on an exception message.
@@ -29,7 +29,7 @@ expected:
     file: src/Service/ApiClient.php
     line: 60
     anchor: "throw new ApiException("
-    tolerance: 4
+    tolerance: 1
     requires: none
     note: >
       The wrapped message is serialised into the JSON error response by the controller, exposing internals to the caller rather than to the log.

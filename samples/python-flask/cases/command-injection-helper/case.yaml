@@ -1,0 +1,40 @@
+id: python-flask/command-injection-helper
+title: Command injection where a private helper builds the shell string
+category: sast
+difficulty: 3
+cwe: [CWE-78]
+owasp: "A03:2021"
+
+description: >
+  The report name is joined into a command string by a private helper, and the caller passes the returned string to subprocess.run with shell=True.
+  A semicolon in the name starts a second command.
+  The construction and the sink are in different functions of the same file, so seeing the flow means following a return value across a call boundary without leaving the module.
+
+expected:
+  - id: command-construction
+    cwe: [CWE-78, CWE-77]
+    severity: critical
+    file: src/shell.py
+    line: 17
+    anchor: 'return f"{CONVERTER} --format {output_format} --input {report_name}"'
+    tolerance: 2
+    requires: cross-function-taint
+    note: >
+      Nothing about this line is dangerous in isolation, it is an ordinary f-string.
+      Flagging it requires knowing the caller passes the result to a shell.
+
+  - id: shell-execution
+    cwe: [CWE-78]
+    severity: critical
+    file: src/shell.py
+    line: 24
+    anchor: "subprocess.run(command, shell=True"
+    tolerance: 2
+    requires: none
+    note: >
+      shell=True on a non-literal is a syntactic pattern that most tools flag on sight, regardless of whether the value is actually tainted.
+      Detecting this alone does not demonstrate dataflow analysis.
+
+safe:
+  - file: src/safe/shell.py
+    note: The same two function split, passing a list with shell=False and validating the format.

@@ -85,6 +85,38 @@ for (const sample of loadSamples()) {
   }
 }
 
+// Overlapping tolerance windows are the subtlest way this bench can lie.
+// Two expectations one line apart with tolerance 1 both accept a finding on either line, so a tool that reports only one of them gets credited for both.
+// That happened for real: a secrets rule firing on the API token line was also credited as detecting the database password on the line above.
+// The scorer assigns one to one and prefers the closest match, which limits the damage but cannot prevent a spare finding spilling onto a neighbour.
+// Rejecting the overlap at validation time is what actually prevents it.
+for (const sample of loadSamples()) {
+  const byFile = new Map();
+  for (const kase of sample.cases) {
+    for (const expectation of kase.expected) {
+      if (!byFile.has(expectation.file)) byFile.set(expectation.file, []);
+      byFile.get(expectation.file).push({ kase, expectation });
+    }
+  }
+
+  for (const [file, entries] of byFile) {
+    for (let i = 0; i < entries.length; i += 1) {
+      for (let j = i + 1; j < entries.length; j += 1) {
+        const a = entries[i];
+        const b = entries[j];
+        const gap = Math.abs(a.expectation.line - b.expectation.line);
+        if (gap > a.expectation.tolerance + b.expectation.tolerance) continue;
+        errors.push(
+          `${sample.id}: ${file}: tolerance windows overlap between ` +
+            `${a.kase.name}#${a.expectation.id} (line ${a.expectation.line}, tolerance ${a.expectation.tolerance}) and ` +
+            `${b.kase.name}#${b.expectation.id} (line ${b.expectation.line}, tolerance ${b.expectation.tolerance})\n` +
+            `      one finding could be credited to either, tighten the tolerance`,
+        );
+      }
+    }
+  }
+}
+
 if (errors.length) {
   console.error(`${errors.length} problem(s) across ${caseCount} case(s):\n`);
   for (const error of errors) console.error(`  ${error}`);

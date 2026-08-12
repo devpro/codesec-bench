@@ -9,7 +9,17 @@ runnable: true
 scan_roots:
   - src
 
-# Rule packs to run in addition to each tool's defaults.
-rules:
-  semgrep:
-    - .semgrep/rules.yaml
+# Tools that apply to this sample, with the arguments each one needs.
+# A tool absent from this map is skipped for this sample.
+# The community column is measured at its broadest rather than at its narrowest, so that a zero here cannot be blamed on a stingy rule selection.
+# p/default, p/secrets and p/owasp-top-ten add nothing on this sample: the result is zero with the language pack alone and zero with all five.
+tools:
+  semgrep-community:
+    - --config=p/default
+    - --config=p/php
+    - --config=p/secrets
+    - --config=p/owasp-top-ten
+  semgrep-custom:
+    - --config=.semgrep/rules.yaml
+  opengrep:
+    - --config=.semgrep/rules.yaml

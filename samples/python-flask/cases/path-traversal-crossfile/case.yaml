@@ -1,0 +1,42 @@
+id: python-flask/path-traversal-crossfile
+title: Path traversal from a Flask route into an unrelated module
+category: sast
+difficulty: 4
+cwe: [CWE-22]
+owasp: "A01:2021"
+
+description: >
+  A Flask route reads a name from the query string and passes it to a reader in another module, which joins it onto the reports directory and opens it.
+  Nothing validates it, so a name of "../../etc/passwd" leaves the directory entirely.
+  The source and the sink are in different files, which is what makes this a level 4.
+
+expected:
+  - id: traversal-source
+    cwe: [CWE-22, CWE-20]
+    severity: high
+    file: src/app.py
+    line: 35
+    anchor: 'name = request.args.get("name", "")'
+    tolerance: 3
+    requires: taint-source-recognition
+    note: >
+      Requires modelling the Flask request object as a taint source.
+      Reporting the route is only meaningful if the tool can also reach the sink.
+
+  - id: traversal-sink
+    cwe: [CWE-22]
+    severity: high
+    file: src/files.py
+    line: 23
+    anchor: "path = os.path.join(REPORTS_DIR, name)"
+    tolerance: 3
+    requires: cross-file-taint
+    note: >
+      os.path.join with a variable is a common and mostly benign shape, so flagging it without knowing the value is attacker controlled produces noise.
+      Doing it correctly means following the call from app.py into files.py.
+
+safe:
+  - file: src/safe/files.py
+    note: Resolves the candidate path and refuses anything outside the base directory.
+  - file: src/safe/app.py
+    note: The same routes and the same query parameters, calling the guarded readers.

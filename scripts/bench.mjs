@@ -122,7 +122,9 @@ export function loadSamples() {
       framework: raw.framework ?? "",
       runnable: Boolean(raw.runnable),
       scanRoots: raw.scan_roots ?? ["src"],
-      rules: raw.rules ?? {},
+      // Which tools apply to this sample, and the arguments each one needs.
+      // A tool absent from the map is skipped for the sample rather than run with defaults that would not fit the language.
+      tools: raw.tools ?? {},
       dir: sampleDir,
       cases,
     });

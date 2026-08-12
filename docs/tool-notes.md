@@ -64,14 +64,41 @@ Semgrep 1.166.0 reports `<none>` partially analyzed on the same sample, so the b
 This repository previously documented the bug as specific to Opengrep.
 It was not: it affected Semgrep too, and the accurate statement is that it is version dependent.
 
-### Community packs find nothing on PHP
+### Community packs find nothing on PHP, and the pack selection is not the reason
 
-```bash
-semgrep scan --config p/php --config p/owasp-top-ten src
+Zero results on the PHP sample with the language pack alone, and still zero with `p/default`, `p/secrets` and `p/owasp-top-ten` added.
+The community column is configured at its broadest in `sample.yaml` precisely so that a zero cannot be blamed on a stingy rule selection.
+
+SSRF detection needs cross-file taint tracking, which is a paid tier feature.
+
+### Pack selection matters enormously on Python
+
+On the Python sample the same argument goes the other way:
+
+Configuration                        | Findings
+-------------------------------------|---------
+`p/python` alone                     | 1
+`p/security-audit`                   | 1
+`p/secrets`                          | 2
+`p/default`                          | 4
+`p/default` and `p/secrets` together | 5
+
+Measuring the community tier with only the language pack would have understated it by a factor of five.
+Anyone comparing tools should check which packs the comparison used before believing the numbers.
+
+### Secret detection keys on vendor prefixes, not on variables
+
+In `src/config.py` of the Python sample, two adjacent lines are treated completely differently:
+
+```python
+DATABASE_PASSWORD = "pr0d-Reporting-2024!"                        # not reported
+SERVICE_API_TOKEN = "sk_live_9f2a4c8e1b7d3f6a0c5e8b2d4f7a1c9e"    # reported, twice
 ```
 
-Zero results on the PHP sample.
-SSRF detection needs cross-file taint tracking, which is a paid tier feature.
+The token matches `sk_live_`, a recognisable provider prefix, and fires two separate rules.
+The plaintext production password in a variable named `DATABASE_PASSWORD` fires nothing.
+
+This is worth knowing before relying on a secrets scanner: it recognises vendor credential formats, it does not reason about what a variable holds.
 
 ## Opengrep
 
@@ -111,6 +138,14 @@ Bearer is documented as strong on sensitive data flowing into logs, and the samp
 Bearer also emits no version in its SARIF driver metadata, so a result from it cannot be tied to a version without a separate lookup.
 
 `scripts/run_scan.sh` applies a `SCAN_TIMEOUT` ceiling, 1800 seconds by default, so a scanner behaving this way now fails the scan rather than stalling the pipeline.
+
+## Bandit
+
+Configured for the Python sample, not installed, so it has no column.
+
+```bash
+pipx install bandit
+```
 
 ## Tools evaluated and set aside
 

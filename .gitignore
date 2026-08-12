@@ -171,3 +171,4 @@ phpunit.xml
 # Transient scan output, the committed copy lives under results/
 samples/*/.scan.sarif
 samples/*/.scannerwork/
+samples/*/.venv/

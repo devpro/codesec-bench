@@ -1,0 +1,312 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": []
+        }
+      ],
+      "results": [
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/config.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 54,
+                  "endLine": 9,
+                  "snippet": {
+                    "text": "SERVICE_API_TOKEN = \"sk_live_9f2a4c8e1b7d3f6a0c5e8b2d4f7a1c9e\""
+                  },
+                  "startColumn": 22,
+                  "startLine": 9
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Stripe API Key detected"
+          },
+          "properties": {},
+          "ruleId": "generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/config.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 62,
+                  "endLine": 9,
+                  "snippet": {
+                    "text": "SERVICE_API_TOKEN = \"sk_live_9f2a4c8e1b7d3f6a0c5e8b2d4f7a1c9e\""
+                  },
+                  "startColumn": 22,
+                  "startLine": 9
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Picatic API Key detected"
+          },
+          "properties": {},
+          "ruleId": "generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/db.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 26,
+                  "endLine": 25,
+                  "snippet": {
+                    "text": "    cursor.execute(query)"
+                  },
+                  "startColumn": 5,
+                  "startLine": 25
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Detected possible formatted SQL query. Use parameterized queries instead."
+          },
+          "properties": {},
+          "ruleId": "python.lang.security.audit.formatted-sql-query.formatted-sql-query"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/db.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 26,
+                  "endLine": 25,
+                  "snippet": {
+                    "text": "    cursor.execute(query)"
+                  },
+                  "startColumn": 5,
+                  "startLine": 25
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option."
+          },
+          "properties": {},
+          "ruleId": "python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/shell.py",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 48,
+                  "endLine": 24,
+                  "snippet": {
+                    "text": "    result = subprocess.run(command, shell=True, capture_output=True, text=True)"
+                  },
+                  "startColumn": 44,
+                  "startLine": 24
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Found 'subprocess' function 'run' with 'shell=True'. This is dangerous because this call will spawn the command using a shell process. Doing so propagates current shell settings and variables, which makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead."
+          },
+          "properties": {},
+          "ruleId": "python.lang.security.audit.subprocess-shell-true.subprocess-shell-true"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "Semgrep OSS",
+          "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Picatic API Key detected"
+              },
+              "help": {
+                "markdown": "Picatic API Key detected\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key)\n - [https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures](https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures)\n",
+                "text": "Picatic API Key detected\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key",
+              "id": "generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key",
+              "name": "generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-798: Use of Hard-coded Credentials",
+                  "LOW CONFIDENCE",
+                  "OWASP-A07:2021 - Identification and Authentication Failures",
+                  "OWASP-A07:2025 - Authentication Failures",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: generic.secrets.security.detected-picatic-api-key.detected-picatic-api-key"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Stripe API Key detected"
+              },
+              "help": {
+                "markdown": "Stripe API Key detected\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key)\n - [https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures](https://owasp.org/Top10/A07_2021-Identification_and_Authentication_Failures)\n",
+                "text": "Stripe API Key detected\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key",
+              "id": "generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key",
+              "name": "generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-798: Use of Hard-coded Credentials",
+                  "LOW CONFIDENCE",
+                  "OWASP-A07:2021 - Identification and Authentication Failures",
+                  "OWASP-A07:2025 - Authentication Failures",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: generic.secrets.security.detected-stripe-api-key.detected-stripe-api-key"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Detected possible formatted SQL query. Use parameterized queries instead."
+              },
+              "help": {
+                "markdown": "Detected possible formatted SQL query. Use parameterized queries instead.\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/python.lang.security.audit.formatted-sql-query.formatted-sql-query)\n - [https://stackoverflow.com/questions/775296/mysql-parameterized-queries](https://stackoverflow.com/questions/775296/mysql-parameterized-queries)\n",
+                "text": "Detected possible formatted SQL query. Use parameterized queries instead.\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/python.lang.security.audit.formatted-sql-query.formatted-sql-query",
+              "id": "python.lang.security.audit.formatted-sql-query.formatted-sql-query",
+              "name": "python.lang.security.audit.formatted-sql-query.formatted-sql-query",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+                  "LOW CONFIDENCE",
+                  "OWASP-A01:2017 - Injection",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A05:2025 - Injection",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: python.lang.security.audit.formatted-sql-query.formatted-sql-query"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Found 'subprocess' function '$FUNC' with 'shell=True'. This is dangerous because this call will spawn the command using a shell process. Doing so propagates current shell settings and variables, which makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead."
+              },
+              "help": {
+                "markdown": "Found 'subprocess' function '$FUNC' with 'shell=True'. This is dangerous because this call will spawn the command using a shell process. Doing so propagates current shell settings and variables, which makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead.\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/python.lang.security.audit.subprocess-shell-true.subprocess-shell-true)\n - [https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess](https://stackoverflow.com/questions/3172470/actual-meaning-of-shell-true-in-subprocess)\n - [https://docs.python.org/3/library/subprocess.html](https://docs.python.org/3/library/subprocess.html)\n",
+                "text": "Found 'subprocess' function '$FUNC' with 'shell=True'. This is dangerous because this call will spawn the command using a shell process. Doing so propagates current shell settings and variables, which makes it much easier for a malicious actor to execute commands. Use 'shell=False' instead.\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/python.lang.security.audit.subprocess-shell-true.subprocess-shell-true",
+              "id": "python.lang.security.audit.subprocess-shell-true.subprocess-shell-true",
+              "name": "python.lang.security.audit.subprocess-shell-true.subprocess-shell-true",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')",
+                  "MEDIUM CONFIDENCE",
+                  "OWASP-A01:2017 - Injection",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A05:2025 - Injection",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: python.lang.security.audit.subprocess-shell-true.subprocess-shell-true"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option."
+              },
+              "help": {
+                "markdown": "Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option.\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query)\n - [https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-textual-sql](https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-textual-sql)\n - [https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_quick_guide.htm](https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_quick_guide.htm)\n - [https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-more-specific-text-with-table-expression-literal-column-and-expression-column](https://docs.sqlalchemy.org/en/14/core/tutorial.html#using-more-specific-text-with-table-expression-literal-column-and-expression-column)\n",
+                "text": "Avoiding SQL string concatenation: untrusted input concatenated with raw SQL query can result in SQL Injection. In order to execute raw query safely, prepared statement should be used. SQLAlchemy provides TextualSQL to easily used prepared statement with named parameters. For complex SQL composition, use SQL Expression Language or Schema Definition Language. In most cases, SQLAlchemy ORM will be a better option.\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query",
+              "id": "python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query",
+              "name": "python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+                  "LOW CONFIDENCE",
+                  "OWASP-A01:2017 - Injection",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A05:2025 - Injection",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: python.sqlalchemy.security.sqlalchemy-execute-raw-query.sqlalchemy-execute-raw-query"
+              }
+            }
+          ],
+          "semanticVersion": "1.166.0"
+        }
+      }
+    }
+  ],
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json"
+}
