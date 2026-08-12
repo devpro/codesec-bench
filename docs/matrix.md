@@ -12,6 +12,41 @@ Unexpected findings are everything else the tool reported in the sample, listed 
 
 See [methodology.md](methodology.md) for the full scoring rules.
 
+## dotnet-aspnet
+
+ASP.NET Core reporting service, five cases across the difficulty ladder
+
+### Cases
+
+Case                                                                             | Difficulty               | CWE              | Expected findings
+---------------------------------------------------------------------------------|--------------------------|------------------|------------------
+[path-guard-startswith](../samples/dotnet-aspnet/cases/path-guard-startswith/)   | 5 framework or sanitizer | CWE-22           | 2
+[sql-injection-concat](../samples/dotnet-aspnet/cases/sql-injection-concat/)     | 2 intra-procedural       | CWE-89           | 2
+[ssrf-crossfile](../samples/dotnet-aspnet/cases/ssrf-crossfile/)                 | 4 cross-file             | CWE-918          | 2
+[weak-crypto-and-secret](../samples/dotnet-aspnet/cases/weak-crypto-and-secret/) | 1 syntax                 | CWE-327, CWE-798 | 2
+[xml-resolver-helper](../samples/dotnet-aspnet/cases/xml-resolver-helper/)       | 3 cross-function         | CWE-611          | 2
+
+### Detection by expectation
+
+Case                   | Expectation                   | Requires                 | semgrep-community
+-----------------------|-------------------------------|--------------------------|------------------
+path-guard-startswith  | prefix-containment-check      | sanitizer-reasoning      | no
+path-guard-startswith  | guarded-read                  | sanitizer-reasoning      | yes
+sql-injection-concat   | query-construction            | none                     | no
+sql-injection-concat   | command-construction          | intra-procedural-taint   | yes
+ssrf-crossfile         | ssrf-source                   | taint-source-recognition | no
+ssrf-crossfile         | ssrf-sink                     | cross-file-taint         | no
+weak-crypto-and-secret | hardcoded-connection-password | none                     | no
+weak-crypto-and-secret | weak-hash                     | none                     | no
+xml-resolver-helper    | resolver-assignment           | none                     | no
+xml-resolver-helper    | untrusted-load                | cross-function-taint     | no
+
+### Totals
+
+Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
+------------------|---------|----------|---------|--------|--------|-----------------|-----------
+semgrep-community | 1.166.0 | 2/10     | 0       | 8      | 20%    | 1               | 0
+
 ## java-spring
 
 Spring Boot reporting service, five cases across the difficulty ladder

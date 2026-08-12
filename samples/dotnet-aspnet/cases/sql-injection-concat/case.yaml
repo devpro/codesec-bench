@@ -1,0 +1,38 @@
+id: dotnet-aspnet/sql-injection-concat
+title: SQL injection through an owner name concatenated into a SqlCommand
+category: sast
+difficulty: 2
+cwe: [CWE-89]
+owasp: "A03:2021"
+
+description: >
+  A query parameter is concatenated into a SELECT statement and executed through SqlCommand.
+  A quote in the owner name ends the literal and the remainder executes as SQL.
+  The concatenation and the command construction are adjacent lines in one method.
+
+expected:
+  - id: query-construction
+    cwe: [CWE-89]
+    severity: critical
+    file: src/ReportRepository.cs
+    line: 29
+    anchor: 'string sql = "SELECT title FROM reports WHERE owner = '
+    tolerance: 0
+    requires: none
+    note: >
+      String concatenation into SQL is the most heavily covered pattern in any rule pack.
+
+  - id: command-construction
+    cwe: [CWE-89]
+    severity: critical
+    file: src/ReportRepository.cs
+    line: 30
+    anchor: "await using var command = new SqlCommand(sql, connection);"
+    tolerance: 0
+    requires: intra-procedural-taint
+    note: >
+      Reporting the SqlCommand rather than the concatenation requires following sql one statement, which is where Python and Java both landed.
+
+safe:
+  - file: src/Safe/SafeReportRepository.cs
+    note: The same query with the owner bound through a command parameter.

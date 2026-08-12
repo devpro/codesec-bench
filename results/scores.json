@@ -1,6 +1,199 @@
 {
   "samples": [
     {
+      "sample": "dotnet-aspnet",
+      "title": "ASP.NET Core reporting service, five cases across the difficulty ladder",
+      "language": "csharp",
+      "case_count": 5,
+      "expectation_count": 10,
+      "tools": {
+        "semgrep-community": {
+          "version": "1.166.0",
+          "cases": [
+            {
+              "case": "dotnet-aspnet/path-guard-startswith",
+              "difficulty": 5,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 1,
+              "outcomes": [
+                {
+                  "expectation": "prefix-containment-check",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/ReportFileService.cs:25",
+                  "evidence": null
+                },
+                {
+                  "expectation": "guarded-read",
+                  "status": "detected",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/ReportFileService.cs:30",
+                  "evidence": {
+                    "rule": "csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine",
+                    "line": 30,
+                    "cwe": [
+                      "CWE-22"
+                    ]
+                  }
+                }
+              ],
+              "false_positive_details": [
+                {
+                  "rule": "csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine",
+                  "location": "src/Safe/SafeReportFileService.cs:26",
+                  "cwe": [
+                    "CWE-22"
+                  ]
+                }
+              ]
+            },
+            {
+              "case": "dotnet-aspnet/sql-injection-concat",
+              "difficulty": 2,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "query-construction",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "critical",
+                  "location": "src/ReportRepository.cs:29",
+                  "evidence": null
+                },
+                {
+                  "expectation": "command-construction",
+                  "status": "detected",
+                  "requires": "intra-procedural-taint",
+                  "severity": "critical",
+                  "location": "src/ReportRepository.cs:30",
+                  "evidence": {
+                    "rule": "csharp.lang.security.sqli.csharp-sqli.csharp-sqli",
+                    "line": 30,
+                    "cwe": [
+                      "CWE-89"
+                    ]
+                  }
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "dotnet-aspnet/ssrf-crossfile",
+              "difficulty": 4,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "ssrf-source",
+                  "status": "missed",
+                  "requires": "taint-source-recognition",
+                  "severity": "high",
+                  "location": "src/ReportController.cs:39",
+                  "evidence": null
+                },
+                {
+                  "expectation": "ssrf-sink",
+                  "status": "missed",
+                  "requires": "cross-file-taint",
+                  "severity": "high",
+                  "location": "src/UpstreamClient.cs:22",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "dotnet-aspnet/weak-crypto-and-secret",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "hardcoded-connection-password",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/CryptoService.cs:15",
+                  "evidence": null
+                },
+                {
+                  "expectation": "weak-hash",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "medium",
+                  "location": "src/CryptoService.cs:28",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "dotnet-aspnet/xml-resolver-helper",
+              "difficulty": 3,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "resolver-assignment",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/XmlIngestService.cs:23",
+                  "evidence": null
+                },
+                {
+                  "expectation": "untrusted-load",
+                  "status": "missed",
+                  "requires": "cross-function-taint",
+                  "severity": "high",
+                  "location": "src/XmlIngestService.cs:32",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            }
+          ],
+          "totals": {
+            "expected": 10,
+            "detected": 2,
+            "partial": 0,
+            "missed": 8,
+            "false_positives": 1,
+            "unexpected": 0,
+            "recall": 0.2
+          },
+          "false_positive_details": [
+            {
+              "rule": "csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine",
+              "location": "src/Safe/SafeReportFileService.cs:26",
+              "cwe": [
+                "CWE-22"
+              ]
+            }
+          ],
+          "unexpected_details": []
+        }
+      }
+    },
+    {
       "sample": "java-spring",
       "title": "Spring Boot reporting service, five cases across the difficulty ladder",
       "language": "java",

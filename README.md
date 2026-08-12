@@ -31,42 +31,53 @@ No third party container image is used anywhere in this repository.
 
 Detailed tables live in [docs/matrix.md](docs/matrix.md).
 
-Tool                         | Version | php-symfony | python-flask | typescript-express | java-spring
------------------------------|---------|-------------|--------------|--------------------|------------
-Semgrep OSS, custom rules    | 1.166.0 | 3/5         | not written  | not written        | not written
-Opengrep, same custom rules  | 1.22.0  | 3/5         | not written  | not written        | not written
-Semgrep OSS, community packs | 1.166.0 | 0/5         | 3/10         | 1/8                | 3/10
+Tool                         | Version | php-symfony | python-flask | typescript-express | java-spring | dotnet-aspnet
+-----------------------------|---------|-------------|--------------|--------------------|-------------|--------------
+Semgrep OSS, custom rules    | 1.166.0 | 3/5         | not written  | not written        | not written | not written
+Opengrep, same custom rules  | 1.22.0  | 3/5         | not written  | not written        | not written | not written
+Semgrep OSS, community packs | 1.166.0 | 0/5         | 3/10         | 1/8                | 3/10        | 2/10
 
 Detection tracks the difficulty ladder, not severity:
 
-Level | Requires                   | python-flask | typescript-express | java-spring
-------|----------------------------|--------------|--------------------|------------
-1     | Nothing, a literal          | 1 of 2       | 1 of 2             | 1 of 2
-2     | Dataflow in one function    | 1 of 2       | 0 of 1             | 1 of 2
-3     | Across functions, one file  | 1 of 2       | 0 of 1             | 1 of 2
-4     | Across files                | 0 of 2       | 0 of 2             | 0 of 2
-5     | Judging a guard             | 0 of 2       | 0 of 2             | 0 of 2
+Level | Requires                   | python-flask | typescript-express | java-spring | dotnet-aspnet
+------|----------------------------|--------------|--------------------|-------------|--------------
+1     | Nothing, a literal          | 1 of 2       | 1 of 2             | 1 of 2      | 0 of 2
+2     | Dataflow in one function    | 1 of 2       | 0 of 1             | 1 of 2      | 1 of 2
+3     | Across functions, one file  | 1 of 2       | 0 of 1             | 1 of 2      | 0 of 2
+4     | Across files                | 0 of 2       | 0 of 2             | 0 of 2      | 0 of 2
+5     | Judging a guard             | 0 of 2       | 0 of 2             | 0 of 2      | 1 of 2
 
-**Nothing above level 3 has been detected, in any language, by any tool measured.**
+**No genuine detection above level 3 exists anywhere in this bench.**
 
-Four findings now replicate across independent ecosystems, which is what makes them worth stating as results rather than anecdotes.
+The single level 5 entry is an artefact and should not be read as a detection.
+The rule that produced it, `unsafe-path-combine`, fires on the correctly guarded counterpart as well, so it flags path operations indiscriminately rather than reading the guard.
+Without the safe counterpart it would have been published as a real result.
+See [the case](samples/dotnet-aspnet/cases/path-guard-startswith/).
+
+Five findings now replicate across independent ecosystems, which is what makes them results rather than anecdotes.
 
 **Level 4 is a property of the analysis, not of the ecosystem.**
-The identical CWE-918 cross-file flow is planted in PHP, TypeScript and Java, and missed in all three, at both the source and the sink.
-Java has the most mature free security tooling of any language here, which removes the last ecosystem explanation.
+The identical CWE-918 cross-file flow is planted in PHP, TypeScript, Java and C#, and missed in all four, at both the source and the sink.
+Eight expectations, four ecosystems spanning the full range of free tool maturity, zero detections.
+This is the most reproducible result here, and the one worth quoting to anyone deciding whether free SAST is sufficient.
 
 **Secret detection keys on vendor prefixes, not on variables.**
-`DATABASE_PASSWORD`, `JWT_SIGNING_SECRET` and `SIGNING_KEY` are missed in Python, TypeScript and Java respectively, while a token carrying an `sk_live_` prefix on an adjacent line is reported twice.
-The most commonly cited SAST win depends on the credential resembling a vendor's format.
+Hardcoded secrets are missed in all four languages.
+The C# case even embeds the literal keyword `Password=` inside a connection string and is still unreported, while a token carrying an `sk_live_` prefix in the Python sample is reported twice.
 
 **SQL injection is reported at the sink, not at the mistake.**
-In both Python and Java the tool flags the execute call and not the string construction on the line above.
+In Python, Java and C# the tool flags the execute or command call, never the string construction on the line above.
 The fix belongs on the line that was not flagged, and the rule would fire identically on a query built from trusted constants.
 
-**Detection does not track severity.**
-An MD5 call and a DES cipher are reported; a cross-file SSRF and a defeated traversal guard are not.
+**Rule coverage is not uniform across ecosystems.**
+An MD5 call is reported in TypeScript and missed in C#.
+An unhardened XML parser is reported in Java, while a call that removes .NET's safe default is missed.
+A comparison run in one language does not transfer to another.
 
-The one detected level 3 expectation is worth reading carefully.
+**Detection does not track severity.**
+Weak hashes and ciphers are reported; cross-file SSRF and defeated guards are not.
+
+The one genuine level 3 detection needs its caveat.
 `java-spring/xxe-parser-helper` is caught at the parser factory, but that is an **absence** of hardening calls, visible to a syntactic rule, not a flow.
 Its cross-function half is missed like every other level 3 flow.
 
@@ -91,6 +102,7 @@ Sample                                            | Stack                     | 
 [python-flask](samples/python-flask/)             | Python 3.12, Flask 3      | 5     | 1 to 5
 [typescript-express](samples/typescript-express/) | TypeScript 5.6, Express 4 | 5     | 1 to 5
 [java-spring](samples/java-spring/)               | Java 21, Spring Boot 3    | 5     | 1 to 5
+[dotnet-aspnet](samples/dotnet-aspnet/)           | C# 12, ASP.NET Core 8     | 5     | 1 to 5
 
 ## Docs
 

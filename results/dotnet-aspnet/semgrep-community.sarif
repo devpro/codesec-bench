@@ -1,0 +1,169 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": []
+        }
+      ],
+      "results": [
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/ReportFileService.cs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 41,
+                  "endLine": 30,
+                  "snippet": {
+                    "text": "        return File.ReadAllText(fullPath);"
+                  },
+                  "startColumn": 33,
+                  "startLine": 30
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "String argument name is used to read or write data from a file via Path.Combine without direct sanitization via Path.GetFileName. If the path is user-supplied data this can lead to path traversal."
+          },
+          "properties": {},
+          "ruleId": "csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/ReportRepository.cs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 53,
+                  "endLine": 30,
+                  "snippet": {
+                    "text": "        await using var command = new SqlCommand(sql, connection);"
+                  },
+                  "startColumn": 50,
+                  "startLine": 30
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Detected a formatted string in a SQL statement. This could lead to SQL injection if variables in the SQL statement are not properly sanitized. Use a prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand' and 'SqlParameter'."
+          },
+          "properties": {},
+          "ruleId": "csharp.lang.security.sqli.csharp-sqli.csharp-sqli"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/Safe/SafeReportFileService.cs",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 41,
+                  "endLine": 26,
+                  "snippet": {
+                    "text": "        return File.ReadAllText(fullPath);"
+                  },
+                  "startColumn": 33,
+                  "startLine": 26
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "String argument name is used to read or write data from a file via Path.Combine without direct sanitization via Path.GetFileName. If the path is user-supplied data this can lead to path traversal."
+          },
+          "properties": {},
+          "ruleId": "csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "Semgrep OSS",
+          "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "String argument $A is used to read or write data from a file via Path.Combine without direct sanitization via Path.GetFileName. If the path is user-supplied data this can lead to path traversal."
+              },
+              "help": {
+                "markdown": "String argument $A is used to read or write data from a file via Path.Combine without direct sanitization via Path.GetFileName. If the path is user-supplied data this can lead to path traversal.\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine)\n - [https://www.praetorian.com/blog/pathcombine-security-issues-in-aspnet-applications/](https://www.praetorian.com/blog/pathcombine-security-issues-in-aspnet-applications/)\n - [https://docs.microsoft.com/en-us/dotnet/api/system.io.path.combine?view=net-6.0#remarks](https://docs.microsoft.com/en-us/dotnet/api/system.io.path.combine?view=net-6.0#remarks)\n",
+                "text": "String argument $A is used to read or write data from a file via Path.Combine without direct sanitization via Path.GetFileName. If the path is user-supplied data this can lead to path traversal.\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine",
+              "id": "csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine",
+              "name": "csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')",
+                  "MEDIUM CONFIDENCE",
+                  "OWASP-A01:2021 - Broken Access Control",
+                  "OWASP-A01:2025 - Broken Access Control",
+                  "OWASP-A05:2017 - Broken Access Control",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: csharp.lang.security.filesystem.unsafe-path-combine.unsafe-path-combine"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "fullDescription": {
+                "text": "Detected a formatted string in a SQL statement. This could lead to SQL injection if variables in the SQL statement are not properly sanitized. Use a prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand' and 'SqlParameter'."
+              },
+              "help": {
+                "markdown": "Detected a formatted string in a SQL statement. This could lead to SQL injection if variables in the SQL statement are not properly sanitized. Use a prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand' and 'SqlParameter'.\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/csharp.lang.security.sqli.csharp-sqli.csharp-sqli)\n - [https://owasp.org/Top10/A03_2021-Injection](https://owasp.org/Top10/A03_2021-Injection)\n",
+                "text": "Detected a formatted string in a SQL statement. This could lead to SQL injection if variables in the SQL statement are not properly sanitized. Use a prepared statements instead. You can obtain a PreparedStatement using 'SqlCommand' and 'SqlParameter'.\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/csharp.lang.security.sqli.csharp-sqli.csharp-sqli",
+              "id": "csharp.lang.security.sqli.csharp-sqli.csharp-sqli",
+              "name": "csharp.lang.security.sqli.csharp-sqli.csharp-sqli",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+                  "MEDIUM CONFIDENCE",
+                  "OWASP-A01:2017 - Injection",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A05:2025 - Injection",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: csharp.lang.security.sqli.csharp-sqli.csharp-sqli"
+              }
+            }
+          ],
+          "semanticVersion": "1.166.0"
+        }
+      }
+    }
+  ],
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json"
+}

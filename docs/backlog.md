@@ -24,13 +24,15 @@ Known gaps and planned work.
 
 ## Samples
 
-Next: **C#**, to complete the pair with Java.
+All five planned languages are done.
+Further samples are lower value than adding tools: the ladder result is now replicated four times and another language is unlikely to change it.
 
 Each new sample needs cases spread across the difficulty ladder.
 `python-flask` and `typescript-express` both cover levels 1 to 5 and are the template to follow.
 `php-symfony` has nothing at level 3 or 5.
 
 **SpotBugs with find-sec-bugs** is the obvious next tool for `java-spring`, and it analyses bytecode, so that sample would need a real build.
+**Roslyn security analysers** are the equivalent for `dotnet-aspnet` and would likewise need a build.
 
 ## Case coverage
 

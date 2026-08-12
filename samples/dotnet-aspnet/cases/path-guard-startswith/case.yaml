@@ -1,0 +1,44 @@
+id: dotnet-aspnet/path-guard-startswith
+title: Path containment checked with StartsWith against a base directory lacking a trailing separator
+category: sast
+difficulty: 5
+cwe: [CWE-22]
+owasp: "A01:2021"
+
+description: >
+  The report path is resolved with Path.GetFullPath and then checked against the base directory with StartsWith.
+  The base directory carries no trailing separator, so a sibling directory whose name merely begins with the same characters satisfies the prefix.
+
+  "/var/lib/reports-public/secrets.txt" starts with "/var/lib/reports" and is accepted, although it is outside the intended directory entirely.
+
+  The resolution step is correct and is what makes this convincing.
+  Path.GetFullPath genuinely normalises away traversal sequences, so the obvious payload is rejected and the guard looks tested.
+  The mistake is in the comparison, not in the normalisation.
+
+expected:
+  - id: prefix-containment-check
+    cwe: [CWE-22, CWE-20]
+    severity: high
+    file: src/ReportFileService.cs
+    line: 25
+    anchor: "if (!fullPath.StartsWith(ReportsDirectory))"
+    tolerance: 1
+    requires: sanitizer-reasoning
+    note: >
+      Naming the missing separator is the most actionable possible result, since the fix is one character.
+
+  - id: guarded-read
+    cwe: [CWE-22]
+    severity: high
+    file: src/ReportFileService.cs
+    line: 30
+    anchor: "return File.ReadAllText(fullPath);"
+    tolerance: 0
+    requires: sanitizer-reasoning
+    note: >
+      A tool that tracks taint and does not treat StartsWith as validating would report this without reasoning about the separator.
+      That counts as a detection here: the bench measures outcomes, not intent.
+
+safe:
+  - file: src/Safe/SafeReportFileService.cs
+    note: Appends the directory separator to the base before comparing, so a sibling prefix cannot satisfy it.

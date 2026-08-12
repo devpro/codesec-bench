@@ -1,0 +1,43 @@
+id: dotnet-aspnet/ssrf-crossfile
+title: SSRF through an upstream URL that crosses a controller and a client service
+category: sast
+difficulty: 4
+cwe: [CWE-918]
+owasp: "A10:2021"
+
+description: >
+  An ASP.NET Core action binds a query parameter and passes it to a client service in another file, which requests it unmodified.
+  An attacker chooses the host, so pointing it at the cloud metadata endpoint returns instance credentials from inside the network boundary.
+
+  This is the fourth planting of the same CWE-918 defect, after php-symfony, typescript-express and java-spring.
+  Four ecosystems spanning the full range of free tool maturity isolate analysis capability from ecosystem coverage.
+
+expected:
+  - id: ssrf-source
+    cwe: [CWE-918, CWE-20]
+    severity: high
+    file: src/ReportController.cs
+    line: 39
+    anchor: "public async Task<string> Upstream([FromQuery] string url)"
+    tolerance: 1
+    requires: taint-source-recognition
+    note: >
+      Requires modelling the ASP.NET Core parameter binding as a taint source.
+
+  - id: ssrf-sink
+    cwe: [CWE-918]
+    severity: high
+    file: src/UpstreamClient.cs
+    line: 22
+    anchor: "await _httpClient.GetAsync(target);"
+    tolerance: 1
+    requires: cross-file-taint
+    note: >
+      HttpClient.GetAsync on a variable is an entirely ordinary shape.
+      Flagging it correctly means following the call from the controller into the client.
+
+safe:
+  - file: src/Safe/SafeUpstreamClient.cs
+    note: Parses the URL and compares the host for equality against an allowlist.
+  - file: src/Safe/SafeReportController.cs
+    note: The same actions binding the same parameters, calling the guarded client.

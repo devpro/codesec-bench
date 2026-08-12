@@ -147,8 +147,50 @@ The Java sample makes it three:
 private static final String SIGNING_KEY = "reporting-signing-key-2024";   // not reported
 ```
 
-Three languages, three rule sets, the same behaviour.
+The C# sample makes it four, and is the most striking of them:
+
+```csharp
+"Server=reporting-db.internal;...;Password=Pr0d-Reporting-2024;"   // not reported
+```
+
+That value carries the literal keyword `Password=`, the most recognisable credential shape there is, and is still unreported.
+
+Four languages, four rule sets, the same behaviour.
 This is worth knowing before relying on a secrets scanner: it recognises vendor credential formats, it does not reason about what a variable holds.
+
+### Rule coverage is not uniform across ecosystems
+
+The same defect class at the same ladder level is covered inconsistently:
+
+Defect                                   | Language   | Detected
+-----------------------------------------|------------|---------
+`createHash("md5")`                      | TypeScript | yes
+`Cipher.getInstance("DES/ECB/...")`      | Java       | yes, twice
+`MD5.Create()`                           | C#         | no
+Unhardened `DocumentBuilderFactory`      | Java       | yes
+`XmlResolver = new XmlUrlResolver()`     | C#         | no
+
+The two XML entries are worth separating.
+Java is caught for an **absence** of hardening calls; C# undoes a safe platform default with an explicit assignment and is not caught.
+Both are single expressions with named types, so both are syntactically reachable, and only the absence form is covered.
+
+A tool comparison run in one language does not transfer to another.
+
+### A rule can appear to detect a level 5 defect while flagging everything
+
+`unsafe-path-combine` reports the vulnerable path read in the C# sample, which scored as the only level 5 detection in the bench.
+
+It also reports the correctly guarded counterpart:
+
+```text
+src/ReportFileService.cs:30          broken guard      reported
+src/Safe/SafeReportFileService.cs:26 correct guard     reported
+```
+
+The rule flags path operations indiscriminately and is not reading the guard at all.
+
+Without a safe counterpart to compare against, this would have been recorded and published as a genuine level 5 result.
+It is the strongest argument in this repository for pairing every case.
 
 ## Opengrep
 

@@ -1,0 +1,39 @@
+id: dotnet-aspnet/weak-crypto-and-secret
+title: MD5 used for integrity beside a connection string with a plaintext password
+category: sast
+difficulty: 1
+cwe: [CWE-327, CWE-798]
+owasp: "A02:2021"
+
+description: >
+  Two defects in one small service, both visible in a single expression.
+  MD5 is collision broken, so two different payloads can be made to share a fingerprint, which defeats the integrity check the value is used for.
+  The connection string embeds a plaintext production database password as a source literal.
+
+expected:
+  - id: hardcoded-connection-password
+    cwe: [CWE-798, CWE-259]
+    severity: high
+    file: src/CryptoService.cs
+    line: 15
+    anchor: "Password=Pr0d-Reporting-2024;"
+    tolerance: 1
+    requires: none
+    note: >
+      A connection string is the one credential shape that carries its own keyword, Password=, so it is more recognisable than a bare literal in a named variable.
+      Whether that is enough is the question this expectation asks.
+
+  - id: weak-hash
+    cwe: [CWE-327, CWE-328]
+    severity: medium
+    file: src/CryptoService.cs
+    line: 28
+    anchor: "using var md5 = MD5.Create();"
+    tolerance: 0
+    requires: none
+    note: >
+      A named broken algorithm in a single call, the calibration expectation for this sample.
+
+safe:
+  - file: src/Safe/SafeCryptoService.cs
+    note: Reads the connection string from configuration and uses SHA-256.

@@ -1,0 +1,41 @@
+id: dotnet-aspnet/xml-resolver-helper
+title: XXE reintroduced by assigning an XmlUrlResolver in a helper
+category: sast
+difficulty: 3
+cwe: [CWE-611]
+owasp: "A05:2021"
+
+description: >
+  Modern .NET leaves XmlDocument.XmlResolver null, which disables external entity resolution by default.
+  A helper assigns an XmlUrlResolver, deliberately undoing that, and the caller loads an untrusted request body with the resulting document.
+
+  This is the mirror image of the Java XXE case.
+  There the defect is an absence of hardening calls, here it is the presence of a call that removes hardening the platform already applied.
+  Both are single expressions, so both are reachable syntactically, which is what makes the pair worth having.
+
+expected:
+  - id: resolver-assignment
+    cwe: [CWE-611, CWE-827]
+    severity: high
+    file: src/XmlIngestService.cs
+    line: 23
+    anchor: "document.XmlResolver = new XmlUrlResolver();"
+    tolerance: 0
+    requires: none
+    note: >
+      A presence rather than an absence, and a single named assignment, so a syntactic rule can reach it.
+
+  - id: untrusted-load
+    cwe: [CWE-611]
+    severity: high
+    file: src/XmlIngestService.cs
+    line: 32
+    anchor: "document.LoadXml(xml);"
+    tolerance: 0
+    requires: cross-function-taint
+    note: >
+      Reporting the load requires knowing the document came from a helper that re-enabled the resolver.
+
+safe:
+  - file: src/Safe/SafeXmlIngestService.cs
+    note: The same helper and caller split, leaving the resolver null.
