@@ -12,6 +12,41 @@ Unexpected findings are everything else the tool reported in the sample, listed 
 
 See [methodology.md](methodology.md) for the full scoring rules.
 
+## java-spring
+
+Spring Boot reporting service, five cases across the difficulty ladder
+
+### Cases
+
+Case                                                                           | Difficulty               | CWE              | Expected findings
+-------------------------------------------------------------------------------|--------------------------|------------------|------------------
+[regex-guard-unanchored](../samples/java-spring/cases/regex-guard-unanchored/) | 5 framework or sanitizer | CWE-918          | 2
+[sql-injection-concat](../samples/java-spring/cases/sql-injection-concat/)     | 2 intra-procedural       | CWE-89           | 2
+[ssrf-crossfile](../samples/java-spring/cases/ssrf-crossfile/)                 | 4 cross-file             | CWE-918          | 2
+[weak-crypto-and-secret](../samples/java-spring/cases/weak-crypto-and-secret/) | 1 syntax                 | CWE-327, CWE-798 | 2
+[xxe-parser-helper](../samples/java-spring/cases/xxe-parser-helper/)           | 3 cross-function         | CWE-611          | 2
+
+### Detection by expectation
+
+Case                   | Expectation           | Requires                 | semgrep-community
+-----------------------|-----------------------|--------------------------|------------------
+regex-guard-unanchored | unanchored-match      | sanitizer-reasoning      | no
+regex-guard-unanchored | guarded-sink          | sanitizer-reasoning      | no
+sql-injection-concat   | query-construction    | none                     | no
+sql-injection-concat   | query-execution       | intra-procedural-taint   | yes
+ssrf-crossfile         | ssrf-source           | taint-source-recognition | no
+ssrf-crossfile         | ssrf-sink             | cross-file-taint         | no
+weak-crypto-and-secret | hardcoded-signing-key | none                     | no
+weak-crypto-and-secret | weak-cipher           | none                     | yes
+xxe-parser-helper      | unsafe-parser-factory | none                     | yes
+xxe-parser-helper      | untrusted-parse       | cross-function-taint     | no
+
+### Totals
+
+Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
+------------------|---------|----------|---------|--------|--------|-----------------|-----------
+semgrep-community | 1.166.0 | 3/10     | 0       | 7      | 30%    | 0               | 0
+
 ## php-symfony
 
 Symfony 7.4 HTTP client wrapper

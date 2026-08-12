@@ -1,0 +1,42 @@
+id: java-spring/regex-guard-unanchored
+title: SSRF allowlist using an unanchored pattern with find rather than matches
+category: sast
+difficulty: 5
+cwe: [CWE-918]
+owasp: "A10:2021"
+
+description: >
+  The upstream URL is checked against Pattern.compile("https://reports\\.internal") using Matcher.find().
+  find searches for the pattern anywhere in the input, while matches would require it to cover the whole input, and the pattern carries no anchors either.
+  Any URL that merely contains the allowed host as a substring passes, so "https://evil.com/?next=https://reports.internal" is accepted and fetched.
+
+  The guard is present, the pattern states the right intent, and the check is worthless.
+  A tool must judge how the pattern is applied rather than observe that validation exists.
+
+expected:
+  - id: unanchored-match
+    cwe: [CWE-918, CWE-625, CWE-20]
+    severity: high
+    file: src/main/java/com/example/reporting/UpstreamClient.java
+    line: 48
+    anchor: "if (!ALLOWED.matcher(target).find()) {"
+    tolerance: 1
+    requires: sanitizer-reasoning
+    note: >
+      find versus matches is a two character difference with a total change in meaning, and naming it is the most actionable possible result.
+
+  - id: guarded-sink
+    cwe: [CWE-918]
+    severity: high
+    file: src/main/java/com/example/reporting/UpstreamClient.java
+    line: 54
+    anchor: ".uri(URI.create(target))"
+    tolerance: 1
+    requires: sanitizer-reasoning
+    note: >
+      A tool that tracks taint and does not treat a regex check as validating would report this without reasoning about the pattern.
+      That counts as a detection here: the bench measures outcomes, not intent.
+
+safe:
+  - file: src/main/java/com/example/reporting/safe/SafeUpstreamClient.java
+    note: Decides on the parsed host rather than on a substring match.

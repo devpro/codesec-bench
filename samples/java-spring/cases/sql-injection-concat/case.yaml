@@ -1,0 +1,38 @@
+id: java-spring/sql-injection-concat
+title: SQL injection through an owner name concatenated into a JDBC statement
+category: sast
+difficulty: 2
+cwe: [CWE-89]
+owasp: "A03:2021"
+
+description: >
+  A request parameter is concatenated into a SELECT statement and executed through a plain JDBC Statement.
+  A quote in the owner name ends the literal and the remainder executes as SQL.
+  The concatenation and the execution are adjacent lines in one method.
+
+expected:
+  - id: query-construction
+    cwe: [CWE-89]
+    severity: critical
+    file: src/main/java/com/example/reporting/ReportRepository.java
+    line: 37
+    anchor: 'String sql = "SELECT title FROM reports WHERE owner = '
+    tolerance: 0
+    requires: none
+    note: >
+      String concatenation into SQL is the single most heavily covered pattern in any Java rule pack.
+
+  - id: query-execution
+    cwe: [CWE-89]
+    severity: critical
+    file: src/main/java/com/example/reporting/ReportRepository.java
+    line: 38
+    anchor: "ResultSet results = statement.executeQuery(sql);"
+    tolerance: 0
+    requires: intra-procedural-taint
+    note: >
+      Reporting the execution rather than the construction requires following sql one statement.
+
+safe:
+  - file: src/main/java/com/example/reporting/safe/SafeReportRepository.java
+    note: The same query with the owner bound through a PreparedStatement.

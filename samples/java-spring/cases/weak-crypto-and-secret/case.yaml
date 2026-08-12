@@ -1,0 +1,38 @@
+id: java-spring/weak-crypto-and-secret
+title: DES in ECB mode keyed from a hardcoded signing key
+category: sast
+difficulty: 1
+cwe: [CWE-327, CWE-798]
+owasp: "A02:2021"
+
+description: >
+  Two defects in one small service, both visible in a single expression.
+  DES has a 56 bit effective key and is exhaustively searchable on commodity hardware, and ECB mode leaks structure because identical plaintext blocks produce identical ciphertext blocks.
+  The key itself is a source literal, so anyone with repository access can decrypt everything the service has ever produced.
+
+expected:
+  - id: hardcoded-signing-key
+    cwe: [CWE-798, CWE-259, CWE-321]
+    severity: high
+    file: src/main/java/com/example/reporting/CryptoService.java
+    line: 17
+    anchor: 'private static final String SIGNING_KEY = "reporting-signing-key-2024";'
+    tolerance: 0
+    requires: none
+    note: >
+      A literal with no vendor prefix, the shape the Python and TypeScript samples both showed goes unreported.
+
+  - id: weak-cipher
+    cwe: [CWE-327, CWE-326]
+    severity: high
+    file: src/main/java/com/example/reporting/CryptoService.java
+    line: 29
+    anchor: 'Cipher.getInstance("DES/ECB/PKCS5Padding")'
+    tolerance: 0
+    requires: none
+    note: >
+      A named broken algorithm in a single call, which is the calibration expectation for this sample.
+
+safe:
+  - file: src/main/java/com/example/reporting/safe/SafeCryptoService.java
+    note: Injects the key from configuration and uses authenticated AES-GCM.

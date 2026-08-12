@@ -88,7 +88,7 @@ Anyone comparing tools should check which packs the comparison used before belie
 
 ### An unresolvable rule pack aborts the entire scan, silently
 
-`p/express` does not exist.
+`p/express` and `p/spring` do not exist.
 The registry answers 404, and Semgrep then abandons the whole run rather than continuing with the packs that did resolve:
 
 ```text
@@ -104,6 +104,9 @@ This one did, briefly, and reported 0 of 8 on the TypeScript sample before the c
 `scripts/run_scan.sh` now refuses to record output from any scanner exiting above 1, since 0 and 1 are the only conventional non-error codes.
 
 Anyone comparing tools should check the exit status as well as the finding count.
+
+Every pack is now verified to resolve before it is added to a `sample.yaml`.
+Two of the plausible looking framework packs tried so far, `p/express` and `p/spring`, do not exist.
 
 ### Template literal interpolation is not covered for XSS
 
@@ -138,7 +141,13 @@ The TypeScript sample replicates this exactly:
 export const JWT_SIGNING_SECRET = "s3cr3t-jwt-signing-key-do-not-share";   // not reported
 ```
 
-Two languages, two rule sets, the same behaviour.
+The Java sample makes it three:
+
+```java
+private static final String SIGNING_KEY = "reporting-signing-key-2024";   // not reported
+```
+
+Three languages, three rule sets, the same behaviour.
 This is worth knowing before relying on a secrets scanner: it recognises vendor credential formats, it does not reason about what a variable holds.
 
 ## Opengrep

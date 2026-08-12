@@ -1,0 +1,43 @@
+id: java-spring/ssrf-crossfile
+title: SSRF through an upstream URL that crosses a controller and a client service
+category: sast
+difficulty: 4
+cwe: [CWE-918]
+owasp: "A10:2021"
+
+description: >
+  A Spring controller binds a request parameter and passes it to a client service in another file, which requests it unmodified.
+  An attacker chooses the host, so pointing it at the cloud metadata endpoint returns instance credentials from inside the network boundary.
+
+  This is the third planting of the same CWE-918 defect, after php-symfony and typescript-express.
+  Three ecosystems with very different tool maturity isolate analysis capability from ecosystem coverage.
+
+expected:
+  - id: ssrf-source
+    cwe: [CWE-918, CWE-20]
+    severity: high
+    file: src/main/java/com/example/reporting/ReportController.java
+    line: 36
+    anchor: "public String upstream(@RequestParam String url)"
+    tolerance: 1
+    requires: taint-source-recognition
+    note: >
+      Requires modelling the Spring parameter binding as a taint source.
+
+  - id: ssrf-sink
+    cwe: [CWE-918]
+    severity: high
+    file: src/main/java/com/example/reporting/UpstreamClient.java
+    line: 34
+    anchor: ".uri(URI.create(target))"
+    tolerance: 1
+    requires: cross-file-taint
+    note: >
+      URI.create on a variable is an entirely ordinary shape.
+      Flagging it correctly means following the call from the controller into the client.
+
+safe:
+  - file: src/main/java/com/example/reporting/safe/SafeUpstreamClient.java
+    note: Parses the URL and compares the host for equality against an allowlist.
+  - file: src/main/java/com/example/reporting/safe/SafeReportController.java
+    note: The same handlers binding the same parameters, calling the guarded client.

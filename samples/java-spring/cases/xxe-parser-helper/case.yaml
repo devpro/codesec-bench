@@ -1,0 +1,40 @@
+id: java-spring/xxe-parser-helper
+title: XXE through a parser factory configured in a helper and used by its caller
+category: sast
+difficulty: 3
+cwe: [CWE-611]
+owasp: "A05:2021"
+
+description: >
+  A private helper builds a DocumentBuilderFactory at its defaults, which permit DTD processing and external entity resolution.
+  The caller parses an untrusted request body with the resulting builder, so a DOCTYPE in the payload can read local files or reach internal hosts.
+
+  The dangerous configuration and the untrusted input meet in different methods, which is what places this at level 3.
+
+expected:
+  - id: unsafe-parser-factory
+    cwe: [CWE-611, CWE-827]
+    severity: high
+    file: src/main/java/com/example/reporting/XmlIngestService.java
+    line: 26
+    anchor: "DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();"
+    tolerance: 2
+    requires: none
+    note: >
+      Unusually for level 3, the defect is an absence rather than a flow: the factory is missing calls that should be there.
+      That makes it reachable by a purely syntactic rule, unlike the other level 3 cases in this bench.
+
+  - id: untrusted-parse
+    cwe: [CWE-611]
+    severity: high
+    file: src/main/java/com/example/reporting/XmlIngestService.java
+    line: 34
+    anchor: "Document document = builder.parse("
+    tolerance: 1
+    requires: cross-function-taint
+    note: >
+      Reporting the parse call requires knowing the builder came from an unsafely configured factory in another method.
+
+safe:
+  - file: src/main/java/com/example/reporting/safe/SafeXmlIngestService.java
+    note: The same helper and caller split, with DTD processing disallowed outright.

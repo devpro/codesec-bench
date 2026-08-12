@@ -1,6 +1,189 @@
 {
   "samples": [
     {
+      "sample": "java-spring",
+      "title": "Spring Boot reporting service, five cases across the difficulty ladder",
+      "language": "java",
+      "case_count": 5,
+      "expectation_count": 10,
+      "tools": {
+        "semgrep-community": {
+          "version": "1.166.0",
+          "cases": [
+            {
+              "case": "java-spring/regex-guard-unanchored",
+              "difficulty": 5,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "unanchored-match",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/UpstreamClient.java:48",
+                  "evidence": null
+                },
+                {
+                  "expectation": "guarded-sink",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/UpstreamClient.java:54",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/sql-injection-concat",
+              "difficulty": 2,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "query-construction",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "critical",
+                  "location": "src/main/java/com/example/reporting/ReportRepository.java:37",
+                  "evidence": null
+                },
+                {
+                  "expectation": "query-execution",
+                  "status": "detected",
+                  "requires": "intra-procedural-taint",
+                  "severity": "critical",
+                  "location": "src/main/java/com/example/reporting/ReportRepository.java:38",
+                  "evidence": {
+                    "rule": "java.lang.security.audit.formatted-sql-string.formatted-sql-string",
+                    "line": 38,
+                    "cwe": [
+                      "CWE-89"
+                    ]
+                  }
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/ssrf-crossfile",
+              "difficulty": 4,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "ssrf-source",
+                  "status": "missed",
+                  "requires": "taint-source-recognition",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/ReportController.java:36",
+                  "evidence": null
+                },
+                {
+                  "expectation": "ssrf-sink",
+                  "status": "missed",
+                  "requires": "cross-file-taint",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/UpstreamClient.java:34",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/weak-crypto-and-secret",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "hardcoded-signing-key",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/CryptoService.java:17",
+                  "evidence": null
+                },
+                {
+                  "expectation": "weak-cipher",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/CryptoService.java:29",
+                  "evidence": {
+                    "rule": "java.lang.security.audit.crypto.ecb-cipher.ecb-cipher",
+                    "line": 29,
+                    "cwe": [
+                      "CWE-327"
+                    ]
+                  }
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/xxe-parser-helper",
+              "difficulty": 3,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "unsafe-parser-factory",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/XmlIngestService.java:26",
+                  "evidence": {
+                    "rule": "java.lang.security.audit.xxe.documentbuilderfactory-disallow-doctype-decl-missing.documentbuilderfactory-disallow-doctype-decl-missing",
+                    "line": 28,
+                    "cwe": [
+                      "CWE-611"
+                    ]
+                  }
+                },
+                {
+                  "expectation": "untrusted-parse",
+                  "status": "missed",
+                  "requires": "cross-function-taint",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/XmlIngestService.java:34",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            }
+          ],
+          "totals": {
+            "expected": 10,
+            "detected": 3,
+            "partial": 0,
+            "missed": 7,
+            "false_positives": 0,
+            "unexpected": 0,
+            "recall": 0.3
+          },
+          "false_positive_details": [],
+          "unexpected_details": []
+        }
+      }
+    },
+    {
       "sample": "php-symfony",
       "title": "Symfony 7.4 HTTP client wrapper",
       "language": "php",

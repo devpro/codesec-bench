@@ -31,34 +31,44 @@ No third party container image is used anywhere in this repository.
 
 Detailed tables live in [docs/matrix.md](docs/matrix.md).
 
-Tool                         | Version | php-symfony | python-flask | typescript-express
------------------------------|---------|-------------|--------------|-------------------
-Semgrep OSS, custom rules    | 1.166.0 | 3/5         | not written  | not written
-Opengrep, same custom rules  | 1.22.0  | 3/5         | not written  | not written
-Semgrep OSS, community packs | 1.166.0 | 0/5         | 3/10         | 1/8
+Tool                         | Version | php-symfony | python-flask | typescript-express | java-spring
+-----------------------------|---------|-------------|--------------|--------------------|------------
+Semgrep OSS, custom rules    | 1.166.0 | 3/5         | not written  | not written        | not written
+Opengrep, same custom rules  | 1.22.0  | 3/5         | not written  | not written        | not written
+Semgrep OSS, community packs | 1.166.0 | 0/5         | 3/10         | 1/8                | 3/10
 
 Detection tracks the difficulty ladder, not severity:
 
-Level | Requires                  | python-flask | typescript-express
-------|---------------------------|--------------|-------------------
-1     | Nothing, a literal         | 1 of 2       | 1 of 2
-2     | Dataflow in one function   | 1 of 2       | 0 of 1
-3     | Across functions, one file | 1 of 2       | 0 of 1
-4     | Across files               | 0 of 2       | 0 of 2
-5     | Judging a guard            | 0 of 2       | 0 of 2
+Level | Requires                   | python-flask | typescript-express | java-spring
+------|----------------------------|--------------|--------------------|------------
+1     | Nothing, a literal          | 1 of 2       | 1 of 2             | 1 of 2
+2     | Dataflow in one function    | 1 of 2       | 0 of 1             | 1 of 2
+3     | Across functions, one file  | 1 of 2       | 0 of 1             | 1 of 2
+4     | Across files                | 0 of 2       | 0 of 2             | 0 of 2
+5     | Judging a guard             | 0 of 2       | 0 of 2             | 0 of 2
 
-Three findings replicate across languages, which is what makes them worth stating.
+**Nothing above level 3 has been detected, in any language, by any tool measured.**
 
-**Level 4 is where free tooling stops, and it is not an ecosystem problem.**
-The identical CWE-918 cross-file flow is planted in PHP and in TypeScript, and missed in both.
-The PHP miss alone could be blamed on weak PHP support; the TypeScript miss removes that explanation.
+Four findings now replicate across independent ecosystems, which is what makes them worth stating as results rather than anecdotes.
+
+**Level 4 is a property of the analysis, not of the ecosystem.**
+The identical CWE-918 cross-file flow is planted in PHP, TypeScript and Java, and missed in all three, at both the source and the sink.
+Java has the most mature free security tooling of any language here, which removes the last ecosystem explanation.
 
 **Secret detection keys on vendor prefixes, not on variables.**
-`DATABASE_PASSWORD` in Python and `JWT_SIGNING_SECRET` in TypeScript are both missed, while tokens with recognisable vendor prefixes nearby are reported.
+`DATABASE_PASSWORD`, `JWT_SIGNING_SECRET` and `SIGNING_KEY` are missed in Python, TypeScript and Java respectively, while a token carrying an `sk_live_` prefix on an adjacent line is reported twice.
 The most commonly cited SAST win depends on the credential resembling a vendor's format.
 
+**SQL injection is reported at the sink, not at the mistake.**
+In both Python and Java the tool flags the execute call and not the string construction on the line above.
+The fix belongs on the line that was not flagged, and the rule would fire identically on a query built from trusted constants.
+
 **Detection does not track severity.**
-An MD5 call is reported; a cross-file SSRF and a defeated traversal guard are not.
+An MD5 call and a DES cipher are reported; a cross-file SSRF and a defeated traversal guard are not.
+
+The one detected level 3 expectation is worth reading carefully.
+`java-spring/xxe-parser-helper` is caught at the parser factory, but that is an **absence** of hardening calls, visible to a syntactic rule, not a flow.
+Its cross-function half is missed like every other level 3 flow.
 
 Bearer CLI is excluded: 2.0.2 does not complete on any sample.
 Bandit is configured for the Python sample but is not installed, so it has no column yet.
@@ -80,6 +90,7 @@ Sample                                            | Stack                     | 
 [php-symfony](samples/php-symfony/)               | PHP 8.3, Symfony 7.4      | 3     | 1, 2, 4
 [python-flask](samples/python-flask/)             | Python 3.12, Flask 3      | 5     | 1 to 5
 [typescript-express](samples/typescript-express/) | TypeScript 5.6, Express 4 | 5     | 1 to 5
+[java-spring](samples/java-spring/)               | Java 21, Spring Boot 3    | 5     | 1 to 5
 
 ## Docs
 
