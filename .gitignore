@@ -178,3 +178,4 @@ samples/*/obj/
 samples/*/target/
 samples/*/.codeql-db/
 gl-sast-report.json
+samples/java-spring/target/

@@ -647,6 +647,528 @@
           },
           "false_positive_details": [],
           "unexpected_details": []
+        },
+        "trivy": {
+          "version": "0.73.0",
+          "cases": [
+            {
+              "case": "java-spring/regex-guard-unanchored",
+              "category": "sast",
+              "difficulty": 5,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "unanchored-match",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/UpstreamClient.java:48",
+                  "evidence": null
+                },
+                {
+                  "expectation": "guarded-sink",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/UpstreamClient.java:54",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/sql-injection-concat",
+              "category": "sast",
+              "difficulty": 2,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "query-construction",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "critical",
+                  "location": "src/main/java/com/example/reporting/ReportRepository.java:37",
+                  "evidence": null
+                },
+                {
+                  "expectation": "query-execution",
+                  "status": "missed",
+                  "requires": "intra-procedural-taint",
+                  "severity": "critical",
+                  "location": "src/main/java/com/example/reporting/ReportRepository.java:38",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/ssrf-crossfile",
+              "category": "sast",
+              "difficulty": 4,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "ssrf-source",
+                  "status": "missed",
+                  "requires": "taint-source-recognition",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/ReportController.java:36",
+                  "evidence": null
+                },
+                {
+                  "expectation": "ssrf-sink",
+                  "status": "missed",
+                  "requires": "cross-file-taint",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/UpstreamClient.java:34",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/vulnerable-dependency",
+              "category": "sca",
+              "difficulty": 1,
+              "expected": 1,
+              "detected": 1,
+              "partial": 0,
+              "missed": 0,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "log4shell",
+                  "status": "detected",
+                  "requires": "resolved-dependency-graph",
+                  "severity": "critical",
+                  "location": "pom.xml:49",
+                  "evidence": {
+                    "rule": "CVE-2021-44228",
+                    "line": 47,
+                    "cwe": []
+                  }
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/weak-crypto-and-secret",
+              "category": "sast",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "hardcoded-signing-key",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/CryptoService.java:17",
+                  "evidence": null
+                },
+                {
+                  "expectation": "weak-cipher",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/CryptoService.java:29",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "java-spring/xxe-parser-helper",
+              "category": "sast",
+              "difficulty": 3,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "unsafe-parser-factory",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/XmlIngestService.java:26",
+                  "evidence": null
+                },
+                {
+                  "expectation": "untrusted-parse",
+                  "status": "missed",
+                  "requires": "cross-function-taint",
+                  "severity": "high",
+                  "location": "src/main/java/com/example/reporting/XmlIngestService.java:34",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            }
+          ],
+          "totals": {
+            "expected": 11,
+            "detected": 1,
+            "partial": 0,
+            "missed": 10,
+            "false_positives": 0,
+            "unexpected": 63,
+            "recall": 0.091,
+            "by_category": {
+              "sast": {
+                "expected": 10,
+                "detected": 0,
+                "partial": 0
+              },
+              "sca": {
+                "expected": 1,
+                "detected": 1,
+                "partial": 0
+              }
+            }
+          },
+          "false_positive_details": [],
+          "unexpected_details": [
+            {
+              "rule": "CVE-2024-12798",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-11226",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2024-12801",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-10532",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-1225",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-9828",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "GHSA-r7wm-3cxj-wff9",
+              "location": "pom.xml:1",
+              "cwe": [
+                "CWE-770"
+              ]
+            },
+            {
+              "rule": "GHSA-72hv-8253-57qq",
+              "location": "pom.xml:1",
+              "cwe": [
+                "CWE-770"
+              ]
+            },
+            {
+              "rule": "CVE-2026-54512",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-54513",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-54514",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-54515",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-59888",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-59889",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "GHSA-mhm7-754m-9p8w",
+              "location": "pom.xml:1",
+              "cwe": [
+                "CWE-863"
+              ]
+            },
+            {
+              "rule": "CVE-2025-24813",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41293",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-43512",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-43515",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-48988",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-48989",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-52520",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-53506",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-55752",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-24734",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-24880",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-34483",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41284",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-42498",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-43513",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-31650",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-49124",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-49125",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-55668",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-66614",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-25854",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-31651",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-46701",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-55754",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-61795",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-43514",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-22235",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-40973",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-22233",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-41249",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41848",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41850",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41851",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41852",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-41234",
+              "location": "pom.xml:1",
+              "cwe": [
+                "CWE-113"
+              ]
+            },
+            {
+              "rule": "CVE-2026-41854",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41842",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41845",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2025-41242",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-22737",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-22745",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41841",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41843",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41844",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41846",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-41853",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-22735",
+              "location": "pom.xml:1",
+              "cwe": []
+            },
+            {
+              "rule": "CVE-2026-22741",
+              "location": "pom.xml:1",
+              "cwe": []
+            }
+          ]
         }
       }
     },

@@ -82,7 +82,13 @@ task score
 
 ## Building
 
-The sample is not wired to a build.
-Semgrep parses C# from source without compiling, so no toolchain is needed to reproduce the results.
+```bash
+dotnet build
+```
 
-A build becomes necessary only for tools that analyse assemblies, such as the Roslyn security analysers, which are on the backlog.
+Verified to build locally on .NET 8, with no warnings.
+
+Semgrep and CodeQL with `build-mode: none` parse the source without compiling, so the build is not needed to reproduce their results.
+It is needed for dependency scanning: `RestorePackagesWithLockFile` is enabled on the project, and the resulting `packages.lock.json` is what makes the dependency graph visible to a scanner at all.
+
+`dotnet restore` itself warns NU1903 about the deliberately vulnerable package, before any scanner runs.

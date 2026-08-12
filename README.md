@@ -92,9 +92,14 @@ Two findings came out of adding them.
 The first run found nothing outside Python. `package.json` and a `.csproj` are invisible on their own; adding `package-lock.json` and enabling `RestorePackagesWithLockFile` made both visible.
 A repository that does not commit lock files may be reporting clean because there was nothing to read.
 
-**Java could not be measured at all.**
-Trivy resolves the Maven parent POM over the network and was rate limited with HTTP 429, so it aborted and wrote nothing.
-That is recorded as unmeasured rather than as a miss: log4j-core 2.14.1 is pinned in that manifest, and publishing a zero caused by a rate limit would be dishonest.
+**A dependency scan can fail for reasons unrelated to the code.**
+Java initially produced nothing: trivy resolves the Maven parent POM over the network and was rate limited with HTTP 429, so it aborted and wrote no output.
+That was recorded as unmeasured rather than as a miss, and after warming the Maven cache the same command found Log4Shell.
+A harness that had recorded the empty result would have published a clean bill of health for a manifest containing Log4Shell.
+
+**The planted defect was 1 finding in 64.**
+The same Java run reported 63 further advisories against transitive dependencies of an ordinary Spring Boot starter, all against `pom.xml:1` because transitive dependencies have no declaration line.
+Log4Shell only stands out here because the case manifest said in advance where it would be.
 
 Bearer CLI is excluded: 2.0.2 does not complete on any sample.
 Bandit is configured for the Python sample but is not installed, so it has no column yet.

@@ -40,7 +40,7 @@ Each new sample needs cases spread across the difficulty ladder.
 `php-symfony` has nothing at level 3 or 5.
 
 **SpotBugs with find-sec-bugs** is the obvious next tool for `java-spring`, and **Roslyn security analysers** for `dotnet-aspnet`.
-Both analyse compiled output. Both samples now carry a real `pom.xml` and `.csproj`, so the build exists; only Maven is missing locally.
+Both analyse compiled output. Both samples now carry a real `pom.xml` and `.csproj`, and both are verified to build locally.
 
 ## Case coverage
 

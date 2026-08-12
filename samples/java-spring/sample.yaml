@@ -4,7 +4,7 @@ language: java
 language_version: "21"
 framework: Spring Boot 3
 codeql_language: java
-runnable: false
+runnable: true
 
 # Paths a scanner is pointed at, relative to the sample root.
 scan_roots:

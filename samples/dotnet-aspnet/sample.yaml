@@ -4,7 +4,7 @@ language: csharp
 language_version: "12"
 framework: ASP.NET Core 8
 codeql_language: csharp
-runnable: false
+runnable: true
 
 # Paths a scanner is pointed at, relative to the sample root.
 scan_roots:

@@ -85,7 +85,14 @@ The registry returns 404 for it, exactly as it does for `p/express`, and a singl
 
 ## Building
 
-The sample is not wired to a build.
-Semgrep parses Java from source without compiling, so no toolchain is needed to reproduce the results.
+```bash
+mvn -B compile
+```
 
-A build becomes necessary only for tools that analyse bytecode, such as SpotBugs with find-sec-bugs, which is on the backlog.
+Verified to compile locally with Maven 3.8.7 and Java 21.
+
+Semgrep and CodeQL with `build-mode: none` parse the source without compiling, so the build is not needed to reproduce their results.
+It is needed for dependency scanning, which resolves the parent POM, and for tools that analyse bytecode such as SpotBugs with find-sec-bugs.
+
+Run `mvn dependency:resolve` once to warm `~/.m2`.
+Without a warm cache trivy resolves the parent POM over the network and can be rate limited into failing outright, which is documented in [docs/tool-notes.md](../../docs/tool-notes.md).

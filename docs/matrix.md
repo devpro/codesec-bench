@@ -74,31 +74,33 @@ Case                                                                           |
 
 ### Detection by expectation
 
-Case                   | Expectation           | Requires                  | semgrep-community
------------------------|-----------------------|---------------------------|------------------
-regex-guard-unanchored | unanchored-match      | sanitizer-reasoning       | no
-regex-guard-unanchored | guarded-sink          | sanitizer-reasoning       | no
-sql-injection-concat   | query-construction    | none                      | no
-sql-injection-concat   | query-execution       | intra-procedural-taint    | yes
-ssrf-crossfile         | ssrf-source           | taint-source-recognition  | no
-ssrf-crossfile         | ssrf-sink             | cross-file-taint          | no
-vulnerable-dependency  | log4shell             | resolved-dependency-graph | no
-weak-crypto-and-secret | hardcoded-signing-key | none                      | no
-weak-crypto-and-secret | weak-cipher           | none                      | yes
-xxe-parser-helper      | unsafe-parser-factory | none                      | yes
-xxe-parser-helper      | untrusted-parse       | cross-function-taint      | no
+Case                   | Expectation           | Requires                  | semgrep-community | trivy
+-----------------------|-----------------------|---------------------------|-------------------|------
+regex-guard-unanchored | unanchored-match      | sanitizer-reasoning       | no                | no
+regex-guard-unanchored | guarded-sink          | sanitizer-reasoning       | no                | no
+sql-injection-concat   | query-construction    | none                      | no                | no
+sql-injection-concat   | query-execution       | intra-procedural-taint    | yes               | no
+ssrf-crossfile         | ssrf-source           | taint-source-recognition  | no                | no
+ssrf-crossfile         | ssrf-sink             | cross-file-taint          | no                | no
+vulnerable-dependency  | log4shell             | resolved-dependency-graph | no                | yes
+weak-crypto-and-secret | hardcoded-signing-key | none                      | no                | no
+weak-crypto-and-secret | weak-cipher           | none                      | yes               | no
+xxe-parser-helper      | unsafe-parser-factory | none                      | yes               | no
+xxe-parser-helper      | untrusted-parse       | cross-function-taint      | no                | no
 
 ### Totals
 
 Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
 ------------------|---------|----------|---------|--------|--------|-----------------|-----------
 semgrep-community | 1.166.0 | 3/11     | 0       | 8      | 27%    | 0               | 0
+trivy             | 0.73.0  | 1/11     | 0       | 10     | 9%     | 0               | 63
 
 ### Detected by category
 
 Tool              | sast | sca
 ------------------|------|----
 semgrep-community | 3/10 | 0/1
+trivy             | 0/10 | 1/1
 
 ## php-symfony
 

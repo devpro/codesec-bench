@@ -299,9 +299,9 @@ Only `requirements.txt` works unaided, because a pip requirement is already a re
 
 This is worth knowing before trusting a green dependency scan: a repository that does not commit lock files may be reporting clean because there was nothing to read.
 
-### Maven scanning needs the network, and can fail outright
+### Maven scanning needs a warm local cache, and fails hard without one
 
-`java-spring` could not be measured.
+The first attempt on `java-spring` produced nothing at all:
 
 ```text
 FATAL Error remote Maven repository returned 429 Too Many Requests for
@@ -309,15 +309,38 @@ FATAL Error remote Maven repository returned 429 Too Many Requests for
 ```
 
 Trivy resolves the parent POM over the network to compute the effective dependency set.
-Maven Central rate limited the request, trivy aborted, and no output was produced.
+Maven Central rate limited the request, trivy aborted, and no output was written.
 
-**This is recorded as unmeasured, not as a miss.**
-The sample pins log4j-core 2.14.1, so Log4Shell is sitting in that manifest, and it would be dishonest to publish a zero caused by an HTTP 429.
+That was recorded as **unmeasured, not as a miss**, because the sample pins log4j-core 2.14.1 and publishing a zero caused by an HTTP 429 would have been a false result.
 
 Trivy exits 1 both when it has findings and when it fails fatally, so the exit code cannot distinguish the two.
 Only the absent output file does, which is why `scripts/run_scan.sh` refuses to record a scan that wrote nothing.
 
-The fix is a warm `~/.m2`, which needs Maven installed locally.
+After installing Maven and running `mvn dependency:resolve` once to warm `~/.m2`, the same command reported 70 findings and detected Log4Shell at `pom.xml:47`.
+
+The lesson is about the harness as much as the tool.
+A dependency scan can fail for reasons that have nothing to do with the code, and a harness that records the empty result would publish a clean bill of health for a manifest containing the most consequential vulnerability of the last decade.
+
+### The planted defect was 1 finding in 64
+
+The same run reported 63 further advisories, all against transitive dependencies of an ordinary, current Spring Boot starter:
+
+Package                              | Advisories
+-------------------------------------|-----------
+`org.apache.tomcat.embed:tomcat-embed-core` | 26
+`org.springframework:spring-webmvc`         | 12
+`org.springframework:spring-expression`     | 3
+others                                       | 22
+
+Every one of them is reported against `pom.xml:1`, because a transitive dependency has no declaration line to point at.
+
+Two consequences worth knowing.
+
+The deliberately planted Log4Shell is **one finding in sixty four**, and the only reason it stands out here is that this repository declared in advance exactly where it was.
+On a real project it arrives in the same undifferentiated list.
+
+Transitive findings are **indistinguishable by location**.
+Any workflow that triages by file and line has nothing to work with, and the bench itself can only score direct dependencies for the same reason.
 
 ### Dependency findings decay, source findings do not
 
