@@ -77,7 +77,18 @@ A useful bench spreads across the ladder, which is why the grade is mandatory in
 `sast` is the current focus.
 The case format reserves `secrets`, `sca`, and `iac` so those categories can be added without redesigning the manifest or the scoring script.
 
-The scoring model transfers directly: an SCA case declares an expected finding on a dependency coordinate rather than a source line, and a secrets case declares one on a literal.
+The scoring model transfers, with two deliberate differences for `sca`.
+
+An SCA expectation is matched on **advisory identifier** rather than CWE, declared as `advisory: [CVE-...]`.
+Dependency scanners identify findings by advisory and frequently emit no CWE at all, so matching on CWE would record every correct detection as partial.
+
+An SCA case is **exempt from the safe counterpart rule**.
+The counterpart of a vulnerable dependency would be a patched version, and no version is permanently safe: advisories are published against releases that were clean when they were pinned.
+Trivy already reports an advisory against the Flask version this repository pinned as current.
+A safe counterpart would therefore decay into a false measurement without the repository changing at all.
+
+Totals are additionally broken down by category.
+A single ratio is unfair to a specialised tool: a dependency scanner scored against the SAST expectations in the same sample reports 1 of 11 when it is 4 of 4 on the cases it addresses.
 
 ## Reproducibility
 

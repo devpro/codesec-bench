@@ -104,6 +104,18 @@ function renderSample(entry) {
     ...table(["Tool", "Version", "Detected", "Partial", "Missed", "Recall", "False positives", "Unexpected"], totalRows),
     "",
   );
+
+  // A single ratio is unfair to a specialised tool: a dependency scanner scored against SAST expectations
+  // looks far worse than it is. The breakdown reports each tool against each category it was measured on.
+  const categories = [...new Set(tools.flatMap((t) => Object.keys(entry.tools[t].totals.by_category ?? {})))].sort();
+  if (categories.length > 1) {
+    const categoryRows = tools.map((tool) => {
+      const by = entry.tools[tool].totals.by_category ?? {};
+      return [tool, ...categories.map((c) => (by[c] ? `${by[c].detected}/${by[c].expected}` : "n/a"))];
+    });
+    lines.push("### Detected by category", "", ...table(["Tool", ...categories], categoryRows), "");
+  }
+
   return lines;
 }
 

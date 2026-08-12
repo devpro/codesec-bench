@@ -1,0 +1,24 @@
+id: dotnet-aspnet/vulnerable-dependency
+title: Newtonsoft.Json pinned to a release with a known denial of service advisory
+category: sca
+difficulty: 1
+cwe: [CWE-1395, CWE-755]
+
+description: >
+  The project pins Newtonsoft.Json 12.0.1, which is affected by CVE-2024-21907: improper handling of exceptional conditions, reachable by deserialising deeply nested input.
+
+  Findings are expected against packages.lock.json rather than the csproj.
+  The lock file only exists because RestorePackagesWithLockFile is enabled on the project, and enabling it is what makes the dependency visible to scanning at all.
+
+expected:
+  - id: newtonsoft-dos
+    cwe: [CWE-1395, CWE-755]
+    advisory: [CVE-2024-21907, GHSA-5crp-9r3c-p9vr]
+    severity: high
+    file: packages.lock.json
+    line: 21
+    anchor: '"Newtonsoft.Json"'
+    tolerance: 2
+    requires: none
+    note: >
+      dotnet restore itself warns NU1903 about this package, so the SDK reports it before any scanner runs.

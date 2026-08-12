@@ -1,0 +1,26 @@
+id: java-spring/vulnerable-dependency
+title: log4j-core pinned to 2.14.1, the release affected by Log4Shell
+category: sca
+difficulty: 1
+cwe: [CWE-1395, CWE-917]
+
+description: >
+  pom.xml pins log4j-core 2.14.1, which is affected by CVE-2021-44228, Log4Shell, and by CVE-2021-45046.
+  The version is pinned explicitly because the Spring Boot parent manages a patched one, and inheriting it would remove the defect.
+
+  This is the most consequential vulnerability of the last decade sitting in a dependency manifest, at difficulty 1.
+  If dependency scanning finds anything at all, it should find this.
+
+expected:
+  - id: log4shell
+    cwe: [CWE-1395, CWE-917]
+    advisory: [CVE-2021-44228, CVE-2021-45046, GHSA-jfh8-c2jp-5v3q]
+    severity: critical
+    file: pom.xml
+    line: 49
+    anchor: "<artifactId>log4j-core</artifactId>"
+    tolerance: 2
+    requires: resolved-dependency-graph
+    note: >
+      A pom.xml declares a dependency but does not resolve it.
+      Whether a tool reports this depends on whether it can resolve the graph, which for Maven means running Maven, and that is the question this case asks.

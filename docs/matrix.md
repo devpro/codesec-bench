@@ -18,34 +18,44 @@ ASP.NET Core reporting service, five cases across the difficulty ladder
 
 ### Cases
 
-Case                                                                             | Difficulty               | CWE              | Expected findings
----------------------------------------------------------------------------------|--------------------------|------------------|------------------
-[path-guard-startswith](../samples/dotnet-aspnet/cases/path-guard-startswith/)   | 5 framework or sanitizer | CWE-22           | 2
-[sql-injection-concat](../samples/dotnet-aspnet/cases/sql-injection-concat/)     | 2 intra-procedural       | CWE-89           | 2
-[ssrf-crossfile](../samples/dotnet-aspnet/cases/ssrf-crossfile/)                 | 4 cross-file             | CWE-918          | 2
-[weak-crypto-and-secret](../samples/dotnet-aspnet/cases/weak-crypto-and-secret/) | 1 syntax                 | CWE-327, CWE-798 | 2
-[xml-resolver-helper](../samples/dotnet-aspnet/cases/xml-resolver-helper/)       | 3 cross-function         | CWE-611          | 2
+Case                                                                             | Difficulty               | CWE               | Expected findings
+---------------------------------------------------------------------------------|--------------------------|-------------------|------------------
+[path-guard-startswith](../samples/dotnet-aspnet/cases/path-guard-startswith/)   | 5 framework or sanitizer | CWE-22            | 2
+[sql-injection-concat](../samples/dotnet-aspnet/cases/sql-injection-concat/)     | 2 intra-procedural       | CWE-89            | 2
+[ssrf-crossfile](../samples/dotnet-aspnet/cases/ssrf-crossfile/)                 | 4 cross-file             | CWE-918           | 2
+[vulnerable-dependency](../samples/dotnet-aspnet/cases/vulnerable-dependency/)   | 1 syntax                 | CWE-1395, CWE-755 | 1
+[weak-crypto-and-secret](../samples/dotnet-aspnet/cases/weak-crypto-and-secret/) | 1 syntax                 | CWE-327, CWE-798  | 2
+[xml-resolver-helper](../samples/dotnet-aspnet/cases/xml-resolver-helper/)       | 3 cross-function         | CWE-611           | 2
 
 ### Detection by expectation
 
-Case                   | Expectation                   | Requires                 | semgrep-community
------------------------|-------------------------------|--------------------------|------------------
-path-guard-startswith  | prefix-containment-check      | sanitizer-reasoning      | no
-path-guard-startswith  | guarded-read                  | sanitizer-reasoning      | yes
-sql-injection-concat   | query-construction            | none                     | no
-sql-injection-concat   | command-construction          | intra-procedural-taint   | yes
-ssrf-crossfile         | ssrf-source                   | taint-source-recognition | no
-ssrf-crossfile         | ssrf-sink                     | cross-file-taint         | no
-weak-crypto-and-secret | hardcoded-connection-password | none                     | no
-weak-crypto-and-secret | weak-hash                     | none                     | no
-xml-resolver-helper    | resolver-assignment           | none                     | no
-xml-resolver-helper    | untrusted-load                | cross-function-taint     | no
+Case                   | Expectation                   | Requires                 | semgrep-community | trivy
+-----------------------|-------------------------------|--------------------------|-------------------|------
+path-guard-startswith  | prefix-containment-check      | sanitizer-reasoning      | no                | no
+path-guard-startswith  | guarded-read                  | sanitizer-reasoning      | yes               | no
+sql-injection-concat   | query-construction            | none                     | no                | no
+sql-injection-concat   | command-construction          | intra-procedural-taint   | yes               | no
+ssrf-crossfile         | ssrf-source                   | taint-source-recognition | no                | no
+ssrf-crossfile         | ssrf-sink                     | cross-file-taint         | no                | no
+vulnerable-dependency  | newtonsoft-dos                | none                     | no                | yes
+weak-crypto-and-secret | hardcoded-connection-password | none                     | no                | no
+weak-crypto-and-secret | weak-hash                     | none                     | no                | no
+xml-resolver-helper    | resolver-assignment           | none                     | no                | no
+xml-resolver-helper    | untrusted-load                | cross-function-taint     | no                | no
 
 ### Totals
 
 Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
 ------------------|---------|----------|---------|--------|--------|-----------------|-----------
-semgrep-community | 1.166.0 | 2/10     | 0       | 8      | 20%    | 1               | 0
+semgrep-community | 1.166.0 | 2/11     | 0       | 9      | 18%    | 1               | 0
+trivy             | 0.73.0  | 1/11     | 0       | 10     | 9%     | 0               | 0
+
+### Detected by category
+
+Tool              | sast | sca
+------------------|------|----
+semgrep-community | 2/10 | 0/1
+trivy             | 0/10 | 1/1
 
 ## java-spring
 
@@ -53,34 +63,42 @@ Spring Boot reporting service, five cases across the difficulty ladder
 
 ### Cases
 
-Case                                                                           | Difficulty               | CWE              | Expected findings
--------------------------------------------------------------------------------|--------------------------|------------------|------------------
-[regex-guard-unanchored](../samples/java-spring/cases/regex-guard-unanchored/) | 5 framework or sanitizer | CWE-918          | 2
-[sql-injection-concat](../samples/java-spring/cases/sql-injection-concat/)     | 2 intra-procedural       | CWE-89           | 2
-[ssrf-crossfile](../samples/java-spring/cases/ssrf-crossfile/)                 | 4 cross-file             | CWE-918          | 2
-[weak-crypto-and-secret](../samples/java-spring/cases/weak-crypto-and-secret/) | 1 syntax                 | CWE-327, CWE-798 | 2
-[xxe-parser-helper](../samples/java-spring/cases/xxe-parser-helper/)           | 3 cross-function         | CWE-611          | 2
+Case                                                                           | Difficulty               | CWE               | Expected findings
+-------------------------------------------------------------------------------|--------------------------|-------------------|------------------
+[regex-guard-unanchored](../samples/java-spring/cases/regex-guard-unanchored/) | 5 framework or sanitizer | CWE-918           | 2
+[sql-injection-concat](../samples/java-spring/cases/sql-injection-concat/)     | 2 intra-procedural       | CWE-89            | 2
+[ssrf-crossfile](../samples/java-spring/cases/ssrf-crossfile/)                 | 4 cross-file             | CWE-918           | 2
+[vulnerable-dependency](../samples/java-spring/cases/vulnerable-dependency/)   | 1 syntax                 | CWE-1395, CWE-917 | 1
+[weak-crypto-and-secret](../samples/java-spring/cases/weak-crypto-and-secret/) | 1 syntax                 | CWE-327, CWE-798  | 2
+[xxe-parser-helper](../samples/java-spring/cases/xxe-parser-helper/)           | 3 cross-function         | CWE-611           | 2
 
 ### Detection by expectation
 
-Case                   | Expectation           | Requires                 | semgrep-community
------------------------|-----------------------|--------------------------|------------------
-regex-guard-unanchored | unanchored-match      | sanitizer-reasoning      | no
-regex-guard-unanchored | guarded-sink          | sanitizer-reasoning      | no
-sql-injection-concat   | query-construction    | none                     | no
-sql-injection-concat   | query-execution       | intra-procedural-taint   | yes
-ssrf-crossfile         | ssrf-source           | taint-source-recognition | no
-ssrf-crossfile         | ssrf-sink             | cross-file-taint         | no
-weak-crypto-and-secret | hardcoded-signing-key | none                     | no
-weak-crypto-and-secret | weak-cipher           | none                     | yes
-xxe-parser-helper      | unsafe-parser-factory | none                     | yes
-xxe-parser-helper      | untrusted-parse       | cross-function-taint     | no
+Case                   | Expectation           | Requires                  | semgrep-community
+-----------------------|-----------------------|---------------------------|------------------
+regex-guard-unanchored | unanchored-match      | sanitizer-reasoning       | no
+regex-guard-unanchored | guarded-sink          | sanitizer-reasoning       | no
+sql-injection-concat   | query-construction    | none                      | no
+sql-injection-concat   | query-execution       | intra-procedural-taint    | yes
+ssrf-crossfile         | ssrf-source           | taint-source-recognition  | no
+ssrf-crossfile         | ssrf-sink             | cross-file-taint          | no
+vulnerable-dependency  | log4shell             | resolved-dependency-graph | no
+weak-crypto-and-secret | hardcoded-signing-key | none                      | no
+weak-crypto-and-secret | weak-cipher           | none                      | yes
+xxe-parser-helper      | unsafe-parser-factory | none                      | yes
+xxe-parser-helper      | untrusted-parse       | cross-function-taint      | no
 
 ### Totals
 
 Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
 ------------------|---------|----------|---------|--------|--------|-----------------|-----------
-semgrep-community | 1.166.0 | 3/10     | 0       | 7      | 30%    | 0               | 0
+semgrep-community | 1.166.0 | 3/11     | 0       | 8      | 27%    | 0               | 0
+
+### Detected by category
+
+Tool              | sast | sca
+------------------|------|----
+semgrep-community | 3/10 | 0/1
 
 ## php-symfony
 
@@ -118,34 +136,44 @@ Flask reporting service with five cases across the difficulty ladder
 
 ### Cases
 
-Case                                                                                    | Difficulty               | CWE     | Expected findings
-----------------------------------------------------------------------------------------|--------------------------|---------|------------------
-[command-injection-helper](../samples/python-flask/cases/command-injection-helper/)     | 3 cross-function         | CWE-78  | 2
-[hardcoded-credential](../samples/python-flask/cases/hardcoded-credential/)             | 1 syntax                 | CWE-798 | 2
-[path-traversal-crossfile](../samples/python-flask/cases/path-traversal-crossfile/)     | 4 cross-file             | CWE-22  | 2
-[sanitizer-bypass-traversal](../samples/python-flask/cases/sanitizer-bypass-traversal/) | 5 framework or sanitizer | CWE-22  | 2
-[sql-injection-fstring](../samples/python-flask/cases/sql-injection-fstring/)           | 2 intra-procedural       | CWE-89  | 2
+Case                                                                                    | Difficulty               | CWE               | Expected findings
+----------------------------------------------------------------------------------------|--------------------------|-------------------|------------------
+[command-injection-helper](../samples/python-flask/cases/command-injection-helper/)     | 3 cross-function         | CWE-78            | 2
+[hardcoded-credential](../samples/python-flask/cases/hardcoded-credential/)             | 1 syntax                 | CWE-798           | 2
+[path-traversal-crossfile](../samples/python-flask/cases/path-traversal-crossfile/)     | 4 cross-file             | CWE-22            | 2
+[sanitizer-bypass-traversal](../samples/python-flask/cases/sanitizer-bypass-traversal/) | 5 framework or sanitizer | CWE-22            | 2
+[sql-injection-fstring](../samples/python-flask/cases/sql-injection-fstring/)           | 2 intra-procedural       | CWE-89            | 2
+[vulnerable-dependency](../samples/python-flask/cases/vulnerable-dependency/)           | 1 syntax                 | CWE-1395, CWE-502 | 1
 
 ### Detection by expectation
 
-Case                       | Expectation          | Requires                 | semgrep-community
----------------------------|----------------------|--------------------------|------------------
-command-injection-helper   | command-construction | cross-function-taint     | no
-command-injection-helper   | shell-execution      | none                     | yes
-hardcoded-credential       | database-password    | none                     | no
-hardcoded-credential       | api-token            | none                     | yes
-path-traversal-crossfile   | traversal-source     | taint-source-recognition | no
-path-traversal-crossfile   | traversal-sink       | cross-file-taint         | no
-sanitizer-bypass-traversal | inadequate-sanitizer | sanitizer-reasoning      | no
-sanitizer-bypass-traversal | guarded-sink         | sanitizer-reasoning      | no
-sql-injection-fstring      | query-construction   | none                     | no
-sql-injection-fstring      | query-execution      | intra-procedural-taint   | yes
+Case                       | Expectation          | Requires                 | semgrep-community | trivy
+---------------------------|----------------------|--------------------------|-------------------|------
+command-injection-helper   | command-construction | cross-function-taint     | no                | no
+command-injection-helper   | shell-execution      | none                     | yes               | no
+hardcoded-credential       | database-password    | none                     | no                | no
+hardcoded-credential       | api-token            | none                     | yes               | no
+path-traversal-crossfile   | traversal-source     | taint-source-recognition | no                | no
+path-traversal-crossfile   | traversal-sink       | cross-file-taint         | no                | no
+sanitizer-bypass-traversal | inadequate-sanitizer | sanitizer-reasoning      | no                | no
+sanitizer-bypass-traversal | guarded-sink         | sanitizer-reasoning      | no                | no
+sql-injection-fstring      | query-construction   | none                     | no                | no
+sql-injection-fstring      | query-execution      | intra-procedural-taint   | yes               | no
+vulnerable-dependency      | pyyaml-rce           | none                     | no                | yes
 
 ### Totals
 
 Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
 ------------------|---------|----------|---------|--------|--------|-----------------|-----------
-semgrep-community | 1.166.0 | 3/10     | 0       | 7      | 30%    | 0               | 0
+semgrep-community | 1.166.0 | 3/11     | 0       | 8      | 27%    | 0               | 0
+trivy             | 0.73.0  | 1/11     | 0       | 10     | 9%     | 0               | 1
+
+### Detected by category
+
+Tool              | sast | sca
+------------------|------|----
+semgrep-community | 3/10 | 0/1
+trivy             | 0/10 | 1/1
 
 ## typescript-express
 
@@ -153,29 +181,40 @@ Express reporting service in TypeScript, five cases across the difficulty ladder
 
 ### Cases
 
-Case                                                                                        | Difficulty               | CWE              | Expected findings
---------------------------------------------------------------------------------------------|--------------------------|------------------|------------------
-[prototype-pollution-merge](../samples/typescript-express/cases/prototype-pollution-merge/) | 3 cross-function         | CWE-1321         | 1
-[reflected-xss](../samples/typescript-express/cases/reflected-xss/)                         | 2 intra-procedural       | CWE-79           | 1
-[ssrf-allowlist-bypass](../samples/typescript-express/cases/ssrf-allowlist-bypass/)         | 5 framework or sanitizer | CWE-918          | 2
-[ssrf-crossfile](../samples/typescript-express/cases/ssrf-crossfile/)                       | 4 cross-file             | CWE-918          | 2
-[weak-hash-and-secret](../samples/typescript-express/cases/weak-hash-and-secret/)           | 1 syntax                 | CWE-327, CWE-798 | 2
+Case                                                                                        | Difficulty               | CWE                | Expected findings
+--------------------------------------------------------------------------------------------|--------------------------|--------------------|------------------
+[prototype-pollution-merge](../samples/typescript-express/cases/prototype-pollution-merge/) | 3 cross-function         | CWE-1321           | 1
+[reflected-xss](../samples/typescript-express/cases/reflected-xss/)                         | 2 intra-procedural       | CWE-79             | 1
+[ssrf-allowlist-bypass](../samples/typescript-express/cases/ssrf-allowlist-bypass/)         | 5 framework or sanitizer | CWE-918            | 2
+[ssrf-crossfile](../samples/typescript-express/cases/ssrf-crossfile/)                       | 4 cross-file             | CWE-918            | 2
+[vulnerable-dependency](../samples/typescript-express/cases/vulnerable-dependency/)         | 1 syntax                 | CWE-1395, CWE-1321 | 2
+[weak-hash-and-secret](../samples/typescript-express/cases/weak-hash-and-secret/)           | 1 syntax                 | CWE-327, CWE-798   | 2
 
 ### Detection by expectation
 
-Case                      | Expectation                | Requires                 | semgrep-community
---------------------------|----------------------------|--------------------------|------------------
-prototype-pollution-merge | unguarded-recursive-assign | cross-function-taint     | no
-reflected-xss             | unescaped-interpolation    | intra-procedural-taint   | no
-ssrf-allowlist-bypass     | prefix-check-guard         | sanitizer-reasoning      | no
-ssrf-allowlist-bypass     | guarded-sink               | sanitizer-reasoning      | no
-ssrf-crossfile            | ssrf-source                | taint-source-recognition | no
-ssrf-crossfile            | ssrf-sink                  | cross-file-taint         | no
-weak-hash-and-secret      | hardcoded-jwt-secret       | none                     | no
-weak-hash-and-secret      | weak-password-hash         | none                     | yes
+Case                      | Expectation                | Requires                 | semgrep-community | trivy
+--------------------------|----------------------------|--------------------------|-------------------|------
+prototype-pollution-merge | unguarded-recursive-assign | cross-function-taint     | no                | no
+reflected-xss             | unescaped-interpolation    | intra-procedural-taint   | no                | no
+ssrf-allowlist-bypass     | prefix-check-guard         | sanitizer-reasoning      | no                | no
+ssrf-allowlist-bypass     | guarded-sink               | sanitizer-reasoning      | no                | no
+ssrf-crossfile            | ssrf-source                | taint-source-recognition | no                | no
+ssrf-crossfile            | ssrf-sink                  | cross-file-taint         | no                | no
+vulnerable-dependency     | lodash-prototype-pollution | none                     | no                | yes
+vulnerable-dependency     | axios-ssrf                 | none                     | no                | yes
+weak-hash-and-secret      | hardcoded-jwt-secret       | none                     | no                | no
+weak-hash-and-secret      | weak-password-hash         | none                     | yes               | no
 
 ### Totals
 
 Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
 ------------------|---------|----------|---------|--------|--------|-----------------|-----------
-semgrep-community | 1.166.0 | 1/8      | 0       | 7      | 13%    | 1               | 2
+semgrep-community | 1.166.0 | 1/10     | 0       | 9      | 10%    | 1               | 2
+trivy             | 0.73.0  | 2/10     | 0       | 8      | 20%    | 0               | 0
+
+### Detected by category
+
+Tool              | sast | sca
+------------------|------|----
+semgrep-community | 1/8  | 0/2
+trivy             | 0/8  | 2/2

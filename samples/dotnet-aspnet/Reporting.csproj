@@ -13,10 +13,15 @@
       on exactly the code the bench exists to measure. Warnings stay visible, they simply are not errors.
     -->
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+
+    <!-- A lock file is what makes the dependency graph visible to SCA tools. Without it a PackageReference is invisible. -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <!-- Deliberately vulnerable, see cases/vulnerable-dependency. CVE-2024-21907. -->
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
 
 </Project>

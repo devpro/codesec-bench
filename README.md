@@ -82,6 +82,20 @@ The one genuine level 3 detection needs its caveat.
 `java-spring/xxe-parser-helper` is caught at the parser factory, but that is an **absence** of hardening calls, visible to a syntactic rule, not a flow.
 Its cross-function half is missed like every other level 3 flow.
 
+### Dependency scanning
+
+Trivy detects every dependency case it can see, four of four, in Python, TypeScript and C#.
+
+Two findings came out of adding them.
+
+**A manifest is not enough, a lock file is.**
+The first run found nothing outside Python. `package.json` and a `.csproj` are invisible on their own; adding `package-lock.json` and enabling `RestorePackagesWithLockFile` made both visible.
+A repository that does not commit lock files may be reporting clean because there was nothing to read.
+
+**Java could not be measured at all.**
+Trivy resolves the Maven parent POM over the network and was rate limited with HTTP 429, so it aborted and wrote nothing.
+That is recorded as unmeasured rather than as a miss: log4j-core 2.14.1 is pinned in that manifest, and publishing a zero caused by a rate limit would be dishonest.
+
 Bearer CLI is excluded: 2.0.2 does not complete on any sample.
 Bandit is configured for the Python sample but is not installed, so it has no column yet.
 
@@ -120,8 +134,10 @@ Targets **Linux**, including WSL2, written for `bash`.
 The harness is Node.js and bash only.
 Python appears solely as sample code to be scanned.
 
-`sast` is the current focus.
-The case format reserves `secrets`, `sca` and `iac` so those categories can be added without redesigning the scoring.
+`sast` and `sca` are measured.
+The case format reserves `secrets` and `iac` for later.
+
+SCA cases differ deliberately: they are matched on advisory identifier rather than CWE, since dependency scanners emit no CWE, and they are exempt from the safe counterpart rule, since no dependency version is permanently safe.
 
 Related project: [sonar-samples](https://github.com/devpro/sonar-samples) covers one tool across six stacks, answering whether analysis runs correctly.
 This repository covers many tools against curated defects, answering whether the bug is found.

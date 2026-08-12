@@ -19,6 +19,14 @@ const { values } = parseArgs({
 
 const intersects = (a, b) => a.some((x) => b.includes(x));
 
+// An expectation declaring advisories is scored on those rather than on CWE.
+// SCA tools identify findings by advisory and frequently emit no CWE, so matching such a case on CWE would
+// record every correct detection as partial.
+const identifierMatch = (expectation, finding) =>
+  expectation.advisory
+    ? intersects(finding.advisories ?? [], expectation.advisory)
+    : intersects(finding.cwe, expectation.cwe);
+
 /**
  * Assign findings to expectations, one to one, across every case in the sample.
  *
@@ -38,7 +46,7 @@ function assignFindings(cases, findings) {
       candidates.push({
         expectationIndex,
         findingIndex,
-        cweMatch: intersects(finding.cwe, expectation.cwe),
+        cweMatch: identifierMatch(expectation, finding),
         distance: Math.abs(finding.line - expectation.line),
       });
     });
@@ -98,6 +106,7 @@ function classifyCase(kase, findings, assignment, consumed) {
 
   return {
     case: kase.id,
+    category: kase.category,
     difficulty: kase.difficulty,
     expected: outcomes.length,
     detected,
@@ -149,6 +158,19 @@ function scoreSample(sample) {
       falsePositives.push({ rule: finding.ruleId, location: `${finding.file}:${finding.line}`, cwe: finding.cwe });
     }
 
+    // Totals are also broken down by category, because a single number is unfair to a specialised tool.
+    // Trivy addresses dependency findings and nothing else, so scoring it against the SAST expectations in the
+    // same sample reports it as 1 of 11 when it is 4 of 4 on the cases it actually covers.
+    // The breakdown lets the reader see the difference without the repository having to assert what each tool
+    // is for, which would be a claim rather than a measurement.
+    const byCategory = {};
+    for (const c of cases) {
+      const bucket = (byCategory[c.category] ??= { expected: 0, detected: 0, partial: 0 });
+      bucket.expected += c.expected;
+      bucket.detected += c.detected;
+      bucket.partial += c.partial;
+    }
+
     const sum = (key) => cases.reduce((total, c) => total + c[key], 0);
     const expected = sum("expected");
     const detected = sum("detected");
@@ -165,6 +187,7 @@ function scoreSample(sample) {
         false_positives: falsePositives.length,
         unexpected: unexpected.length,
         recall: expected ? Math.round((detected / expected) * 1000) / 1000 : null,
+        by_category: byCategory,
       },
       false_positive_details: falsePositives,
       unexpected_details: unexpected,

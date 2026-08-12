@@ -16,6 +16,11 @@ export const DEFAULT_TOLERANCE = 3;
 
 const CWE_PATTERN = /CWE[-_ ]?(\d+)/gi;
 
+// SCA tools identify a finding by advisory, not by weakness class.
+// Trivy emits no CWE at all, so matching an SCA expectation on CWE would classify every correct detection
+// as partial. Advisory identifiers are the meaningful key for that category.
+const ADVISORY_PATTERN = /\b(CVE-\d{4}-\d{4,}|GHSA-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4})\b/gi;
+
 /**
  * Compare a path from a SARIF file with a path from a manifest.
  *
@@ -44,6 +49,20 @@ export function extractCwes(...blobs) {
     const text = typeof blob === "string" ? blob : JSON.stringify(blob);
     for (const match of text.matchAll(CWE_PATTERN)) {
       const tag = `CWE-${match[1]}`;
+      if (!found.includes(tag)) found.push(tag);
+    }
+  }
+  return found;
+}
+
+/** Pull CVE and GHSA identifiers out of arbitrary SARIF fragments, for scoring SCA cases. */
+export function extractAdvisories(...blobs) {
+  const found = [];
+  for (const blob of blobs) {
+    if (blob === null || blob === undefined) continue;
+    const text = typeof blob === "string" ? blob : JSON.stringify(blob);
+    for (const match of text.matchAll(ADVISORY_PATTERN)) {
+      const tag = match[1].toUpperCase().startsWith("CVE") ? match[1].toUpperCase() : match[1];
       if (!found.includes(tag)) found.push(tag);
     }
   }
@@ -82,6 +101,7 @@ function loadCase(manifestPath, sampleId) {
       file: e.file,
       line: e.line,
       anchor: e.anchor ?? null,
+      advisory: e.advisory ?? null,
       tolerance: e.tolerance ?? DEFAULT_TOLERANCE,
       requires: e.requires ?? "none",
       note: (e.note ?? "").trim(),
@@ -153,6 +173,7 @@ export function loadSarif(path, tool) {
       const ruleId = result.ruleId ?? result.rule?.id ?? "unknown";
       const rule = rulesById.get(ruleId) ?? {};
       const cwe = extractCwes(rule, result.properties, result.message);
+      const advisories = extractAdvisories(ruleId, rule, result.message);
       const message = (result.message?.text ?? "").trim();
 
       for (const location of result.locations?.length ? result.locations : []) {
@@ -160,7 +181,7 @@ export function loadSarif(path, tool) {
         const uri = physical.artifactLocation?.uri;
         const line = physical.region?.startLine;
         if (!uri || line === undefined) continue;
-        findings.push({ tool, ruleId, file: uri, line: Number(line), cwe, message });
+        findings.push({ tool, ruleId, file: uri, line: Number(line), cwe, advisories, message });
       }
     }
   }

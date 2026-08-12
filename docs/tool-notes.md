@@ -270,3 +270,61 @@ It did not object to line 8, a plaintext production database password.
 
 That is a fifth independent confirmation of the secrets finding above, from a detector built by a different vendor on a different codebase.
 The full account, and why the secret was kept rather than removed, is in [platforms.md](platforms.md).
+
+## Trivy
+
+Measured on 0.73.0, dependency scanning only.
+
+Trivy detects every dependency case it can see: PyYAML in Python, lodash and axios in TypeScript, Newtonsoft.Json in C#.
+Four of four, on the category it addresses.
+
+Its overall ratio in the matrix looks far worse than that, because it is scored against the SAST expectations in the same samples.
+The per category breakdown exists for exactly this reason.
+
+### A manifest is not enough, a lock file is
+
+The first run detected nothing outside Python:
+
+Sample             | Manifest present | Lock file present | Detected
+-------------------|------------------|-------------------|---------
+python-flask       | requirements.txt | not needed        | yes
+typescript-express | package.json     | no                | **no**
+dotnet-aspnet      | Reporting.csproj | no                | **no**
+
+Adding `package-lock.json` took TypeScript from nothing to 32 findings.
+Enabling `RestorePackagesWithLockFile` and restoring took C# from nothing to one.
+
+A `PackageReference` or a `dependencies` entry is invisible on its own.
+Only `requirements.txt` works unaided, because a pip requirement is already a resolved pin.
+
+This is worth knowing before trusting a green dependency scan: a repository that does not commit lock files may be reporting clean because there was nothing to read.
+
+### Maven scanning needs the network, and can fail outright
+
+`java-spring` could not be measured.
+
+```text
+FATAL Error remote Maven repository returned 429 Too Many Requests for
+  .../spring-boot-starter-parent-3.4.1.pom
+```
+
+Trivy resolves the parent POM over the network to compute the effective dependency set.
+Maven Central rate limited the request, trivy aborted, and no output was produced.
+
+**This is recorded as unmeasured, not as a miss.**
+The sample pins log4j-core 2.14.1, so Log4Shell is sitting in that manifest, and it would be dishonest to publish a zero caused by an HTTP 429.
+
+Trivy exits 1 both when it has findings and when it fails fatally, so the exit code cannot distinguish the two.
+Only the absent output file does, which is why `scripts/run_scan.sh` refuses to record a scan that wrote nothing.
+
+The fix is a warm `~/.m2`, which needs Maven installed locally.
+
+### Dependency findings decay, source findings do not
+
+Trivy reports CVE-2026-27205 against Flask 3.0.3, which was current when this sample was written.
+
+Nothing in the repository changed.
+The advisory database did.
+
+This is the structural difference between SCA and SAST in this bench, and it is why dependency cases are exempt from the safe counterpart rule.
+A patched version is only safe until it is not, so a safe counterpart would silently decay into a false measurement.

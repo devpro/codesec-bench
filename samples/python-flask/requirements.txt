@@ -1,1 +1,5 @@
 Flask==3.0.3
+
+# Deliberately vulnerable, see cases/vulnerable-dependency.
+# PyYAML 5.3.1 is affected by CVE-2020-14343, arbitrary code execution through full_load.
+PyYAML==5.3.1

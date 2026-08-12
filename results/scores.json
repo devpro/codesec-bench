@@ -4,14 +4,15 @@
       "sample": "dotnet-aspnet",
       "title": "ASP.NET Core reporting service, five cases across the difficulty ladder",
       "language": "csharp",
-      "case_count": 5,
-      "expectation_count": 10,
+      "case_count": 6,
+      "expectation_count": 11,
       "tools": {
         "semgrep-community": {
           "version": "1.166.0",
           "cases": [
             {
               "case": "dotnet-aspnet/path-guard-startswith",
+              "category": "sast",
               "difficulty": 5,
               "expected": 2,
               "detected": 1,
@@ -54,6 +55,7 @@
             },
             {
               "case": "dotnet-aspnet/sql-injection-concat",
+              "category": "sast",
               "difficulty": 2,
               "expected": 2,
               "detected": 1,
@@ -88,6 +90,7 @@
             },
             {
               "case": "dotnet-aspnet/ssrf-crossfile",
+              "category": "sast",
               "difficulty": 4,
               "expected": 2,
               "detected": 0,
@@ -115,7 +118,29 @@
               "false_positive_details": []
             },
             {
+              "case": "dotnet-aspnet/vulnerable-dependency",
+              "category": "sca",
+              "difficulty": 1,
+              "expected": 1,
+              "detected": 0,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "newtonsoft-dos",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "packages.lock.json:21",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
               "case": "dotnet-aspnet/weak-crypto-and-secret",
+              "category": "sast",
               "difficulty": 1,
               "expected": 2,
               "detected": 0,
@@ -144,6 +169,7 @@
             },
             {
               "case": "dotnet-aspnet/xml-resolver-helper",
+              "category": "sast",
               "difficulty": 3,
               "expected": 2,
               "detected": 0,
@@ -172,13 +198,25 @@
             }
           ],
           "totals": {
-            "expected": 10,
+            "expected": 11,
             "detected": 2,
             "partial": 0,
-            "missed": 8,
+            "missed": 9,
             "false_positives": 1,
             "unexpected": 0,
-            "recall": 0.2
+            "recall": 0.182,
+            "by_category": {
+              "sast": {
+                "expected": 10,
+                "detected": 2,
+                "partial": 0
+              },
+              "sca": {
+                "expected": 1,
+                "detected": 0,
+                "partial": 0
+              }
+            }
           },
           "false_positive_details": [
             {
@@ -190,6 +228,204 @@
             }
           ],
           "unexpected_details": []
+        },
+        "trivy": {
+          "version": "0.73.0",
+          "cases": [
+            {
+              "case": "dotnet-aspnet/path-guard-startswith",
+              "category": "sast",
+              "difficulty": 5,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "prefix-containment-check",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/ReportFileService.cs:25",
+                  "evidence": null
+                },
+                {
+                  "expectation": "guarded-read",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/ReportFileService.cs:30",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "dotnet-aspnet/sql-injection-concat",
+              "category": "sast",
+              "difficulty": 2,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "query-construction",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "critical",
+                  "location": "src/ReportRepository.cs:29",
+                  "evidence": null
+                },
+                {
+                  "expectation": "command-construction",
+                  "status": "missed",
+                  "requires": "intra-procedural-taint",
+                  "severity": "critical",
+                  "location": "src/ReportRepository.cs:30",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "dotnet-aspnet/ssrf-crossfile",
+              "category": "sast",
+              "difficulty": 4,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "ssrf-source",
+                  "status": "missed",
+                  "requires": "taint-source-recognition",
+                  "severity": "high",
+                  "location": "src/ReportController.cs:39",
+                  "evidence": null
+                },
+                {
+                  "expectation": "ssrf-sink",
+                  "status": "missed",
+                  "requires": "cross-file-taint",
+                  "severity": "high",
+                  "location": "src/UpstreamClient.cs:22",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "dotnet-aspnet/vulnerable-dependency",
+              "category": "sca",
+              "difficulty": 1,
+              "expected": 1,
+              "detected": 1,
+              "partial": 0,
+              "missed": 0,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "newtonsoft-dos",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "packages.lock.json:21",
+                  "evidence": {
+                    "rule": "CVE-2024-21907",
+                    "line": 21,
+                    "cwe": []
+                  }
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "dotnet-aspnet/weak-crypto-and-secret",
+              "category": "sast",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "hardcoded-connection-password",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/CryptoService.cs:15",
+                  "evidence": null
+                },
+                {
+                  "expectation": "weak-hash",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "medium",
+                  "location": "src/CryptoService.cs:28",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "dotnet-aspnet/xml-resolver-helper",
+              "category": "sast",
+              "difficulty": 3,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "resolver-assignment",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/XmlIngestService.cs:23",
+                  "evidence": null
+                },
+                {
+                  "expectation": "untrusted-load",
+                  "status": "missed",
+                  "requires": "cross-function-taint",
+                  "severity": "high",
+                  "location": "src/XmlIngestService.cs:32",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            }
+          ],
+          "totals": {
+            "expected": 11,
+            "detected": 1,
+            "partial": 0,
+            "missed": 10,
+            "false_positives": 0,
+            "unexpected": 0,
+            "recall": 0.091,
+            "by_category": {
+              "sast": {
+                "expected": 10,
+                "detected": 0,
+                "partial": 0
+              },
+              "sca": {
+                "expected": 1,
+                "detected": 1,
+                "partial": 0
+              }
+            }
+          },
+          "false_positive_details": [],
+          "unexpected_details": []
         }
       }
     },
@@ -197,14 +433,15 @@
       "sample": "java-spring",
       "title": "Spring Boot reporting service, five cases across the difficulty ladder",
       "language": "java",
-      "case_count": 5,
-      "expectation_count": 10,
+      "case_count": 6,
+      "expectation_count": 11,
       "tools": {
         "semgrep-community": {
           "version": "1.166.0",
           "cases": [
             {
               "case": "java-spring/regex-guard-unanchored",
+              "category": "sast",
               "difficulty": 5,
               "expected": 2,
               "detected": 0,
@@ -233,6 +470,7 @@
             },
             {
               "case": "java-spring/sql-injection-concat",
+              "category": "sast",
               "difficulty": 2,
               "expected": 2,
               "detected": 1,
@@ -267,6 +505,7 @@
             },
             {
               "case": "java-spring/ssrf-crossfile",
+              "category": "sast",
               "difficulty": 4,
               "expected": 2,
               "detected": 0,
@@ -294,7 +533,29 @@
               "false_positive_details": []
             },
             {
+              "case": "java-spring/vulnerable-dependency",
+              "category": "sca",
+              "difficulty": 1,
+              "expected": 1,
+              "detected": 0,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "log4shell",
+                  "status": "missed",
+                  "requires": "resolved-dependency-graph",
+                  "severity": "critical",
+                  "location": "pom.xml:49",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
               "case": "java-spring/weak-crypto-and-secret",
+              "category": "sast",
               "difficulty": 1,
               "expected": 2,
               "detected": 1,
@@ -329,6 +590,7 @@
             },
             {
               "case": "java-spring/xxe-parser-helper",
+              "category": "sast",
               "difficulty": 3,
               "expected": 2,
               "detected": 1,
@@ -363,13 +625,25 @@
             }
           ],
           "totals": {
-            "expected": 10,
+            "expected": 11,
             "detected": 3,
             "partial": 0,
-            "missed": 7,
+            "missed": 8,
             "false_positives": 0,
             "unexpected": 0,
-            "recall": 0.3
+            "recall": 0.273,
+            "by_category": {
+              "sast": {
+                "expected": 10,
+                "detected": 3,
+                "partial": 0
+              },
+              "sca": {
+                "expected": 1,
+                "detected": 0,
+                "partial": 0
+              }
+            }
           },
           "false_positive_details": [],
           "unexpected_details": []
@@ -388,6 +662,7 @@
           "cases": [
             {
               "case": "php-symfony/broad-exception-catch",
+              "category": "sast",
               "difficulty": 1,
               "expected": 1,
               "detected": 1,
@@ -414,6 +689,7 @@
             },
             {
               "case": "php-symfony/sensitive-data-in-logs",
+              "category": "sast",
               "difficulty": 2,
               "expected": 2,
               "detected": 1,
@@ -448,6 +724,7 @@
             },
             {
               "case": "php-symfony/ssrf-crossfile",
+              "category": "sast",
               "difficulty": 4,
               "expected": 2,
               "detected": 1,
@@ -496,7 +773,14 @@
             "missed": 2,
             "false_positives": 1,
             "unexpected": 0,
-            "recall": 0.6
+            "recall": 0.6,
+            "by_category": {
+              "sast": {
+                "expected": 5,
+                "detected": 3,
+                "partial": 0
+              }
+            }
           },
           "false_positive_details": [
             {
@@ -514,6 +798,7 @@
           "cases": [
             {
               "case": "php-symfony/broad-exception-catch",
+              "category": "sast",
               "difficulty": 1,
               "expected": 1,
               "detected": 0,
@@ -534,6 +819,7 @@
             },
             {
               "case": "php-symfony/sensitive-data-in-logs",
+              "category": "sast",
               "difficulty": 2,
               "expected": 2,
               "detected": 0,
@@ -562,6 +848,7 @@
             },
             {
               "case": "php-symfony/ssrf-crossfile",
+              "category": "sast",
               "difficulty": 4,
               "expected": 2,
               "detected": 0,
@@ -596,7 +883,14 @@
             "missed": 5,
             "false_positives": 0,
             "unexpected": 0,
-            "recall": 0
+            "recall": 0,
+            "by_category": {
+              "sast": {
+                "expected": 5,
+                "detected": 0,
+                "partial": 0
+              }
+            }
           },
           "false_positive_details": [],
           "unexpected_details": []
@@ -606,6 +900,7 @@
           "cases": [
             {
               "case": "php-symfony/broad-exception-catch",
+              "category": "sast",
               "difficulty": 1,
               "expected": 1,
               "detected": 1,
@@ -632,6 +927,7 @@
             },
             {
               "case": "php-symfony/sensitive-data-in-logs",
+              "category": "sast",
               "difficulty": 2,
               "expected": 2,
               "detected": 1,
@@ -666,6 +962,7 @@
             },
             {
               "case": "php-symfony/ssrf-crossfile",
+              "category": "sast",
               "difficulty": 4,
               "expected": 2,
               "detected": 1,
@@ -714,7 +1011,14 @@
             "missed": 2,
             "false_positives": 1,
             "unexpected": 0,
-            "recall": 0.6
+            "recall": 0.6,
+            "by_category": {
+              "sast": {
+                "expected": 5,
+                "detected": 3,
+                "partial": 0
+              }
+            }
           },
           "false_positive_details": [
             {
@@ -733,14 +1037,15 @@
       "sample": "python-flask",
       "title": "Flask reporting service with five cases across the difficulty ladder",
       "language": "python",
-      "case_count": 5,
-      "expectation_count": 10,
+      "case_count": 6,
+      "expectation_count": 11,
       "tools": {
         "semgrep-community": {
           "version": "1.166.0",
           "cases": [
             {
               "case": "python-flask/command-injection-helper",
+              "category": "sast",
               "difficulty": 3,
               "expected": 2,
               "detected": 1,
@@ -775,6 +1080,7 @@
             },
             {
               "case": "python-flask/hardcoded-credential",
+              "category": "sast",
               "difficulty": 1,
               "expected": 2,
               "detected": 1,
@@ -809,6 +1115,7 @@
             },
             {
               "case": "python-flask/path-traversal-crossfile",
+              "category": "sast",
               "difficulty": 4,
               "expected": 2,
               "detected": 0,
@@ -837,6 +1144,7 @@
             },
             {
               "case": "python-flask/sanitizer-bypass-traversal",
+              "category": "sast",
               "difficulty": 5,
               "expected": 2,
               "detected": 0,
@@ -865,6 +1173,7 @@
             },
             {
               "case": "python-flask/sql-injection-fstring",
+              "category": "sast",
               "difficulty": 2,
               "expected": 2,
               "detected": 1,
@@ -896,19 +1205,256 @@
                 }
               ],
               "false_positive_details": []
+            },
+            {
+              "case": "python-flask/vulnerable-dependency",
+              "category": "sca",
+              "difficulty": 1,
+              "expected": 1,
+              "detected": 0,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "pyyaml-rce",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "requirements.txt:5",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
             }
           ],
           "totals": {
-            "expected": 10,
+            "expected": 11,
             "detected": 3,
             "partial": 0,
-            "missed": 7,
+            "missed": 8,
             "false_positives": 0,
             "unexpected": 0,
-            "recall": 0.3
+            "recall": 0.273,
+            "by_category": {
+              "sast": {
+                "expected": 10,
+                "detected": 3,
+                "partial": 0
+              },
+              "sca": {
+                "expected": 1,
+                "detected": 0,
+                "partial": 0
+              }
+            }
           },
           "false_positive_details": [],
           "unexpected_details": []
+        },
+        "trivy": {
+          "version": "0.73.0",
+          "cases": [
+            {
+              "case": "python-flask/command-injection-helper",
+              "category": "sast",
+              "difficulty": 3,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "command-construction",
+                  "status": "missed",
+                  "requires": "cross-function-taint",
+                  "severity": "critical",
+                  "location": "src/shell.py:17",
+                  "evidence": null
+                },
+                {
+                  "expectation": "shell-execution",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "critical",
+                  "location": "src/shell.py:24",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/hardcoded-credential",
+              "category": "sast",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "database-password",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/config.py:8",
+                  "evidence": null
+                },
+                {
+                  "expectation": "api-token",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/config.py:9",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/path-traversal-crossfile",
+              "category": "sast",
+              "difficulty": 4,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "traversal-source",
+                  "status": "missed",
+                  "requires": "taint-source-recognition",
+                  "severity": "high",
+                  "location": "src/app.py:35",
+                  "evidence": null
+                },
+                {
+                  "expectation": "traversal-sink",
+                  "status": "missed",
+                  "requires": "cross-file-taint",
+                  "severity": "high",
+                  "location": "src/files.py:23",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/sanitizer-bypass-traversal",
+              "category": "sast",
+              "difficulty": 5,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "inadequate-sanitizer",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/files.py:17",
+                  "evidence": null
+                },
+                {
+                  "expectation": "guarded-sink",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/files.py:37",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/sql-injection-fstring",
+              "category": "sast",
+              "difficulty": 2,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "query-construction",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "critical",
+                  "location": "src/db.py:24",
+                  "evidence": null
+                },
+                {
+                  "expectation": "query-execution",
+                  "status": "missed",
+                  "requires": "intra-procedural-taint",
+                  "severity": "critical",
+                  "location": "src/db.py:25",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "python-flask/vulnerable-dependency",
+              "category": "sca",
+              "difficulty": 1,
+              "expected": 1,
+              "detected": 1,
+              "partial": 0,
+              "missed": 0,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "pyyaml-rce",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "requirements.txt:5",
+                  "evidence": {
+                    "rule": "CVE-2020-14343",
+                    "line": 5,
+                    "cwe": []
+                  }
+                }
+              ],
+              "false_positive_details": []
+            }
+          ],
+          "totals": {
+            "expected": 11,
+            "detected": 1,
+            "partial": 0,
+            "missed": 10,
+            "false_positives": 0,
+            "unexpected": 1,
+            "recall": 0.091,
+            "by_category": {
+              "sast": {
+                "expected": 10,
+                "detected": 0,
+                "partial": 0
+              },
+              "sca": {
+                "expected": 1,
+                "detected": 1,
+                "partial": 0
+              }
+            }
+          },
+          "false_positive_details": [],
+          "unexpected_details": [
+            {
+              "rule": "CVE-2026-27205",
+              "location": "requirements.txt:1",
+              "cwe": []
+            }
+          ]
         }
       }
     },
@@ -916,14 +1462,15 @@
       "sample": "typescript-express",
       "title": "Express reporting service in TypeScript, five cases across the difficulty ladder",
       "language": "typescript",
-      "case_count": 5,
-      "expectation_count": 8,
+      "case_count": 6,
+      "expectation_count": 10,
       "tools": {
         "semgrep-community": {
           "version": "1.166.0",
           "cases": [
             {
               "case": "typescript-express/prototype-pollution-merge",
+              "category": "sast",
               "difficulty": 3,
               "expected": 1,
               "detected": 0,
@@ -944,6 +1491,7 @@
             },
             {
               "case": "typescript-express/reflected-xss",
+              "category": "sast",
               "difficulty": 2,
               "expected": 1,
               "detected": 0,
@@ -964,6 +1512,7 @@
             },
             {
               "case": "typescript-express/ssrf-allowlist-bypass",
+              "category": "sast",
               "difficulty": 5,
               "expected": 2,
               "detected": 0,
@@ -992,6 +1541,7 @@
             },
             {
               "case": "typescript-express/ssrf-crossfile",
+              "category": "sast",
               "difficulty": 4,
               "expected": 2,
               "detected": 0,
@@ -1019,7 +1569,37 @@
               "false_positive_details": []
             },
             {
+              "case": "typescript-express/vulnerable-dependency",
+              "category": "sca",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "lodash-prototype-pollution",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "package-lock.json:603",
+                  "evidence": null
+                },
+                {
+                  "expectation": "axios-ssrf",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "package-lock.json:162",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
               "case": "typescript-express/weak-hash-and-secret",
+              "category": "sast",
               "difficulty": 1,
               "expected": 2,
               "detected": 1,
@@ -1054,13 +1634,25 @@
             }
           ],
           "totals": {
-            "expected": 8,
+            "expected": 10,
             "detected": 1,
             "partial": 0,
-            "missed": 7,
+            "missed": 9,
             "false_positives": 1,
             "unexpected": 2,
-            "recall": 0.125
+            "recall": 0.1,
+            "by_category": {
+              "sast": {
+                "expected": 8,
+                "detected": 1,
+                "partial": 0
+              },
+              "sca": {
+                "expected": 2,
+                "detected": 0,
+                "partial": 0
+              }
+            }
           },
           "false_positive_details": [
             {
@@ -1087,6 +1679,200 @@
               ]
             }
           ]
+        },
+        "trivy": {
+          "version": "0.73.0",
+          "cases": [
+            {
+              "case": "typescript-express/prototype-pollution-merge",
+              "category": "sast",
+              "difficulty": 3,
+              "expected": 1,
+              "detected": 0,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "unguarded-recursive-assign",
+                  "status": "missed",
+                  "requires": "cross-function-taint",
+                  "severity": "high",
+                  "location": "src/merge.ts:24",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/reflected-xss",
+              "category": "sast",
+              "difficulty": 2,
+              "expected": 1,
+              "detected": 0,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "unescaped-interpolation",
+                  "status": "missed",
+                  "requires": "intra-procedural-taint",
+                  "severity": "high",
+                  "location": "src/render.ts:15",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/ssrf-allowlist-bypass",
+              "category": "sast",
+              "difficulty": 5,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "prefix-check-guard",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/fetcher.ts:30",
+                  "evidence": null
+                },
+                {
+                  "expectation": "guarded-sink",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/fetcher.ts:35",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/ssrf-crossfile",
+              "category": "sast",
+              "difficulty": 4,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "ssrf-source",
+                  "status": "missed",
+                  "requires": "taint-source-recognition",
+                  "severity": "high",
+                  "location": "src/app.ts:31",
+                  "evidence": null
+                },
+                {
+                  "expectation": "ssrf-sink",
+                  "status": "missed",
+                  "requires": "cross-file-taint",
+                  "severity": "high",
+                  "location": "src/fetcher.ts:17",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/vulnerable-dependency",
+              "category": "sca",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 2,
+              "partial": 0,
+              "missed": 0,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "lodash-prototype-pollution",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "package-lock.json:603",
+                  "evidence": {
+                    "rule": "CVE-2020-8203",
+                    "line": 603,
+                    "cwe": []
+                  }
+                },
+                {
+                  "expectation": "axios-ssrf",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "package-lock.json:162",
+                  "evidence": {
+                    "rule": "CVE-2021-3749",
+                    "line": 162,
+                    "cwe": []
+                  }
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/weak-hash-and-secret",
+              "category": "sast",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "hardcoded-jwt-secret",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/crypto.ts:10",
+                  "evidence": null
+                },
+                {
+                  "expectation": "weak-password-hash",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/crypto.ts:20",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            }
+          ],
+          "totals": {
+            "expected": 10,
+            "detected": 2,
+            "partial": 0,
+            "missed": 8,
+            "false_positives": 0,
+            "unexpected": 0,
+            "recall": 0.2,
+            "by_category": {
+              "sast": {
+                "expected": 8,
+                "detected": 0,
+                "partial": 0
+              },
+              "sca": {
+                "expected": 2,
+                "detected": 2,
+                "partial": 0
+              }
+            }
+          },
+          "false_positive_details": [],
+          "unexpected_details": []
         }
       }
     }

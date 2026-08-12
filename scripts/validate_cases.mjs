@@ -79,7 +79,11 @@ for (const sample of loadSamples()) {
       }
     }
 
-    if (!kase.safe.length) {
+    // A safe counterpart is mandatory for sast, and deliberately not for sca.
+    // The safe counterpart of a vulnerable dependency would be a patched version, but no dependency version is
+    // permanently safe: advisories are published against versions that were clean when pinned, so the pairing
+    // would silently decay into a false measurement without the repository changing at all.
+    if (!kase.safe.length && kase.category !== "sca") {
       errors.push(`${manifest}: no safe counterpart, so this case measures recall only`);
     }
   }

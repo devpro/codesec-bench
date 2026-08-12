@@ -1,0 +1,26 @@
+id: python-flask/vulnerable-dependency
+title: PyYAML pinned to a release with a known arbitrary code execution advisory
+category: sca
+difficulty: 1
+cwe: [CWE-1395, CWE-502]
+
+description: >
+  requirements.txt pins PyYAML 5.3.1, which is affected by CVE-2020-14343: full_load and the FullLoader
+  constructor can be driven to execute arbitrary code through crafted input.
+
+  Dependency scanning is a lookup rather than an analysis.
+  The tool resolves the declared version and asks a database whether an advisory covers it, so difficulty 1
+  reflects that no reasoning about the code is required at all.
+
+expected:
+  - id: pyyaml-rce
+    cwe: [CWE-1395, CWE-502]
+    advisory: [CVE-2020-14343]
+    severity: high
+    file: requirements.txt
+    line: 5
+    anchor: "PyYAML==5.3.1"
+    tolerance: 0
+    requires: none
+    note: >
+      A plain manifest, no lock file needed, which is the easiest possible case for an SCA tool.

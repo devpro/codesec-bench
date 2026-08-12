@@ -1,0 +1,39 @@
+id: typescript-express/vulnerable-dependency
+title: lodash and axios pinned to releases with known advisories
+category: sca
+difficulty: 1
+cwe: [CWE-1395, CWE-1321]
+
+description: >
+  package.json pins lodash 4.17.15 and axios 0.21.0, both long superseded.
+
+  The lodash advisory is deliberate: CVE-2020-8203 is prototype pollution, the same weakness this sample
+  already plants by hand in cases/prototype-pollution-merge.
+  One is a defect written in the sample's own source, the other arrives through a dependency, and the two are
+  found by completely different mechanisms.
+
+  Findings are expected against package-lock.json rather than package.json, because that is where the
+  resolved graph lives and where every SCA tool measured here actually looks.
+
+expected:
+  - id: lodash-prototype-pollution
+    cwe: [CWE-1395, CWE-1321]
+    advisory: [CVE-2020-8203, GHSA-p6mc-m468-83gw, CVE-2021-23337, GHSA-35jh-r3h4-6jhm]
+    severity: high
+    file: package-lock.json
+    line: 603
+    anchor: '"node_modules/lodash"'
+    tolerance: 2
+    requires: none
+
+  - id: axios-ssrf
+    cwe: [CWE-1395, CWE-918]
+    advisory: [CVE-2020-28168, CVE-2021-3749, CVE-2025-27152]
+    severity: high
+    file: package-lock.json
+    line: 162
+    anchor: '"node_modules/axios"'
+    tolerance: 2
+    requires: none
+    note: >
+      The axios advisories include SSRF, the same weakness this sample plants by hand in cases/ssrf-crossfile.

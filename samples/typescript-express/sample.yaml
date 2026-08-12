@@ -14,6 +14,7 @@ scan_roots:
 # A tool absent from this map is skipped for this sample.
 # The community column is configured at its broadest, so that a miss cannot be blamed on rule selection.
 tools:
+  trivy: []
   codeql:
     - codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
   semgrep-community:

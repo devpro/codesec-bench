@@ -118,6 +118,17 @@ case "${TOOL}" in
     rm -rf "${CODEQL_DB}"
     ;;
 
+  trivy)
+    require trivy
+    # Dependency scanning reads manifests and lock files at the sample root, not the source tree, so this is
+    # the one tool that deliberately ignores scan_roots.
+    # Build output is skipped: it contains a second, derived copy of the dependency graph that would be
+    # reported alongside the real one and double count every finding.
+    run trivy fs --scanners vuln ${ARGS} \
+      --skip-dirs bin --skip-dirs obj --skip-dirs node_modules --skip-dirs target \
+      --format sarif --output "${TMP}" --quiet .
+    ;;
+
   bearer)
     require bearer
     run bearer scan ${ROOTS} ${ARGS} \
@@ -126,7 +137,7 @@ case "${TOOL}" in
 
   *)
     echo "Unknown tool: ${TOOL}" >&2
-    echo "Known tools: semgrep-community semgrep-custom opengrep codeql bandit bearer" >&2
+    echo "Known tools: semgrep-community semgrep-custom opengrep codeql trivy bandit bearer" >&2
     exit 1
     ;;
 esac

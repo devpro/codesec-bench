@@ -14,6 +14,7 @@ scan_roots:
 # A tool absent from this map is skipped for this sample.
 # Every pack listed here was verified to resolve, after p/express and p/spring both turned out to be 404s.
 tools:
+  trivy: []
   codeql:
     - codeql/csharp-queries:codeql-suites/csharp-security-extended.qls
   semgrep-community:
