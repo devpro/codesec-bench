@@ -29,6 +29,23 @@ The two lines are not equally detectable, which is why they are separate expecta
 Detection here is pattern recognition on the value, not reasoning about the variable.
 A credential that does not look like a known vendor's token format goes unreported at the easiest level of the ladder.
 
+## GitHub push protection reached the same conclusion
+
+Committing this file was blocked:
+
+```text
+remote: - GITHUB PUSH PROTECTION
+remote:       —— Stripe API Key ——
+remote:          - samples/python-flask/src/config.py:9
+```
+
+Line 9 is the token. Line 8, the plaintext production password, was not flagged.
+
+An entirely separate vendor's detector, running as a platform feature rather than a scanner, splits these two lines exactly as Semgrep does.
+
+The secret was kept rather than weakened, because the committed SARIF proving this finding contains the same literal, and mutating the source would leave the evidence disagreeing with the code.
+See [docs/platforms.md](../../../../docs/platforms.md).
+
 ## The safe counterpart
 
 `src/safe/config.py` keeps the same names and reads both values from the environment.

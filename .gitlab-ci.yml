@@ -1,0 +1,65 @@
+# GitLab pipeline for codesec-bench.
+#
+# The point of this file is the Ultimate tier feature: GitLab Advanced SAST performs cross-function and
+# cross-file taint analysis, which is exactly the capability every level 4 case in this repository is
+# built to require, and which no free tool measured here has.
+#
+# Advanced SAST covers all five sample languages, including PHP.
+# That makes this the first tool in the bench able to attempt every case in the corpus.
+#
+# Project: https://gitlab.com/devpro-labs
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+
+variables:
+  # The Ultimate tier analyzer. Without this the Semgrep based analyzer runs instead, which is the same
+  # engine already measured locally as semgrep-community, so the run would add nothing.
+  GITLAB_ADVANCED_SAST_ENABLED: 'true'
+
+  # The samples are deliberately vulnerable, so a findings based failure would block every pipeline.
+  # The pipeline exists to produce reports, not to gate.
+  SAST_EXCLUDED_ANALYZERS: ''
+
+stages:
+  - test
+  - report
+
+# Keeps the analyzer reports as plain artifacts as well as security reports, so scripts/import_gitlab_sast.mjs
+# can convert them into SARIF and feed them through the same scoring engine as every other tool.
+# Without this the findings live only in the GitLab UI and cannot be scored against the case manifests.
+collect-sast-report:
+  stage: report
+  image: node:20-alpine
+  needs:
+    - job: gitlab-advanced-sast
+      artifacts: true
+      optional: true
+    - job: semgrep-sast
+      artifacts: true
+      optional: true
+  script:
+    - test -f gl-sast-report.json || { echo "No SAST report produced"; exit 1; }
+    - node scripts/import_gitlab_sast.mjs gl-sast-report.json
+    - node scripts/score.mjs
+    - node scripts/render_matrix.mjs
+  artifacts:
+    when: always
+    paths:
+      - gl-sast-report.json
+      - results/
+      - docs/matrix.md
+    expire_in: 30 days
+  rules:
+    - if: $CI_COMMIT_BRANCH
+
+# Manifest validation does not need any scanner, so it runs on every pipeline as a cheap guard against
+# a case manifest whose line anchors have drifted away from the code.
+validate-cases:
+  stage: test
+  image: node:20-alpine
+  script:
+    - npm ci
+    - node scripts/validate_cases.mjs

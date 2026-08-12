@@ -66,6 +66,12 @@ Anything else is replaced by an explicit command that downloads the official rel
 **The harness is Node.js and bash only.**
 Python appears solely as sample code to be scanned, never as tooling.
 
+**Planted credentials are never weakened to get a push through.**
+Samples contain deliberately realistic secrets, and GitHub push protection will block vendor shaped ones.
+The resolution is to allow the secret through the unblock URL as used in tests, not to mutate the literal.
+Mutating it would leave the committed SARIF, which contains the same value because a scanner reported it, disagreeing with the source it came from.
+Record which detector caught it: that is a free measurement from a tool the bench cannot otherwise run.
+
 **Never record a detection without a scan output that shows it.**
 Every number in `docs/matrix.md` is generated from a committed SARIF file under `results/`.
 The table is generated and must not be hand edited.

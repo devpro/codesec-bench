@@ -251,4 +251,22 @@ MegaLinter security flavor | Ships no PHP application SAST, only repository leve
 ## Commercial tools
 
 Identified as capable of PHP cross-file taint analysis, not tested because they require paid licences: Snyk Code, Checkmarx One, Veracode.
-GitLab Advanced SAST is Ultimate tier only and does not cover PHP, which falls back to the Semgrep analyzer already measured here.
+GitLab Advanced SAST is Ultimate tier only.
+
+This file previously stated that it does not cover PHP.
+**That is wrong**, and was inherited from older documentation.
+Advanced SAST supports C#, C/C++, Go, Java, JavaScript, TypeScript, Objective-C, PHP, Python, Ruby and Swift, with documented PHP limitations around dynamic file inclusion and case-insensitive name resolution.
+
+It therefore covers every language in this corpus, and performs the cross-function and cross-file taint analysis that every level 4 case here is built to require.
+It is wired up in `.gitlab-ci.yml` and not yet measured.
+See [platforms.md](platforms.md).
+
+## GitHub secret scanning
+
+Measured incidentally, by being blocked.
+
+Push protection rejected the first push of the Python sample over `samples/python-flask/src/config.py:9`, the token with an `sk_live_` prefix.
+It did not object to line 8, a plaintext production database password.
+
+That is a fifth independent confirmation of the secrets finding above, from a detector built by a different vendor on a different codebase.
+The full account, and why the secret was kept rather than removed, is in [platforms.md](platforms.md).

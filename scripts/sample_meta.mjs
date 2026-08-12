@@ -37,6 +37,14 @@ switch (field) {
     console.log(Object.keys(tools).join(" "));
     break;
 
+  // CodeQL names languages differently from the manifest: javascript-typescript covers both, csharp has no hyphen.
+  // The mapping is declared per sample rather than guessed, so a new stack fails loudly instead of silently scanning nothing.
+  case "codeql-language": {
+    if (!sample.codeqlLanguage) process.exit(3);
+    console.log(sample.codeqlLanguage);
+    break;
+  }
+
   case "args": {
     if (!tool) {
       console.error("args requires a tool name");

@@ -4,6 +4,16 @@ Known gaps and planned work.
 
 ## Tools
 
+- **GitLab Advanced SAST** is wired in `.gitlab-ci.yml` and not yet measured.
+  It is the highest value pending item: Ultimate tier, cross-function and cross-file taint, and it supports every language in the corpus including PHP.
+  It is the first tool able to attempt all 23 cases, and the direct test of the level 4 claim.
+- **CodeQL** is wired both locally, at `security-extended`, and in `.github/workflows/codeql.yml` at the default suite.
+  Neither has run: the CLI is not installed. `docs/tool-notes.md` has the install command.
+  The two configurations answer different questions and are expected to disagree, see `docs/platforms.md`.
+- **A dependency scanning case.**
+  The `sca` category exists in the case format and no case uses it, because no sample pins a knowingly vulnerable dependency.
+  Both platforms run dependency scanning already, so this is the cheapest new category to add.
+
 - **Bandit** is configured for the Python sample but not installed, so it has no column.
   `pipx install bandit`, then `task scan` and `task score`.
 - **Custom rules for the Python and TypeScript samples.**
@@ -18,8 +28,6 @@ Known gaps and planned work.
 - **Bearer** does not complete on either sample at 2.0.2 and is excluded from the default tool set.
   Worth retrying on a later release, and worth checking whether the hang is specific to the `secrets,sast` scanner combination.
   It also emits no version in its SARIF driver metadata.
-- **CodeQL** supports Python but not PHP, so the Python sample is where it becomes measurable.
-  It is the strongest free option for cross-file taint and would be the first tool with a real chance at levels 4 and 5.
 - **Snyk Code** has a free tier worth measuring, unlike the other commercial tools.
 
 ## Samples
@@ -31,8 +39,8 @@ Each new sample needs cases spread across the difficulty ladder.
 `python-flask` and `typescript-express` both cover levels 1 to 5 and are the template to follow.
 `php-symfony` has nothing at level 3 or 5.
 
-**SpotBugs with find-sec-bugs** is the obvious next tool for `java-spring`, and it analyses bytecode, so that sample would need a real build.
-**Roslyn security analysers** are the equivalent for `dotnet-aspnet` and would likewise need a build.
+**SpotBugs with find-sec-bugs** is the obvious next tool for `java-spring`, and **Roslyn security analysers** for `dotnet-aspnet`.
+Both analyse compiled output. Both samples now carry a real `pom.xml` and `.csproj`, so the build exists; only Maven is missing locally.
 
 ## Case coverage
 

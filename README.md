@@ -63,7 +63,8 @@ This is the most reproducible result here, and the one worth quoting to anyone d
 
 **Secret detection keys on vendor prefixes, not on variables.**
 Hardcoded secrets are missed in all four languages.
-The C# case even embeds the literal keyword `Password=` inside a connection string and is still unreported, while a token carrying an `sk_live_` prefix in the Python sample is reported twice.
+The C# case even embeds the literal keyword `Password=` inside a connection string and is still unreported, while a vendor prefixed token in the Python sample is reported twice.
+GitHub push protection independently confirmed this by blocking the prefixed token and ignoring the plaintext production password on the line above it, which is documented in [docs/platforms.md](docs/platforms.md).
 
 **SQL injection is reported at the sink, not at the mistake.**
 In Python, Java and C# the tool flags the execute or command call, never the string construction on the line above.
@@ -110,6 +111,7 @@ Sample                                            | Stack                     | 
 - [case-format.md](docs/case-format.md) for the case manifest format
 - [tool-notes.md](docs/tool-notes.md) for measured tool limitations, including several that contradict their documentation
 - [matrix.md](docs/matrix.md) for the generated comparison tables
+- [platforms.md](docs/platforms.md) for GitHub and GitLab integration, and what only a real platform can measure
 - [backlog.md](docs/backlog.md) for known gaps and planned work
 
 ## Scope

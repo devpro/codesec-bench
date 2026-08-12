@@ -125,6 +125,7 @@ export function loadSamples() {
       // Which tools apply to this sample, and the arguments each one needs.
       // A tool absent from the map is skipped for the sample rather than run with defaults that would not fit the language.
       tools: raw.tools ?? {},
+      codeqlLanguage: raw.codeql_language ?? null,
       dir: sampleDir,
       cases,
     });

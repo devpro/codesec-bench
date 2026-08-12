@@ -173,3 +173,8 @@ samples/*/.scan.sarif
 samples/*/.scannerwork/
 samples/*/.venv/
 samples/*/dist/
+samples/*/bin/
+samples/*/obj/
+samples/*/target/
+samples/*/.codeql-db/
+gl-sast-report.json

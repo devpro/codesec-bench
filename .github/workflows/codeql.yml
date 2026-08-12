@@ -1,0 +1,53 @@
+name: CodeQL
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+jobs:
+  analyze:
+    name: Analyze ${{ matrix.language }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # PHP is absent because CodeQL does not support it, which is itself a documented result.
+        # build-mode none keeps java and csharp analysable without a Maven or SDK build in this workflow.
+        include:
+          - language: python
+            build-mode: none
+          - language: javascript-typescript
+            build-mode: none
+          - language: java
+            build-mode: none
+          - language: csharp
+            build-mode: none
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: ${{ matrix.build-mode }}
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: /language:${{ matrix.language }}
+
+      # The workflow deliberately runs the default query suite rather than security-extended.
+      # It answers "what does enabling code scanning give a team", while the local CLI run in
+      # scripts/run_scan.sh uses security-extended to answer "what is the engine capable of".
+      # See docs/platforms.md for why both numbers are worth having.

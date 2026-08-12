@@ -3,6 +3,7 @@ title: Express reporting service in TypeScript, five cases across the difficulty
 language: typescript
 language_version: "5.6"
 framework: Express 4
+codeql_language: javascript-typescript
 runnable: true
 
 # Paths a scanner is pointed at, relative to the sample root.
@@ -13,6 +14,8 @@ scan_roots:
 # A tool absent from this map is skipped for this sample.
 # The community column is configured at its broadest, so that a miss cannot be blamed on rule selection.
 tools:
+  codeql:
+    - codeql/javascript-queries:codeql-suites/javascript-security-extended.qls
   semgrep-community:
     - --config=p/default
     - --config=p/typescript

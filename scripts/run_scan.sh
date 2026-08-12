@@ -11,10 +11,12 @@
 # Usage:
 #   scripts/run_scan.sh <sample> <tool>
 #
-# Tools:
-#   semgrep-community   Semgrep OSS with the p/php and p/owasp-top-ten packs
+# Tools, each configured per sample in its sample.yaml:
+#   semgrep-community   Semgrep OSS with the registry rule packs
 #   semgrep-custom      Semgrep OSS with the rules committed in the sample
 #   opengrep            Opengrep with the same custom rules
+#   codeql              CodeQL CLI, database create then analyze
+#   bandit              Bandit, Python only
 #   bearer              Bearer CLI, security scanners only
 #
 set -euo pipefail
@@ -89,6 +91,33 @@ case "${TOOL}" in
     run bandit --recursive ${ARGS} --format sarif --output "${TMP}" ${ROOTS}
     ;;
 
+  codeql)
+    require codeql
+    CODEQL_LANGUAGE=$(node "${REPO_ROOT}/scripts/sample_meta.mjs" "${SAMPLE}" codeql-language) || {
+      echo "    no codeql_language in sample.yaml, skipping" >&2
+      exit 0
+    }
+
+    # CodeQL is the only two step tool here: a database is extracted first, then queried.
+    # build-mode=none keeps Java and C# extractable without invoking Maven or the .NET SDK, at the documented
+    # cost of guessing dependencies and skipping generated code, which is recorded in docs/tool-notes.md.
+    CODEQL_DB="${SAMPLE_DIR}/.codeql-db"
+    rm -rf "${CODEQL_DB}"
+
+    run codeql database create "${CODEQL_DB}" \
+      --language="${CODEQL_LANGUAGE}" \
+      --build-mode=none \
+      --source-root="${SAMPLE_DIR}" \
+      --overwrite
+
+    if [ "${RUN_STATUS}" -eq 0 ]; then
+      run codeql database analyze "${CODEQL_DB}" ${ARGS} \
+        --format=sarif-latest --output="${TMP}" --threads=0
+    fi
+
+    rm -rf "${CODEQL_DB}"
+    ;;
+
   bearer)
     require bearer
     run bearer scan ${ROOTS} ${ARGS} \
@@ -97,7 +126,7 @@ case "${TOOL}" in
 
   *)
     echo "Unknown tool: ${TOOL}" >&2
-    echo "Known tools: semgrep-community semgrep-custom opengrep bandit bearer" >&2
+    echo "Known tools: semgrep-community semgrep-custom opengrep codeql bandit bearer" >&2
     exit 1
     ;;
 esac
