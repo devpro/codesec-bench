@@ -1,0 +1,39 @@
+id: typescript-express/weak-hash-and-secret
+title: Passwords hashed with unsalted MD5 next to a hardcoded JWT signing key
+category: sast
+difficulty: 1
+cwe: [CWE-327, CWE-798]
+owasp: "A02:2021"
+
+description: >
+  Two independent defects sit in one small module, both visible in a single expression.
+  Passwords are hashed with unsalted MD5, which a commodity GPU exhausts over the plausible keyspace in hours and which gives identical digests for identical passwords.
+  The JWT signing key is a source literal, so anyone with repository access can mint tokens.
+
+expected:
+  - id: hardcoded-jwt-secret
+    cwe: [CWE-798, CWE-259, CWE-547]
+    severity: high
+    file: src/crypto.ts
+    line: 10
+    anchor: 'export const JWT_SIGNING_SECRET = "s3cr3t-jwt-signing-key-do-not-share";'
+    tolerance: 0
+    requires: none
+    note: >
+      A literal with no vendor prefix, which is the shape the Python sample showed secret scanning misses.
+
+  - id: weak-password-hash
+    cwe: [CWE-327, CWE-328, CWE-916]
+    severity: high
+    file: src/crypto.ts
+    line: 20
+    anchor: 'createHash("md5")'
+    tolerance: 0
+    requires: none
+    note: >
+      A named weak algorithm in a single call, which is the most heavily covered pattern in any rule pack.
+      This is the calibration expectation for the sample.
+
+safe:
+  - file: src/safe/crypto.ts
+    note: Reads the secret from the environment and derives the hash with salted scrypt.

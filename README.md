@@ -31,48 +31,55 @@ No third party container image is used anywhere in this repository.
 
 Detailed tables live in [docs/matrix.md](docs/matrix.md).
 
-Tool                         | Version | php-symfony | python-flask
------------------------------|---------|-------------|-------------
-Semgrep OSS, custom rules    | 1.166.0 | 3/5         | not written
-Opengrep, same custom rules  | 1.22.0  | 3/5         | not written
-Semgrep OSS, community packs | 1.166.0 | 0/5         | 3/10
+Tool                         | Version | php-symfony | python-flask | typescript-express
+-----------------------------|---------|-------------|--------------|-------------------
+Semgrep OSS, custom rules    | 1.166.0 | 3/5         | not written  | not written
+Opengrep, same custom rules  | 1.22.0  | 3/5         | not written  | not written
+Semgrep OSS, community packs | 1.166.0 | 0/5         | 3/10         | 1/8
 
-The single most useful result is the Python sample, because detection tracks the difficulty ladder almost exactly:
+Detection tracks the difficulty ladder, not severity:
 
-Level | Case                       | Detected
-------|----------------------------|---------------------
-1     | hardcoded-credential       | 1 of 2
-2     | sql-injection-fstring      | 1 of 2
-3     | command-injection-helper   | 1 of 2, the sink only
-4     | path-traversal-crossfile   | 0 of 2
-5     | sanitizer-bypass-traversal | 0 of 2
+Level | Requires                  | python-flask | typescript-express
+------|---------------------------|--------------|-------------------
+1     | Nothing, a literal         | 1 of 2       | 1 of 2
+2     | Dataflow in one function   | 1 of 2       | 0 of 1
+3     | Across functions, one file | 1 of 2       | 0 of 1
+4     | Across files               | 0 of 2       | 0 of 2
+5     | Judging a guard            | 0 of 2       | 0 of 2
 
-Python has the best free tool coverage of any language here, so those zeroes at levels 4 and 5 cannot be blamed on an unsupported ecosystem.
-Level 4 is where free tooling stops, in every language measured so far.
+Three findings replicate across languages, which is what makes them worth stating.
 
-Detection also does not track severity.
-The hardcoded token is reported and the path traversal is not, though the traversal is far more dangerous.
+**Level 4 is where free tooling stops, and it is not an ecosystem problem.**
+The identical CWE-918 cross-file flow is planted in PHP and in TypeScript, and missed in both.
+The PHP miss alone could be blamed on weak PHP support; the TypeScript miss removes that explanation.
 
-Bearer CLI is excluded: 2.0.2 does not complete on either sample.
+**Secret detection keys on vendor prefixes, not on variables.**
+`DATABASE_PASSWORD` in Python and `JWT_SIGNING_SECRET` in TypeScript are both missed, while tokens with recognisable vendor prefixes nearby are reported.
+The most commonly cited SAST win depends on the credential resembling a vendor's format.
+
+**Detection does not track severity.**
+An MD5 call is reported; a cross-file SSRF and a defeated traversal guard are not.
+
+Bearer CLI is excluded: 2.0.2 does not complete on any sample.
 Bandit is configured for the Python sample but is not installed, so it has no column yet.
 
 ## Claims that did not survive measurement
 
-Four, so far.
-
 - A rule documented as detecting CWE-396 had never fired, because Semgrep cannot match PHP try/catch structurally.
 - Opengrep, documented as unusable for PHP 8.1 and later, scores identically to Semgrep.
 - Bearer, documented as running 70 checks and finding nothing, does not finish at all on its current release.
-- A hardcoded production password in a variable named `DATABASE_PASSWORD` is not reported, while an API token on the next line is, because detection keys on recognisable vendor prefixes rather than on the variable.
+- Reflected XSS through a template literal is missed in TypeScript, at level 2, although the equivalent string concatenation is heavily covered.
+- `p/express` does not exist, and one unresolvable pack makes Semgrep abort a whole scan while still writing a valid, empty SARIF.
 
 Details in [docs/tool-notes.md](docs/tool-notes.md).
 
 ## Samples
 
-Sample                                | Stack                | Cases | Ladder levels
---------------------------------------|----------------------|-------|--------------
-[php-symfony](samples/php-symfony/)   | PHP 8.3, Symfony 7.4 | 3     | 1, 2, 4
-[python-flask](samples/python-flask/) | Python 3.12, Flask 3 | 5     | 1 to 5
+Sample                                            | Stack                     | Cases | Ladder levels
+--------------------------------------------------|---------------------------|-------|--------------
+[php-symfony](samples/php-symfony/)               | PHP 8.3, Symfony 7.4      | 3     | 1, 2, 4
+[python-flask](samples/python-flask/)             | Python 3.12, Flask 3      | 5     | 1 to 5
+[typescript-express](samples/typescript-express/) | TypeScript 5.6, Express 4 | 5     | 1 to 5
 
 ## Docs
 

@@ -1,0 +1,30 @@
+id: typescript-express/prototype-pollution-merge
+title: Prototype pollution through a recursive merge that does not exclude __proto__
+category: sast
+difficulty: 3
+cwe: [CWE-1321]
+owasp: "A08:2021"
+
+description: >
+  A JSON request body is merged into a defaults object by a recursive helper that copies every own key of the source.
+  Nothing excludes __proto__, so a body of {"__proto__": {"isAdmin": true}} walks into the prototype and assigns there.
+  Every object in the process then inherits the property, which turns a preferences endpoint into a privilege escalation.
+
+  The recursion is what raises this above level 2: the dangerous assignment happens on a nested call, not on the key the handler passed in.
+
+expected:
+  - id: unguarded-recursive-assign
+    cwe: [CWE-1321, CWE-915]
+    severity: high
+    file: src/merge.ts
+    line: 24
+    anchor: "target[key] = deepMerge("
+    tolerance: 1
+    requires: cross-function-taint
+    note: >
+      A computed member assignment inside a recursive function.
+      Recognising it requires knowing the key is attacker controlled and that the recursion reaches the prototype.
+
+safe:
+  - file: src/safe/merge.ts
+    note: The same recursion, with the dangerous keys excluded and a null prototype target.

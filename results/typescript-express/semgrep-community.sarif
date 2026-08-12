@@ -1,0 +1,198 @@
+{
+  "version": "2.1.0",
+  "runs": [
+    {
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "toolExecutionNotifications": []
+        }
+      ],
+      "results": [
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/app.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 42,
+                  "endLine": 33,
+                  "snippet": {
+                    "text": "  response.send(await fetchReport(target));"
+                  },
+                  "startColumn": 17,
+                  "startLine": 33
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML."
+          },
+          "properties": {},
+          "ruleId": "javascript.express.security.audit.xss.direct-response-write.direct-response-write"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/app.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 49,
+                  "endLine": 39,
+                  "snippet": {
+                    "text": "  response.send(await fetchReportGuarded(target));"
+                  },
+                  "startColumn": 17,
+                  "startLine": 39
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML."
+          },
+          "properties": {},
+          "ruleId": "javascript.express.security.audit.xss.direct-response-write.direct-response-write"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/crypto.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 59,
+                  "endLine": 20,
+                  "snippet": {
+                    "text": "  return createHash(\"md5\").update(password).digest(\"hex\");"
+                  },
+                  "startColumn": 3,
+                  "startLine": 20
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "It looks like MD5 is used as a password hash. MD5 is not considered a secure password hash because it can be cracked by an attacker in a short amount of time. Use a suitable password hashing function such as bcrypt. You can use the `bcrypt` node.js package."
+          },
+          "properties": {},
+          "ruleId": "javascript.lang.security.audit.md5-used-as-password.md5-used-as-password"
+        },
+        {
+          "fingerprints": {
+            "matchBasedId/v1": "requires login"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/safe/app.ts",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "endColumn": 42,
+                  "endLine": 35,
+                  "snippet": {
+                    "text": "  response.send(await fetchReport(target));"
+                  },
+                  "startColumn": 17,
+                  "startLine": 35
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML."
+          },
+          "properties": {},
+          "ruleId": "javascript.express.security.audit.xss.direct-response-write.direct-response-write"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "Semgrep OSS",
+          "rules": [
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML."
+              },
+              "help": {
+                "markdown": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML.\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/javascript.express.security.audit.xss.direct-response-write.direct-response-write)\n - [https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n",
+                "text": "Detected directly writing to a Response object from user-defined input. This bypasses any HTML escaping and may expose your application to a Cross-Site-scripting (XSS) vulnerability. Instead, use 'resp.render()' to render safely escaped HTML.\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+              "id": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+              "name": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')",
+                  "MEDIUM CONFIDENCE",
+                  "OWASP-A03:2021 - Injection",
+                  "OWASP-A05:2025 - Injection",
+                  "OWASP-A07:2017 - Cross-Site Scripting (XSS)",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: javascript.express.security.audit.xss.direct-response-write.direct-response-write"
+              }
+            },
+            {
+              "defaultConfiguration": {
+                "level": "warning"
+              },
+              "fullDescription": {
+                "text": "It looks like MD5 is used as a password hash. MD5 is not considered a secure password hash because it can be cracked by an attacker in a short amount of time. Use a suitable password hashing function such as bcrypt. You can use the `bcrypt` node.js package."
+              },
+              "help": {
+                "markdown": "It looks like MD5 is used as a password hash. MD5 is not considered a secure password hash because it can be cracked by an attacker in a short amount of time. Use a suitable password hashing function such as bcrypt. You can use the `bcrypt` node.js package.\n\n#### 💎 Enable cross-file analysis and Pro rules for free at <a href='https://sg.run/pro'>sg.run/pro</a>\n\n<b>References:</b>\n - [Semgrep Rule](https://semgrep.dev/r/javascript.lang.security.audit.md5-used-as-password.md5-used-as-password)\n - [https://tools.ietf.org/id/draft-lvelvindron-tls-md5-sha1-deprecate-01.html](https://tools.ietf.org/id/draft-lvelvindron-tls-md5-sha1-deprecate-01.html)\n - [https://security.stackexchange.com/questions/211/how-to-securely-hash-passwords](https://security.stackexchange.com/questions/211/how-to-securely-hash-passwords)\n - [https://github.com/returntocorp/semgrep-rules/issues/1609](https://github.com/returntocorp/semgrep-rules/issues/1609)\n - [https://www.npmjs.com/package/bcrypt](https://www.npmjs.com/package/bcrypt)\n",
+                "text": "It looks like MD5 is used as a password hash. MD5 is not considered a secure password hash because it can be cracked by an attacker in a short amount of time. Use a suitable password hashing function such as bcrypt. You can use the `bcrypt` node.js package.\n💎 Enable cross-file analysis and Pro rules for free at sg.run/pro"
+              },
+              "helpUri": "https://semgrep.dev/r/javascript.lang.security.audit.md5-used-as-password.md5-used-as-password",
+              "id": "javascript.lang.security.audit.md5-used-as-password.md5-used-as-password",
+              "name": "javascript.lang.security.audit.md5-used-as-password.md5-used-as-password",
+              "properties": {
+                "precision": "very-high",
+                "tags": [
+                  "CWE-327: Use of a Broken or Risky Cryptographic Algorithm",
+                  "LOW CONFIDENCE",
+                  "OWASP-A02:2021 - Cryptographic Failures",
+                  "OWASP-A03:2017 - Sensitive Data Exposure",
+                  "OWASP-A04:2025 - Cryptographic Failures",
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "Semgrep Finding: javascript.lang.security.audit.md5-used-as-password.md5-used-as-password"
+              }
+            }
+          ],
+          "semanticVersion": "1.166.0"
+        }
+      }
+    }
+  ],
+  "$schema": "https://docs.oasis-open.org/sarif/sarif/v2.1.0/os/schemas/sarif-schema-2.1.0.json"
+}

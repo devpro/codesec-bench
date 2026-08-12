@@ -41,6 +41,10 @@ Class            | Meaning
 Sample projects contain ordinary code that may legitimately raise unrelated findings, and treating those as noise would be unfair.
 Only the safe variant, which is purpose-built to be correct, counts as a false positive.
 
+A finding inside a safe variant counts as a false positive for the sample **whatever CWE it carries**.
+Per-case attribution still requires a CWE match, so that one stray result is not charged to every case sharing a safe file, but the sample total counts every distinct finding landing in safe code.
+Without that, a finding matching no case's CWE would be charged to nobody and vanish from the totals, which is how an XSS rule firing on a correctly guarded Express handler initially went unreported.
+
 Two summary numbers are derived per tool:
 
 - **recall**, the share of expected findings classified as `detected`

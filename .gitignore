@@ -172,3 +172,4 @@ phpunit.xml
 samples/*/.scan.sarif
 samples/*/.scannerwork/
 samples/*/.venv/
+samples/*/dist/

@@ -131,6 +131,24 @@ function scoreSample(sample) {
       .filter((f) => !accounted.has(`${f.ruleId}|${f.file}|${f.line}`))
       .map((f) => ({ rule: f.ruleId, location: `${f.file}:${f.line}`, cwe: f.cwe }));
 
+    // The per-case false positive count only counts findings whose CWE matches that case, so that one stray
+    // result is not charged to every case sharing a safe file.
+    // That rule under-counts at the sample level: a finding in safe code whose CWE matches no case would be
+    // charged to nobody and disappear from the totals entirely, which is how an XSS rule firing on a safe
+    // Express handler went unreported here.
+    // Safe code is safe regardless of which case declared it, so the sample total counts every distinct
+    // finding landing in any safe range.
+    const safeRanges = sample.cases.flatMap((kase) => kase.safe);
+    const falsePositives = [];
+    const seenFalsePositives = new Set();
+    for (const finding of findings) {
+      if (!safeRanges.some((safe) => safeContains(safe, finding.file, finding.line))) continue;
+      const key = `${finding.ruleId}|${finding.file}|${finding.line}`;
+      if (seenFalsePositives.has(key)) continue;
+      seenFalsePositives.add(key);
+      falsePositives.push({ rule: finding.ruleId, location: `${finding.file}:${finding.line}`, cwe: finding.cwe });
+    }
+
     const sum = (key) => cases.reduce((total, c) => total + c[key], 0);
     const expected = sum("expected");
     const detected = sum("detected");
@@ -144,10 +162,11 @@ function scoreSample(sample) {
         detected,
         partial,
         missed: expected - detected - partial,
-        false_positives: sum("false_positives"),
+        false_positives: falsePositives.length,
         unexpected: unexpected.length,
         recall: expected ? Math.round((detected / expected) * 1000) / 1000 : null,
       },
+      false_positive_details: falsePositives,
       unexpected_details: unexpected,
     };
   }

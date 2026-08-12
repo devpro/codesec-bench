@@ -43,7 +43,15 @@ require() {
 # Scanners vary enormously in runtime on the same code, and a hung one would otherwise stall the whole pipeline with no output.
 # Bearer 2.0.2 takes over fifteen minutes on the PHP sample where Semgrep takes seconds, so the ceiling is generous rather than tight.
 SCAN_TIMEOUT="${SCAN_TIMEOUT:-1800}"
-run() { timeout --signal=TERM --kill-after=30s "${SCAN_TIMEOUT}" "$@" || true; }
+
+# The exit status is captured rather than discarded.
+# Scanners conventionally exit 0 for a clean run and 1 when they have findings, so neither is an error, but anything above that is.
+# This matters more than it looks: a single unresolvable rule pack makes Semgrep abort the whole scan and still write a valid, empty SARIF.
+# Swallowing the status would record that as "the tool found nothing", which is the exact failure mode this repository exists to catch.
+RUN_STATUS=0
+run() {
+  timeout --signal=TERM --kill-after=30s "${SCAN_TIMEOUT}" "$@" || RUN_STATUS=$?
+}
 
 # Which tools apply to a sample, and with which rule packs, comes from its sample.yaml rather than from a language specific branch here.
 # Exit code 3 means the tool is not configured for this sample, which is a skip rather than a failure: PHP rule packs make no sense on a Flask app.
@@ -94,7 +102,19 @@ case "${TOOL}" in
     ;;
 esac
 
-# A tool that crashes or times out still exits zero through run(), so the absence of the file is the real signal.
+if [ "${RUN_STATUS}" -eq 124 ] || [ "${RUN_STATUS}" -eq 137 ]; then
+  echo "    ${TOOL} exceeded SCAN_TIMEOUT of ${SCAN_TIMEOUT}s, no result recorded" >&2
+  rm -f "${TMP}"
+  exit 1
+fi
+
+if [ "${RUN_STATUS}" -gt 1 ]; then
+  echo "    ${TOOL} exited ${RUN_STATUS}, which is an error rather than a finding count." >&2
+  echo "    Refusing to record the output, since an aborted scan writes an empty but valid SARIF." >&2
+  rm -f "${TMP}"
+  exit 1
+fi
+
 if [ ! -f "${TMP}" ]; then
   echo "    ${TOOL} produced no SARIF output, the scan failed" >&2
   exit 1

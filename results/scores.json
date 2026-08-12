@@ -122,6 +122,15 @@
             "unexpected": 0,
             "recall": 0.6
           },
+          "false_positive_details": [
+            {
+              "rule": "semgrep.ssrf-http-client-url-concatenation",
+              "location": "src/Safe/SafeApiClient.php:61",
+              "cwe": [
+                "CWE-918"
+              ]
+            }
+          ],
           "unexpected_details": []
         },
         "semgrep-community": {
@@ -213,6 +222,7 @@
             "unexpected": 0,
             "recall": 0
           },
+          "false_positive_details": [],
           "unexpected_details": []
         },
         "semgrep-custom": {
@@ -330,6 +340,15 @@
             "unexpected": 0,
             "recall": 0.6
           },
+          "false_positive_details": [
+            {
+              "rule": "semgrep.ssrf-http-client-url-concatenation",
+              "location": "src/Safe/SafeApiClient.php:61",
+              "cwe": [
+                "CWE-918"
+              ]
+            }
+          ],
           "unexpected_details": []
         }
       }
@@ -512,7 +531,186 @@
             "unexpected": 0,
             "recall": 0.3
           },
+          "false_positive_details": [],
           "unexpected_details": []
+        }
+      }
+    },
+    {
+      "sample": "typescript-express",
+      "title": "Express reporting service in TypeScript, five cases across the difficulty ladder",
+      "language": "typescript",
+      "case_count": 5,
+      "expectation_count": 8,
+      "tools": {
+        "semgrep-community": {
+          "version": "1.166.0",
+          "cases": [
+            {
+              "case": "typescript-express/prototype-pollution-merge",
+              "difficulty": 3,
+              "expected": 1,
+              "detected": 0,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "unguarded-recursive-assign",
+                  "status": "missed",
+                  "requires": "cross-function-taint",
+                  "severity": "high",
+                  "location": "src/merge.ts:24",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/reflected-xss",
+              "difficulty": 2,
+              "expected": 1,
+              "detected": 0,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "unescaped-interpolation",
+                  "status": "missed",
+                  "requires": "intra-procedural-taint",
+                  "severity": "high",
+                  "location": "src/render.ts:15",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/ssrf-allowlist-bypass",
+              "difficulty": 5,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "prefix-check-guard",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/fetcher.ts:30",
+                  "evidence": null
+                },
+                {
+                  "expectation": "guarded-sink",
+                  "status": "missed",
+                  "requires": "sanitizer-reasoning",
+                  "severity": "high",
+                  "location": "src/fetcher.ts:35",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/ssrf-crossfile",
+              "difficulty": 4,
+              "expected": 2,
+              "detected": 0,
+              "partial": 0,
+              "missed": 2,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "ssrf-source",
+                  "status": "missed",
+                  "requires": "taint-source-recognition",
+                  "severity": "high",
+                  "location": "src/app.ts:31",
+                  "evidence": null
+                },
+                {
+                  "expectation": "ssrf-sink",
+                  "status": "missed",
+                  "requires": "cross-file-taint",
+                  "severity": "high",
+                  "location": "src/fetcher.ts:17",
+                  "evidence": null
+                }
+              ],
+              "false_positive_details": []
+            },
+            {
+              "case": "typescript-express/weak-hash-and-secret",
+              "difficulty": 1,
+              "expected": 2,
+              "detected": 1,
+              "partial": 0,
+              "missed": 1,
+              "false_positives": 0,
+              "outcomes": [
+                {
+                  "expectation": "hardcoded-jwt-secret",
+                  "status": "missed",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/crypto.ts:10",
+                  "evidence": null
+                },
+                {
+                  "expectation": "weak-password-hash",
+                  "status": "detected",
+                  "requires": "none",
+                  "severity": "high",
+                  "location": "src/crypto.ts:20",
+                  "evidence": {
+                    "rule": "javascript.lang.security.audit.md5-used-as-password.md5-used-as-password",
+                    "line": 20,
+                    "cwe": [
+                      "CWE-327"
+                    ]
+                  }
+                }
+              ],
+              "false_positive_details": []
+            }
+          ],
+          "totals": {
+            "expected": 8,
+            "detected": 1,
+            "partial": 0,
+            "missed": 7,
+            "false_positives": 1,
+            "unexpected": 2,
+            "recall": 0.125
+          },
+          "false_positive_details": [
+            {
+              "rule": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+              "location": "src/safe/app.ts:35",
+              "cwe": [
+                "CWE-79"
+              ]
+            }
+          ],
+          "unexpected_details": [
+            {
+              "rule": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+              "location": "src/app.ts:33",
+              "cwe": [
+                "CWE-79"
+              ]
+            },
+            {
+              "rule": "javascript.express.security.audit.xss.direct-response-write.direct-response-write",
+              "location": "src/app.ts:39",
+              "cwe": [
+                "CWE-79"
+              ]
+            }
+          ]
         }
       }
     }

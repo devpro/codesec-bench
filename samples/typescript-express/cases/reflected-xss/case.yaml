@@ -1,0 +1,27 @@
+id: typescript-express/reflected-xss
+title: Reflected cross site scripting through an unescaped search term
+category: sast
+difficulty: 2
+cwe: [CWE-79]
+owasp: "A03:2021"
+
+description: >
+  A query parameter is interpolated into an HTML template literal with no escaping and returned as the response body.
+  A term containing a script tag executes in the visitor's session, with access to whatever the session can reach.
+  The interpolation and the return are inside one function.
+
+expected:
+  - id: unescaped-interpolation
+    cwe: [CWE-79, CWE-80]
+    severity: high
+    file: src/render.ts
+    line: 15
+    anchor: 'const heading = `<h1>Results for ${term}</h1>`;'
+    tolerance: 0
+    requires: intra-procedural-taint
+    note: >
+      Template literals make this harder than the equivalent string concatenation, since the interpolation is syntax rather than an operator a rule can match on.
+
+safe:
+  - file: src/safe/render.ts
+    note: The same markup with every interpolated value escaped first.

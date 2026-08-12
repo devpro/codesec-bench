@@ -86,6 +86,40 @@ Configuration                        | Findings
 Measuring the community tier with only the language pack would have understated it by a factor of five.
 Anyone comparing tools should check which packs the comparison used before believing the numbers.
 
+### An unresolvable rule pack aborts the entire scan, silently
+
+`p/express` does not exist.
+The registry answers 404, and Semgrep then abandons the whole run rather than continuing with the packs that did resolve:
+
+```text
+[ERROR] Failed to download configuration from https://semgrep.dev/c/p/express HTTP 404.
+[ERROR] invalid configuration file found (1 configs were invalid)
+```
+
+The damaging part is what it writes.
+The same invocation without `p/express` reports 4 findings; with it, Semgrep exits 7 and still produces a well formed SARIF file containing zero results.
+
+A harness that ignores the exit status records that as "the tool found nothing".
+This one did, briefly, and reported 0 of 8 on the TypeScript sample before the cause was found.
+`scripts/run_scan.sh` now refuses to record output from any scanner exiting above 1, since 0 and 1 are the only conventional non-error codes.
+
+Anyone comparing tools should check the exit status as well as the finding count.
+
+### Template literal interpolation is not covered for XSS
+
+`src/render.ts` in the TypeScript sample interpolates a query parameter into HTML:
+
+```typescript
+const heading = `<h1>Results for ${term}</h1>`;   // not reported
+```
+
+This is reflected XSS at level 2 of the ladder, in the best supported language, and it is missed.
+
+String concatenation into HTML is a heavily covered pattern, because `+` is an operator a rule can match on.
+Template interpolation is syntax, and `${...}` appears not to be reached by the rules covering the concatenation form.
+
+The two spellings are equivalent and idiomatic TypeScript prefers the template literal, so writing the idiomatic version loses the detection.
+
 ### Secret detection keys on vendor prefixes, not on variables
 
 In `src/config.py` of the Python sample, two adjacent lines are treated completely differently:
@@ -98,6 +132,13 @@ SERVICE_API_TOKEN = "sk_live_9f2a4c8e1b7d3f6a0c5e8b2d4f7a1c9e"    # reported, tw
 The token matches `sk_live_`, a recognisable provider prefix, and fires two separate rules.
 The plaintext production password in a variable named `DATABASE_PASSWORD` fires nothing.
 
+The TypeScript sample replicates this exactly:
+
+```typescript
+export const JWT_SIGNING_SECRET = "s3cr3t-jwt-signing-key-do-not-share";   // not reported
+```
+
+Two languages, two rule sets, the same behaviour.
 This is worth knowing before relying on a secrets scanner: it recognises vendor credential formats, it does not reason about what a variable holds.
 
 ## Opengrep

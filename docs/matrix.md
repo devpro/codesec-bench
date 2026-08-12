@@ -76,3 +76,36 @@ sql-injection-fstring      | query-execution      | intra-procedural-taint   | y
 Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
 ------------------|---------|----------|---------|--------|--------|-----------------|-----------
 semgrep-community | 1.166.0 | 3/10     | 0       | 7      | 30%    | 0               | 0
+
+## typescript-express
+
+Express reporting service in TypeScript, five cases across the difficulty ladder
+
+### Cases
+
+Case                                                                                        | Difficulty               | CWE              | Expected findings
+--------------------------------------------------------------------------------------------|--------------------------|------------------|------------------
+[prototype-pollution-merge](../samples/typescript-express/cases/prototype-pollution-merge/) | 3 cross-function         | CWE-1321         | 1
+[reflected-xss](../samples/typescript-express/cases/reflected-xss/)                         | 2 intra-procedural       | CWE-79           | 1
+[ssrf-allowlist-bypass](../samples/typescript-express/cases/ssrf-allowlist-bypass/)         | 5 framework or sanitizer | CWE-918          | 2
+[ssrf-crossfile](../samples/typescript-express/cases/ssrf-crossfile/)                       | 4 cross-file             | CWE-918          | 2
+[weak-hash-and-secret](../samples/typescript-express/cases/weak-hash-and-secret/)           | 1 syntax                 | CWE-327, CWE-798 | 2
+
+### Detection by expectation
+
+Case                      | Expectation                | Requires                 | semgrep-community
+--------------------------|----------------------------|--------------------------|------------------
+prototype-pollution-merge | unguarded-recursive-assign | cross-function-taint     | no
+reflected-xss             | unescaped-interpolation    | intra-procedural-taint   | no
+ssrf-allowlist-bypass     | prefix-check-guard         | sanitizer-reasoning      | no
+ssrf-allowlist-bypass     | guarded-sink               | sanitizer-reasoning      | no
+ssrf-crossfile            | ssrf-source                | taint-source-recognition | no
+ssrf-crossfile            | ssrf-sink                  | cross-file-taint         | no
+weak-hash-and-secret      | hardcoded-jwt-secret       | none                     | no
+weak-hash-and-secret      | weak-password-hash         | none                     | yes
+
+### Totals
+
+Tool              | Version | Detected | Partial | Missed | Recall | False positives | Unexpected
+------------------|---------|----------|---------|--------|--------|-----------------|-----------
+semgrep-community | 1.166.0 | 1/8      | 0       | 7      | 13%    | 1               | 2

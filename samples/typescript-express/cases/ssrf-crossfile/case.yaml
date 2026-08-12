@@ -1,0 +1,43 @@
+id: typescript-express/ssrf-crossfile
+title: SSRF through an upstream URL that crosses a handler and a fetcher module
+category: sast
+difficulty: 4
+cwe: [CWE-918]
+owasp: "A10:2021"
+
+description: >
+  An Express handler reads a URL from the query string and passes it to a fetcher in another module, which requests it unmodified.
+  An attacker chooses the host, so pointing it at the cloud metadata endpoint returns instance credentials from inside the network boundary.
+
+  This is deliberately the same defect as php-symfony/ssrf-crossfile, in a language with far better free tool support.
+  Comparing the two isolates ecosystem coverage from analysis capability.
+
+expected:
+  - id: ssrf-source
+    cwe: [CWE-918, CWE-20]
+    severity: high
+    file: src/app.ts
+    line: 31
+    anchor: 'const target = String(request.query.url ?? "");'
+    tolerance: 1
+    requires: taint-source-recognition
+    note: >
+      Requires modelling the Express request object as a taint source.
+
+  - id: ssrf-sink
+    cwe: [CWE-918]
+    severity: high
+    file: src/fetcher.ts
+    line: 17
+    anchor: "const response = await fetch(target,"
+    tolerance: 1
+    requires: cross-file-taint
+    note: >
+      fetch on a variable is an entirely ordinary shape, so flagging it without knowing the value is attacker controlled would be unusable.
+      Doing it correctly means following the call from app.ts into fetcher.ts.
+
+safe:
+  - file: src/safe/fetcher.ts
+    note: Parses the URL and compares the host for equality against an allowlist.
+  - file: src/safe/app.ts
+    note: The same handlers reading the same query parameters, calling the guarded fetcher.

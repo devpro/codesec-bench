@@ -6,9 +6,11 @@ Known gaps and planned work.
 
 - **Bandit** is configured for the Python sample but not installed, so it has no column.
   `pipx install bandit`, then `task scan` and `task score`.
-- **Custom rules for the Python sample.**
+- **Custom rules for the Python and TypeScript samples.**
   The `semgrep-custom` column is PHP only.
-  Writing rules for the Python cases would show how far a determined rule author gets at levels 3 to 5, which is the question the PHP sample already answers for level 4.
+  Writing rules for those cases would show how far a determined rule author gets at levels 3 to 5, which is the question the PHP sample already answers for level 4.
+- **Nothing validates the tool map in `sample.yaml` against the tools the runner knows.**
+  A typo is currently a silent skip, unlike an unresolvable rule pack, which now fails loudly.
 - **SonarQube Community** needs a running server, so it does not fit the single command scan model used by the other tools.
   It needs its own task that starts the server, scans, then reads issues and hotspots through the API.
   Hotspots are not returned by `/api/issues/search` and need `/api/hotspots/search`.
@@ -22,12 +24,10 @@ Known gaps and planned work.
 
 ## Samples
 
-Next: **JavaScript or TypeScript**, to complete the pair chosen for strong tool coverage.
-
-After that, **Java and C#**, for framework heavy taint paths and mature analysers.
+Next: **Java and C#**, for framework heavy taint paths and mature analysers.
 
 Each new sample needs cases spread across the difficulty ladder.
-`python-flask` covers levels 1 to 5 and is the template to follow.
+`python-flask` and `typescript-express` both cover levels 1 to 5 and are the template to follow.
 `php-symfony` has nothing at level 3 or 5.
 
 ## Case coverage

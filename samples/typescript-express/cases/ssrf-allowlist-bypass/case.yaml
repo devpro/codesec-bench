@@ -1,0 +1,42 @@
+id: typescript-express/ssrf-allowlist-bypass
+title: SSRF allowlist checked with startsWith, defeated by extending the hostname
+category: sast
+difficulty: 5
+cwe: [CWE-918]
+owasp: "A10:2021"
+
+description: >
+  The upstream URL is checked with target.startsWith("https://reports.internal") before the request is made.
+  startsWith constrains the beginning of the string and says nothing about where the authority ends, because the prefix is not terminated by a separator.
+  "https://reports.internal.evil.com/" passes the check and resolves to a host the attacker registered.
+
+  This is the level 5 shape: a guard that is present, looks deliberate, and does not hold.
+  A tool must judge the guard rather than merely observe that one exists.
+
+expected:
+  - id: prefix-check-guard
+    cwe: [CWE-918, CWE-20, CWE-697]
+    severity: high
+    file: src/fetcher.ts
+    line: 30
+    anchor: "if (!target.startsWith(ALLOWED_PREFIX)) {"
+    tolerance: 1
+    requires: sanitizer-reasoning
+    note: >
+      Flagging the comparison itself names the actual mistake, which is the most useful possible result.
+
+  - id: guarded-sink
+    cwe: [CWE-918]
+    severity: high
+    file: src/fetcher.ts
+    line: 35
+    anchor: "const response = await fetch(target,"
+    tolerance: 1
+    requires: sanitizer-reasoning
+    note: >
+      A tool with no sanitizer model may report this simply because it tracks taint and does not treat startsWith as validating.
+      That counts as a detection here: the bench measures outcomes, not intent.
+
+safe:
+  - file: src/safe/fetcher.ts
+    note: Decides on the parsed host rather than on a string prefix, so extending the hostname does not pass.
