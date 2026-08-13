@@ -4,7 +4,7 @@ vars:
   SAMPLES:
     sh: ls -d samples/*/ 2>/dev/null | xargs -n1 basename | tr '\n' ' '
   # bearer is deliberately not in the default set: 2.0.2 does not complete on the PHP sample.
-  # It stays available through 'task scan:one TOOL=bearer'. See docs/tool-notes.md.
+  # It stays available through 'task scan:one TOOL=bearer'; See docs/tool-notes.md.
   TOOLS: semgrep-community semgrep-custom opengrep codeql trivy bandit
 
 tasks:

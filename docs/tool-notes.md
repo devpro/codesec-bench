@@ -162,13 +162,13 @@ This is worth knowing before relying on a secrets scanner: it recognises vendor 
 
 The same defect class at the same ladder level is covered inconsistently:
 
-Defect                                   | Language   | Detected
------------------------------------------|------------|---------
-`createHash("md5")`                      | TypeScript | yes
-`Cipher.getInstance("DES/ECB/...")`      | Java       | yes, twice
-`MD5.Create()`                           | C#         | no
-Unhardened `DocumentBuilderFactory`      | Java       | yes
-`XmlResolver = new XmlUrlResolver()`     | C#         | no
+Defect                               | Language   | Detected
+-------------------------------------|------------|-----------
+`createHash("md5")`                  | TypeScript | yes
+`Cipher.getInstance("DES/ECB/...")`  | Java       | yes, twice
+`MD5.Create()`                       | C#         | no
+Unhardened `DocumentBuilderFactory`  | Java       | yes
+`XmlResolver = new XmlUrlResolver()` | C#         | no
 
 The two XML entries are worth separating.
 Java is caught for an **absence** of hardening calls; C# undoes a safe platform default with an explicit assignment and is not caught.
@@ -242,7 +242,7 @@ pipx install bandit
 ## Tools evaluated and set aside
 
 Tool                       | Reason
----------------------------|-------------------------------------------------------------------------------------------------
+---------------------------|------------------------------------------------------------------------------------------------
 PHPStan                    | Type checker, no taint analysis outside the paid tier, no security rules in the free extensions
 Psalm                      | Has genuine inter-procedural taint analysis, produced zero findings on the PHP sample
 CodeQL                     | Does not support PHP at all
@@ -325,12 +325,12 @@ A dependency scan can fail for reasons that have nothing to do with the code, an
 
 The same run reported 63 further advisories, all against transitive dependencies of an ordinary, current Spring Boot starter:
 
-Package                              | Advisories
--------------------------------------|-----------
+Package                                     | Advisories
+--------------------------------------------|-----------
 `org.apache.tomcat.embed:tomcat-embed-core` | 26
 `org.springframework:spring-webmvc`         | 12
 `org.springframework:spring-expression`     | 3
-others                                       | 22
+others                                      | 22
 
 Every one of them is reported against `pom.xml:1`, because a transitive dependency has no declaration line to point at.
 

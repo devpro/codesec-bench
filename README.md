@@ -41,11 +41,11 @@ Detection tracks the difficulty ladder, not severity:
 
 Level | Requires                   | python-flask | typescript-express | java-spring | dotnet-aspnet
 ------|----------------------------|--------------|--------------------|-------------|--------------
-1     | Nothing, a literal          | 1 of 2       | 1 of 2             | 1 of 2      | 0 of 2
-2     | Dataflow in one function    | 1 of 2       | 0 of 1             | 1 of 2      | 1 of 2
-3     | Across functions, one file  | 1 of 2       | 0 of 1             | 1 of 2      | 0 of 2
-4     | Across files                | 0 of 2       | 0 of 2             | 0 of 2      | 0 of 2
-5     | Judging a guard             | 0 of 2       | 0 of 2             | 0 of 2      | 1 of 2
+1     | Nothing, a literal         | 1 of 2       | 1 of 2             | 1 of 2      | 0 of 2
+2     | Dataflow in one function   | 1 of 2       | 0 of 1             | 1 of 2      | 1 of 2
+3     | Across functions, one file | 1 of 2       | 0 of 1             | 1 of 2      | 0 of 2
+4     | Across files               | 0 of 2       | 0 of 2             | 0 of 2      | 0 of 2
+5     | Judging a guard            | 0 of 2       | 0 of 2             | 0 of 2      | 1 of 2
 
 **No genuine detection above level 3 exists anywhere in this bench.**
 
