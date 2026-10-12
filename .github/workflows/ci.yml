@@ -41,7 +41,11 @@ jobs:
           grep " ${TASK_ARCHIVE}$" task_checksums.txt | sha256sum --check --status
 
           tar -xzf "${TASK_ARCHIVE}" task
-          sudo install -m 0755 task /usr/local/bin/task
+          # Installed where the job owns the directory, so neither root nor sudo is needed, on a hosted runner or in a container.
+          mkdir -p "${RUNNER_TEMP}/bin"
+          install -m 0755 task "${RUNNER_TEMP}/bin/task"
+          echo "${RUNNER_TEMP}/bin" >> "$GITHUB_PATH"
+          export PATH="${RUNNER_TEMP}/bin:$PATH"
           rm -f "${TASK_ARCHIVE}" task_checksums.txt task
           task --version
 
@@ -79,7 +83,11 @@ jobs:
           grep " ${TASK_ARCHIVE}$" task_checksums.txt | sha256sum --check --status
 
           tar -xzf "${TASK_ARCHIVE}" task
-          sudo install -m 0755 task /usr/local/bin/task
+          # Installed where the job owns the directory, so neither root nor sudo is needed, on a hosted runner or in a container.
+          mkdir -p "${RUNNER_TEMP}/bin"
+          install -m 0755 task "${RUNNER_TEMP}/bin/task"
+          echo "${RUNNER_TEMP}/bin" >> "$GITHUB_PATH"
+          export PATH="${RUNNER_TEMP}/bin:$PATH"
           rm -f "${TASK_ARCHIVE}" task_checksums.txt task
           task --version
 
