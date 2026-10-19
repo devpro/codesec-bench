@@ -27,27 +27,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Installed from the official GitHub release with a checksum check rather than through a third party action, to keep the supply chain surface to GitHub itself.
-      # Worth extracting into devpro/github-workflow-parts alongside the tflint and terraform setup actions.
       - name: Install Task
-        env:
-          TASK_ARCHIVE: task_linux_amd64.tar.gz
-        run: |
-          BASE_URL="https://github.com/go-task/task/releases/download/${TASK_VERSION}"
-
-          curl -sSL -O "${BASE_URL}/${TASK_ARCHIVE}"
-          curl -sSL -O "${BASE_URL}/task_checksums.txt"
-
-          grep " ${TASK_ARCHIVE}$" task_checksums.txt | sha256sum --check --status
-
-          tar -xzf "${TASK_ARCHIVE}" task
-          # Installed where the job owns the directory, so neither root nor sudo is needed, on a hosted runner or in a container.
-          mkdir -p "${RUNNER_TEMP}/bin"
-          install -m 0755 task "${RUNNER_TEMP}/bin/task"
-          echo "${RUNNER_TEMP}/bin" >> "$GITHUB_PATH"
-          export PATH="${RUNNER_TEMP}/bin:$PATH"
-          rm -f "${TASK_ARCHIVE}" task_checksums.txt task
-          task --version
+        uses: devpro/github-workflow-parts/actions/task/setup@c6d06a61a377a41dc192ce58f08a0b5100d9a2bc
+        with:
+          task-version: ${{ env.TASK_VERSION }}
 
       # Validation catches a manifest whose line anchors have drifted away from the code.
       # Scoring runs against the committed SARIF files rather than rescanning, so this job needs no scanners and stays fast.
@@ -72,24 +55,9 @@ jobs:
         run: npm ci
 
       - name: Install Task
-        env:
-          TASK_ARCHIVE: task_linux_amd64.tar.gz
-        run: |
-          BASE_URL="https://github.com/go-task/task/releases/download/${TASK_VERSION}"
-
-          curl -sSL -O "${BASE_URL}/${TASK_ARCHIVE}"
-          curl -sSL -O "${BASE_URL}/task_checksums.txt"
-
-          grep " ${TASK_ARCHIVE}$" task_checksums.txt | sha256sum --check --status
-
-          tar -xzf "${TASK_ARCHIVE}" task
-          # Installed where the job owns the directory, so neither root nor sudo is needed, on a hosted runner or in a container.
-          mkdir -p "${RUNNER_TEMP}/bin"
-          install -m 0755 task "${RUNNER_TEMP}/bin/task"
-          echo "${RUNNER_TEMP}/bin" >> "$GITHUB_PATH"
-          export PATH="${RUNNER_TEMP}/bin:$PATH"
-          rm -f "${TASK_ARCHIVE}" task_checksums.txt task
-          task --version
+        uses: devpro/github-workflow-parts/actions/task/setup@c6d06a61a377a41dc192ce58f08a0b5100d9a2bc
+        with:
+          task-version: ${{ env.TASK_VERSION }}
 
       # Scanners are installed as binaries rather than run as container images, matching how they run locally.
       - name: Install scanners
