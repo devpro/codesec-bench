@@ -65,4 +65,4 @@ Comparing `url.hostname` for equality cannot be extended, because the parser has
 
 ## Measured results
 
-See [docs/matrix.md](../../../../docs/matrix.md).
+Run `task report` to see which tools find it, as in the [example run](../../../../README.md#example-run).

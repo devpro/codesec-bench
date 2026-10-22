@@ -34,4 +34,4 @@ A level 1 defect went undetected by a rule written specifically for it, and a ha
 
 ## Measured results
 
-See [docs/matrix.md](../../../../docs/matrix.md).
+Run `task report` to see which tools find it, as in the [example run](../../../../README.md#example-run).

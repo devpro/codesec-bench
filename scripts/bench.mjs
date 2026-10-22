@@ -1,6 +1,6 @@
 // Shared model for the bench: samples, cases, and SARIF results.
 //
-// Loading and normalisation live here so that validate_cases, score and render_matrix agree on what a case is and on how a SARIF result is read.
+// Loading and normalisation live here so that validate_cases, score and render_summary agree on what a case is and on how a SARIF result is read.
 
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join, dirname, resolve, sep } from "node:path";
@@ -9,7 +9,8 @@ import yaml from "js-yaml";
 
 export const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const SAMPLES_DIR = join(REPO_ROOT, "samples");
-export const RESULTS_DIR = join(REPO_ROOT, "results");
+// Where a run writes its SARIF files and its summary, which git ignores: the repository holds the cases, not the results of a run.
+export const REPORT_DIR = join(REPO_ROOT, "report");
 export const SCHEMA_PATH = join(REPO_ROOT, "schema", "case.schema.json");
 
 export const DEFAULT_TOLERANCE = 3;
@@ -190,7 +191,7 @@ export function loadSarif(path, tool) {
 
 /** Read every committed SARIF file for a sample, keyed by tool name. */
 export function loadResults(sampleId) {
-  const directory = join(RESULTS_DIR, sampleId);
+  const directory = join(REPORT_DIR, sampleId);
   if (!existsSync(directory)) return {};
   const results = {};
   for (const file of readdirSync(directory).sort()) {

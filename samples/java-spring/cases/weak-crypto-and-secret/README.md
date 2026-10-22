@@ -37,4 +37,4 @@ It is worth knowing that the catch depends on the credential looking like someon
 
 ## Measured results
 
-See [docs/matrix.md](../../../../docs/matrix.md).
+Run `task report` to see which tools find it, as in the [example run](../../../../README.md#example-run).

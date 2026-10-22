@@ -13,7 +13,7 @@ Case                                                    | Difficulty | CWE
 [sensitive-data-in-logs](cases/sensitive-data-in-logs/) | 2          | CWE-532, CWE-209
 [broad-exception-catch](cases/broad-exception-catch/)   | 1          | CWE-396
 
-Measured detection results are in [docs/matrix.md](../../docs/matrix.md), generated from the SARIF files under `results/php-symfony/`.
+Run `task report` to see which tools find these cases, as in the [example run](../../README.md#example-run).
 Tool specific limitations found while measuring this sample are in [docs/tool-notes.md](../../docs/tool-notes.md).
 
 Note that CWE-297, listed here previously as a missing TLS peer verification finding, has been dropped.

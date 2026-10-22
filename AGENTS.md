@@ -69,10 +69,10 @@ Python appears solely as sample code to be scanned, never as tooling.
 **Planted credentials are never weakened to get a push through.**
 Samples contain deliberately realistic secrets, and GitHub push protection will block vendor shaped ones.
 The resolution is to allow the secret through the unblock URL as used in tests, not to mutate the literal.
-Mutating it would leave the committed SARIF, which contains the same value because a scanner reported it, disagreeing with the source it came from.
+Mutating it would delete the finding the case exists to measure.
 Record which detector caught it: that is a free measurement from a tool the bench cannot otherwise run.
 
 **Never record a detection without a scan output that shows it.**
-Every number in `docs/matrix.md` is generated from a committed SARIF file under `results/`.
-The table is generated and must not be hand edited.
+Every number comes from a run of `task report`, which writes `report/summary.md` from the SARIF files of the scan.
+A result table is never written by hand.
 The first measured run of the harness contradicted the hand written table it replaced: a rule documented as detecting CWE-396 had never fired.

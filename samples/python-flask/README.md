@@ -18,7 +18,7 @@ Case                                                          | Difficulty      
 [path-traversal-crossfile](cases/path-traversal-crossfile/)   | 4 cross-file               | CWE-22  | A call into another module
 [sanitizer-bypass-traversal](cases/sanitizer-bypass-traversal/) | 5 framework or sanitizer | CWE-22  | Judging a guard inadequate
 
-Measured detection results are in [docs/matrix.md](../../docs/matrix.md).
+Run `task report` to see which tools find these cases, as in the [example run](../../README.md#example-run).
 
 ## What the ladder shows
 

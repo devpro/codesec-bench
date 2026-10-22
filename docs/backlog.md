@@ -25,9 +25,6 @@ Known gaps and planned work.
   It needs its own task that starts the server, scans, then reads issues and hotspots through the API.
   Hotspots are not returned by `/api/issues/search` and need `/api/hotspots/search`.
   SonarQube is published by SonarSource rather than by GitHub or Docker, so running it locally needs an explicit decision from the repository owner.
-- **Bearer** does not complete on either sample at 2.0.2 and is excluded from the default tool set.
-  Worth retrying on a later release, and worth checking whether the hang is specific to the `secrets,sast` scanner combination.
-  It also emits no version in its SARIF driver metadata.
 - **Snyk Code** has a free tier worth measuring, unlike the other commercial tools.
 
 ## Samples

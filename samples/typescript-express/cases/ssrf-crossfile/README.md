@@ -42,4 +42,4 @@ The counterpart earns its place here: an XSS rule fires on `src/safe/app.ts:35`,
 
 ## Measured results
 
-See [docs/matrix.md](../../../../docs/matrix.md).
+Run `task report` to see which tools find it, as in the [example run](../../../../README.md#example-run).

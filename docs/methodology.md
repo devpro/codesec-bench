@@ -92,12 +92,10 @@ A single ratio is unfair to a specialised tool: a dependency scanner scored agai
 
 ## Reproducibility
 
-Tools run as locally installed binaries, never as third party container images.
-Reproducibility therefore rests on recording the version that produced each result rather than on pinning an image tag: every scan writes SARIF to `results/<sample>/<tool>.sarif`, those files are committed, and the driver version inside them is reported in the matrix.
+Tools run as locally installed binaries, pinned and checked against a SHA256, never as third party container images.
+Every scan writes SARIF to `report/<sample>/<tool>.sarif`, and the summary of the run reports the driver version inside it.
 
 A result measured on one version says nothing about another.
 The PHP sample already shows why: Semgrep 1.104.0 fails to parse constructor promoted properties and 1.166.0 does not, so the same rules on the same code cover different amounts of the file.
 
-The comparison tables in `docs/matrix.md` are generated from those files by `scripts/render_matrix.mjs`.
-They are never edited by hand.
-When a table and a SARIF file disagree, the SARIF file is right and the table needs regenerating.
+The summary is generated from those files by `scripts/render_summary.mjs`, and never edited by hand.

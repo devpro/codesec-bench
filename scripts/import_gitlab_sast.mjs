@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 //
-// Convert a GitLab SAST report into per sample SARIF under results/.
+// Convert a GitLab SAST report into per sample SARIF under report/.
 //
 // GitLab analyzers emit gl-sast-report.json, not SARIF, so without this the findings would live only in
 // the GitLab UI and could not be scored against the case manifests.
 // Converting them means GitLab Advanced SAST goes through the same scoring engine as every local tool,
-// and appears in the same generated matrix, which is the only way the comparison stays honest.
+// and appears in the same summary, which is the only way the comparison stays honest.
 //
 // The report covers the whole repository in one file, so findings are split by which sample they fall in.
 //
@@ -14,7 +14,7 @@
 
 import { readFileSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
-import { RESULTS_DIR, loadSamples } from "./bench.mjs";
+import { REPORT_DIR, loadSamples } from "./bench.mjs";
 
 const [reportPath, toolName = "gitlab-advanced-sast"] = process.argv.slice(2);
 
@@ -91,7 +91,7 @@ if (!bySample.size) {
 for (const sample of samples) {
   const results = bySample.get(sample.id);
   // A sample with no findings still gets a file: an empty result set is a measurement, and omitting it
-  // would leave the matrix unable to distinguish "found nothing" from "was never run".
+  // would leave the summary unable to distinguish "found nothing" from "was never run".
   if (!results && !sample.tools?.[toolName]) continue;
 
   const sarif = {
@@ -105,9 +105,9 @@ for (const sample of samples) {
     ],
   };
 
-  const directory = join(RESULTS_DIR, sample.id);
+  const directory = join(REPORT_DIR, sample.id);
   mkdirSync(directory, { recursive: true });
   writeFileSync(join(directory, `${toolName}.sarif`), `${JSON.stringify(sarif, null, 2)}\n`, "utf8");
 
-  console.log(`${sample.id}: ${(results ?? []).length} finding(s) -> results/${sample.id}/${toolName}.sarif`);
+  console.log(`${sample.id}: ${(results ?? []).length} finding(s) -> report/${sample.id}/${toolName}.sarif`);
 }

@@ -168,7 +168,8 @@ phpunit.xml
 .vscode/
 *.swp
 
-# Transient scan output, the committed copy lives under results/
+# The output of a run, which the repository does not keep: task report writes it again
+report/
 samples/*/.scan.sarif
 samples/*/.scannerwork/
 samples/*/.venv/

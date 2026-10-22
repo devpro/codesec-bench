@@ -4,9 +4,8 @@
 
 **Never record a detection without a scan output that shows it.**
 
-Every number in `docs/matrix.md` comes from a committed SARIF file under `results/`, through `scripts/score.mjs`.
-The table is generated and must not be edited.
-When a table and a SARIF file disagree, the SARIF file is right.
+Every number comes from a run: `task report` scans the samples, scores the SARIF files against the case manifests, and writes `report/summary.md`.
+A table is never written by hand, and the repository keeps the cases, not the output of a run.
 
 This is not a style preference.
 The first measured run of this harness contradicted the hand written table it replaced: a rule documented as detecting CWE-396 had never fired, because Semgrep cannot match PHP try/catch structurally.
@@ -20,7 +19,7 @@ Hand maintained result tables drift towards what the author expected to happen.
 2. Create `cases/<case-id>/case.yaml`, following [docs/case-format.md](docs/case-format.md).
    Include an `anchor` on every expectation, otherwise validation fails.
 3. Create `cases/<case-id>/README.md` explaining the defect, why it sits at its difficulty level, and what the counterpart changes.
-4. Run the pipeline and commit what it produces:
+4. Check the case, then see what the tools find:
 
 ```bash
 task validate
@@ -28,7 +27,7 @@ task scan:sample SAMPLE=<sample>
 task score
 ```
 
-Commit the regenerated `results/**/*.sarif`, `results/scores.json` and `docs/matrix.md` together with the code.
+The summary is in `report/summary.md`, which is not committed.
 
 ## Adding a sample
 

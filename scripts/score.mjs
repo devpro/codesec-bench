@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 //
-// Score committed scan results against the case manifests.
+// Score the scan results of a run against the case manifests.
 //
-// Reads results/<sample>/<tool>.sarif and samples/<sample>/cases/*/case.yaml, then writes results/scores.json.
+// Reads report/<sample>/<tool>.sarif and samples/<sample>/cases/*/case.yaml, then writes report/scores.json.
 // Nothing here inspects source code: a tool is credited only for what its SARIF output actually says.
 //
 // Usage:
@@ -11,7 +11,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
-import { RESULTS_DIR, loadResults, loadSamples, matchesLocation, safeContains } from "./bench.mjs";
+import { REPORT_DIR, loadResults, loadSamples, matchesLocation, safeContains } from "./bench.mjs";
 
 const { values } = parseArgs({
   options: { sample: { type: "string" }, quiet: { type: "boolean", default: false } },
@@ -212,8 +212,8 @@ if (!samples.length) {
 
 const report = { samples: samples.map(scoreSample) };
 
-mkdirSync(RESULTS_DIR, { recursive: true });
-writeFileSync(join(RESULTS_DIR, "scores.json"), `${JSON.stringify(report, null, 2)}\n`, "utf8");
+mkdirSync(REPORT_DIR, { recursive: true });
+writeFileSync(join(REPORT_DIR, "scores.json"), `${JSON.stringify(report, null, 2)}\n`, "utf8");
 
 if (!values.quiet) {
   for (const entry of report.samples) {
@@ -231,5 +231,5 @@ if (!values.quiet) {
       );
     }
   }
-  console.log("\nWrote results/scores.json");
+  console.log("\nWrote report/scores.json");
 }

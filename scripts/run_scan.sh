@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# Run one tool against one sample and write SARIF to results/<sample>/<tool>.sarif.
+# Run one tool against one sample and write SARIF to report/<sample>/<tool>.sarif.
 #
 # Tools are invoked as locally installed binaries, never as container images.
-# Reproducibility therefore comes from recording the version that produced each result rather than from pinning an image tag: every SARIF file carries its tool version, and the matrix reports it.
+# Comparability therefore comes from recording the version that produced each result rather than from pinning an image tag: every SARIF file carries its tool version, and the matrix reports it.
 # See docs/tool-notes.md for install instructions per tool.
 #
 # The scan is always rooted at the sample directory, which keeps the paths inside the SARIF file relative to that sample and comparable across tools.
@@ -17,7 +17,7 @@
 #   opengrep            Opengrep with the same custom rules
 #   codeql              CodeQL CLI, database create then analyze
 #   bandit              Bandit, Python only
-#   bearer              Bearer CLI, security scanners only
+#   trivy               Trivy, dependency scanning
 #
 set -euo pipefail
 
@@ -26,7 +26,7 @@ TOOL="${2:?usage: run_scan.sh <sample> <tool>}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SAMPLE_DIR="${REPO_ROOT}/samples/${SAMPLE}"
-OUT_DIR="${REPO_ROOT}/results/${SAMPLE}"
+OUT_DIR="${REPO_ROOT}/report/${SAMPLE}"
 
 [ -d "${SAMPLE_DIR}" ] || { echo "No such sample: ${SAMPLE}" >&2; exit 1; }
 mkdir -p "${OUT_DIR}"
@@ -43,7 +43,7 @@ require() {
 }
 
 # Scanners vary enormously in runtime on the same code, and a hung one would otherwise stall the whole pipeline with no output.
-# Bearer 2.0.2 takes over fifteen minutes on the PHP sample where Semgrep takes seconds, so the ceiling is generous rather than tight.
+# CodeQL takes minutes on a sample where Semgrep takes seconds, so the ceiling is generous rather than tight.
 SCAN_TIMEOUT="${SCAN_TIMEOUT:-1800}"
 
 # The exit status is captured rather than discarded.
@@ -129,15 +129,9 @@ case "${TOOL}" in
       --format sarif --output "${TMP}" --quiet .
     ;;
 
-  bearer)
-    require bearer
-    run bearer scan ${ROOTS} ${ARGS} \
-      --scanner secrets,sast --format sarif --output "${TMP}" --quiet
-    ;;
-
   *)
     echo "Unknown tool: ${TOOL}" >&2
-    echo "Known tools: semgrep-community semgrep-custom opengrep codeql trivy bandit bearer" >&2
+    echo "Known tools: semgrep-community semgrep-custom opengrep codeql trivy bandit" >&2
     exit 1
     ;;
 esac
@@ -175,4 +169,4 @@ rm -f "${TMP}"
 COUNT=$(jq '[.runs[].results | length] | add // 0' "${OUT}")
 VERSION=$(jq -r '[.runs[].tool.driver | .semanticVersion // .version] | map(select(. != null)) | first // "unknown"' "${OUT}")
 
-echo "    ${COUNT} result(s), version ${VERSION} -> results/${SAMPLE}/${TOOL}.sarif"
+echo "    ${COUNT} result(s), version ${VERSION} -> report/${SAMPLE}/${TOOL}.sarif"

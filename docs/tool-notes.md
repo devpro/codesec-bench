@@ -3,21 +3,37 @@
 Measured behaviour, with the command that produced it.
 Anything in this file was observed on this repository, not read from a vendor page.
 
-Tools run as locally installed binaries.
-No third party container image is used, so each result is tied to the version recorded in its SARIF output rather than to a pinned image tag.
-The versions in [matrix.md](matrix.md) are the ones that produced the committed results.
+Tools run as locally installed binaries, each pinned to a version and checked against a SHA256 before it runs, never as a third party container image nor through an install script fetched from a branch.
+Each result records the version of the tool that produced it, which the summary of a run reports.
+The pipeline installs the same versions, with the actions of [github-workflow-parts](https://github.com/devpro/github-workflow-parts).
 
 ## Installing the tools
 
 ```bash
-# Semgrep OSS
-pipx install semgrep
+# Semgrep 1.180.0 and Bandit 1.9.4, with every package they need, each checked against the hashes of tools/requirements.txt
+python3 -m venv .venv
+.venv/bin/pip install --require-hashes -r tools/requirements.txt
+export PATH="$PWD/.venv/bin:$PATH"
 
-# Opengrep
-curl -fsSL https://raw.githubusercontent.com/opengrep/opengrep/main/install.sh | bash
+mkdir -p "$HOME/.local/bin"
+cd "$(mktemp -d)"
 
-# Bearer CLI
-curl -sfL https://raw.githubusercontent.com/Bearer/bearer/main/contrib/install.sh | sudo sh -s -- -b /usr/bin
+# Opengrep 1.30.2, whose release publishes no checksum file, so the hash is the one the pipeline pins
+curl -fsSL -O https://github.com/opengrep/opengrep/releases/download/v1.30.2/opengrep_manylinux_x86
+echo "a66aa3278457f02b287b985a45b6762aebcaba5000f2689245fd1ed86d1456c7  opengrep_manylinux_x86" | sha256sum --check
+install -m 0755 opengrep_manylinux_x86 "$HOME/.local/bin/opengrep"
+
+# Trivy 0.76.0, checked against the checksums file of its release
+curl -fsSL -O https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_Linux-64bit.tar.gz
+curl -fsSL -O https://github.com/aquasecurity/trivy/releases/download/v0.76.0/trivy_0.76.0_checksums.txt
+grep " trivy_0.76.0_Linux-64bit.tar.gz$" trivy_0.76.0_checksums.txt | sha256sum --check
+tar -xzf trivy_0.76.0_Linux-64bit.tar.gz trivy && install -m 0755 trivy "$HOME/.local/bin/trivy"
+
+# CodeQL 2.27.2, the bundle of the CLI with its query packs, checked against the checksum file beside it
+curl -fsSL -O https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.27.2/codeql-bundle-linux64.tar.gz
+curl -fsSL -O https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.27.2/codeql-bundle-linux64.tar.gz.checksum.txt
+sha256sum --check codeql-bundle-linux64.tar.gz.checksum.txt
+tar -xzf codeql-bundle-linux64.tar.gz -C "$HOME/.local" && ln -sf "$HOME/.local/codeql/codeql" "$HOME/.local/bin/codeql"
 ```
 
 ## Semgrep OSS
@@ -216,28 +232,9 @@ Analysis recovers after the failed constructor and continues through the rest of
 Partial analysis is still a real risk, since a defect inside an unparsed region would be missed silently.
 The honest statement is that coverage is incomplete and the tool does not fail loudly about it, not that the tool is unusable.
 
-## Bearer CLI
-
-**Does not complete on this sample.**
-Excluded from the default tool set, and still runnable through `task scan:one SAMPLE=php-symfony TOOL=bearer`.
-
-Bearer 2.0.2 ran for more than twenty-five minutes on six PHP files without producing output, holding two `processing-worker` processes the whole time, and had to be killed.
-A scanner that cannot finish on a sample this small is not usable in a bench that runs every tool over every sample.
-
-For reference, Bearer 1.47.0 did finish on the same code and reported zero results with `--scanner secrets,sast`.
-Bearer is documented as strong on sensitive data flowing into logs, and the sample contains an exception message carrying an API key being written to a logger, so that was a genuine miss rather than an unsupported category.
-
-Bearer also emits no version in its SARIF driver metadata, so a result from it cannot be tied to a version without a separate lookup.
-
-`scripts/run_scan.sh` applies a `SCAN_TIMEOUT` ceiling, 1800 seconds by default, so a scanner behaving this way now fails the scan rather than stalling the pipeline.
-
 ## Bandit
 
-Configured for the Python sample, not installed, so it has no column.
-
-```bash
-pipx install bandit
-```
+Configured for the Python sample, which is the only language it reads.
 
 ## Tools evaluated and set aside
 
@@ -278,7 +275,7 @@ Measured on 0.73.0, dependency scanning only.
 Trivy detects every dependency case it can see: PyYAML in Python, lodash and axios in TypeScript, Newtonsoft.Json in C#.
 Four of four, on the category it addresses.
 
-Its overall ratio in the matrix looks far worse than that, because it is scored against the SAST expectations in the same samples.
+Its overall ratio in a summary looks far worse than that, because it is scored against the SAST expectations in the same samples.
 The per category breakdown exists for exactly this reason.
 
 ### A manifest is not enough, a lock file is

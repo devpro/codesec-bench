@@ -44,13 +44,12 @@ collect-sast-report:
     - test -f gl-sast-report.json || { echo "No SAST report produced"; exit 1; }
     - node scripts/import_gitlab_sast.mjs gl-sast-report.json
     - node scripts/score.mjs
-    - node scripts/render_matrix.mjs
+    - node scripts/render_summary.mjs
   artifacts:
     when: always
     paths:
       - gl-sast-report.json
-      - results/
-      - docs/matrix.md
+      - report/
     expire_in: 30 days
   rules:
     - if: $CI_COMMIT_BRANCH

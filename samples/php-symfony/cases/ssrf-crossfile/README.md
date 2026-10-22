@@ -36,9 +36,9 @@ The two expectations separate these.
 The only difference is the allowlist checked before the request is built.
 
 A tool that reports the safe file is matching on the concatenation and has not seen the guard above it.
-That is precisely what the repository's own custom Semgrep rule does, and it is recorded as a false positive in [the matrix](../../../../docs/matrix.md).
+That is precisely what the repository's own custom Semgrep rule does, and a run counts it as a false positive, as in the [example run](../../../../README.md#example-run).
 
 ## Measured results
 
-See [docs/matrix.md](../../../../docs/matrix.md).
+Run `task report` to see which tools find it, as in the [example run](../../../../README.md#example-run).
 At the time of writing, no free tool detects `ssrf-source`.

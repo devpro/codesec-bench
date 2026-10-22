@@ -42,4 +42,4 @@ It is worth knowing that the win depends on the credential resembling a vendor's
 
 ## Measured results
 
-See [docs/matrix.md](../../../../docs/matrix.md).
+Run `task report` to see which tools find it, as in the [example run](../../../../README.md#example-run).

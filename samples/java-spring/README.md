@@ -18,7 +18,7 @@ Case                                                      | Difficulty          
 [ssrf-crossfile](cases/ssrf-crossfile/)                   | 4 cross-file             | CWE-918          | A call into another class
 [regex-guard-unanchored](cases/regex-guard-unanchored/)   | 5 framework or sanitizer | CWE-918          | Judging a regex application
 
-Measured detection results are in [docs/matrix.md](../../docs/matrix.md).
+Run `task report` to see which tools find these cases, as in the [example run](../../README.md#example-run).
 
 ## What this sample confirms
 

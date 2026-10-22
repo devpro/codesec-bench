@@ -3,116 +3,56 @@
 A workbench for measuring what code security tools actually catch.
 
 Curated samples carry deliberately planted vulnerabilities at known locations.
-Tools are run against them, their SARIF output is committed, and the comparison tables are generated from those files.
-No result in this repository is claimed without a scan output on disk to back it.
+Tools run against them as code, with the commands to install and run each one, so that every tool can be seen in action and compared on the same defects.
+A result is never written by hand: `task report` scans, scores and writes the summary of the run.
 
 Every vulnerable case ships a **safe counterpart**: the same library, the same call, the same variable names, differing only in the guard that makes it correct.
 That pair is what separates dataflow analysis from pattern matching, and it is why a false positive column exists at all.
 
-## Quick start
+## Tools
 
-Needs [Task](https://taskfile.dev/installation/), Node.js 20 or later, `jq`, and the scanners installed locally.
-Install commands are in [docs/tool-notes.md](docs/tool-notes.md).
+Tool                  | Version | Reads                                    | Installed from
+----------------------|---------|------------------------------------------|-----------------------------------------------
+Semgrep OSS           | 1.180.0 | Every sample, community packs and rules  | PyPI, hashes in `tools/requirements.txt`
+Opengrep              | 1.30.2  | The samples with custom rules            | GitHub release, SHA256 pinned
+CodeQL                | 2.27.2  | Every sample but PHP                     | CodeQL bundle, checksum file of the release
+Trivy                 | 0.76.0  | Dependencies, lock files                 | GitHub release, checksums file of the release
+Bandit                | 1.9.4   | Python                                   | PyPI, hashes in `tools/requirements.txt`
+
+Each one runs as a local binary, checked against a SHA256 before it runs, never as a third party container image.
+The commands are in [docs/tool-notes.md](docs/tool-notes.md#installing-the-tools), and the pipeline installs the same versions.
+
+## Run it
+
+Needs [Task](https://taskfile.dev/installation/), Node.js 24, `jq`, Python 3 for Semgrep and Bandit, and the tools above.
 
 ```bash
-npm install
-task validate                 # check every case manifest against its source
-task scan                     # run every tool against every sample
-task score                    # score the SARIF files and regenerate the matrix
+npm ci
+task report                                        # validate the cases, run every tool on every sample, score
+task scan:one SAMPLE=python-flask TOOL=codeql      # one tool on one sample, then: task score
 ```
 
-Results land in [docs/matrix.md](docs/matrix.md).
-`task ci` runs all three in order, and `task --list` shows every target.
+The SARIF of every scan and `report/summary.md` land in `report/`, which is not committed.
+`task --list` shows every target, and the pipeline keeps the report of each run as an artifact.
 
-Scanners run as local binaries.
-No third party container image is used anywhere in this repository.
+## Example run
 
-## Current results
+The summary of the last results committed before runs stopped being kept, with Semgrep 1.166.0, Opengrep 1.22.0 and Trivy 0.73.0.
+A cell is the expected findings a tool detected in a sample, out of all of them.
 
-Detailed tables live in [docs/matrix.md](docs/matrix.md).
+Tool              | Version | dotnet-aspnet | java-spring | php-symfony | python-flask | typescript-express | False positives
+------------------|---------|---------------|-------------|-------------|--------------|--------------------|----------------
+opengrep          | 1.22.0  | not run       | not run     | 3/5         | not run      | not run            | 1
+semgrep-community | 1.166.0 | 2/11          | 3/11        | 0/5         | 3/11         | 1/10               | 2
+semgrep-custom    | 1.166.0 | not run       | not run     | 3/5         | not run      | not run            | 1
+trivy             | 0.73.0  | 1/11          | 1/11        | not run     | 1/11         | 2/10               | 0
 
-Tool                         | Version | php-symfony | python-flask | typescript-express | java-spring | dotnet-aspnet
------------------------------|---------|-------------|--------------|--------------------|-------------|--------------
-Semgrep OSS, custom rules    | 1.166.0 | 3/5         | not written  | not written        | not written | not written
-Opengrep, same custom rules  | 1.22.0  | 3/5         | not written  | not written        | not written | not written
-Semgrep OSS, community packs | 1.166.0 | 0/5         | 3/10         | 1/8                | 3/10        | 2/10
+What runs like this one show:
 
-Detection tracks the difficulty ladder, not severity:
-
-Level | Requires                   | python-flask | typescript-express | java-spring | dotnet-aspnet
-------|----------------------------|--------------|--------------------|-------------|--------------
-1     | Nothing, a literal         | 1 of 2       | 1 of 2             | 1 of 2      | 0 of 2
-2     | Dataflow in one function   | 1 of 2       | 0 of 1             | 1 of 2      | 1 of 2
-3     | Across functions, one file | 1 of 2       | 0 of 1             | 1 of 2      | 0 of 2
-4     | Across files               | 0 of 2       | 0 of 2             | 0 of 2      | 0 of 2
-5     | Judging a guard            | 0 of 2       | 0 of 2             | 0 of 2      | 1 of 2
-
-**No genuine detection above level 3 exists anywhere in this bench.**
-
-The single level 5 entry is an artefact and should not be read as a detection.
-The rule that produced it, `unsafe-path-combine`, fires on the correctly guarded counterpart as well, so it flags path operations indiscriminately rather than reading the guard.
-Without the safe counterpart it would have been published as a real result.
-See [the case](samples/dotnet-aspnet/cases/path-guard-startswith/).
-
-Five findings now replicate across independent ecosystems, which is what makes them results rather than anecdotes.
-
-**Level 4 is a property of the analysis, not of the ecosystem.**
-The identical CWE-918 cross-file flow is planted in PHP, TypeScript, Java and C#, and missed in all four, at both the source and the sink.
-Eight expectations, four ecosystems spanning the full range of free tool maturity, zero detections.
-This is the most reproducible result here, and the one worth quoting to anyone deciding whether free SAST is sufficient.
-
-**Secret detection keys on vendor prefixes, not on variables.**
-Hardcoded secrets are missed in all four languages.
-The C# case even embeds the literal keyword `Password=` inside a connection string and is still unreported, while a vendor prefixed token in the Python sample is reported twice.
-GitHub push protection independently confirmed this by blocking the prefixed token and ignoring the plaintext production password on the line above it, which is documented in [docs/platforms.md](docs/platforms.md).
-
-**SQL injection is reported at the sink, not at the mistake.**
-In Python, Java and C# the tool flags the execute or command call, never the string construction on the line above.
-The fix belongs on the line that was not flagged, and the rule would fire identically on a query built from trusted constants.
-
-**Rule coverage is not uniform across ecosystems.**
-An MD5 call is reported in TypeScript and missed in C#.
-An unhardened XML parser is reported in Java, while a call that removes .NET's safe default is missed.
-A comparison run in one language does not transfer to another.
-
-**Detection does not track severity.**
-Weak hashes and ciphers are reported; cross-file SSRF and defeated guards are not.
-
-The one genuine level 3 detection needs its caveat.
-`java-spring/xxe-parser-helper` is caught at the parser factory, but that is an **absence** of hardening calls, visible to a syntactic rule, not a flow.
-Its cross-function half is missed like every other level 3 flow.
-
-### Dependency scanning
-
-Trivy detects every dependency case it can see, four of four, in Python, TypeScript and C#.
-
-Two findings came out of adding them.
-
-**A manifest is not enough, a lock file is.**
-The first run found nothing outside Python. `package.json` and a `.csproj` are invisible on their own; adding `package-lock.json` and enabling `RestorePackagesWithLockFile` made both visible.
-A repository that does not commit lock files may be reporting clean because there was nothing to read.
-
-**A dependency scan can fail for reasons unrelated to the code.**
-Java initially produced nothing: trivy resolves the Maven parent POM over the network and was rate limited with HTTP 429, so it aborted and wrote no output.
-That was recorded as unmeasured rather than as a miss, and after warming the Maven cache the same command found Log4Shell.
-A harness that had recorded the empty result would have published a clean bill of health for a manifest containing Log4Shell.
-
-**The planted defect was 1 finding in 64.**
-The same Java run reported 63 further advisories against transitive dependencies of an ordinary Spring Boot starter, all against `pom.xml:1` because transitive dependencies have no declaration line.
-Log4Shell only stands out here because the case manifest said in advance where it would be.
-
-Bearer CLI is excluded: 2.0.2 does not complete on any sample.
-Bandit is configured for the Python sample but is not installed, so it has no column yet.
-
-## Claims that did not survive measurement
-
-- A rule documented as detecting CWE-396 had never fired, because Semgrep cannot match PHP try/catch structurally.
-- Opengrep, documented as unusable for PHP 8.1 and later, scores identically to Semgrep.
-- Bearer, documented as running 70 checks and finding nothing, does not finish at all on its current release.
-- Reflected XSS through a template literal is missed in TypeScript, at level 2, although the equivalent string concatenation is heavily covered.
-- `p/express` does not exist, and one unresolvable pack makes Semgrep abort a whole scan while still writing a valid, empty SARIF.
-
-Details in [docs/tool-notes.md](docs/tool-notes.md).
+- No tool detects a defect that needs following data across files (level 4 of the [difficulty ladder](docs/methodology.md)), in any of the five languages.
+- Secrets are found by their vendor prefix, not by the variable holding them: a `Password=` in a connection string goes unreported.
+- SQL injection is reported at the call that runs the query, not at the line that builds it.
+- A dependency scanner sees nothing without a lock file.
 
 ## Samples
 
@@ -128,8 +68,7 @@ Sample                                            | Stack                     | 
 
 - [methodology.md](docs/methodology.md) for how detection is scored and what the difficulty ladder means
 - [case-format.md](docs/case-format.md) for the case manifest format
-- [tool-notes.md](docs/tool-notes.md) for measured tool limitations, including several that contradict their documentation
-- [matrix.md](docs/matrix.md) for the generated comparison tables
+- [tool-notes.md](docs/tool-notes.md) for installing the tools, and their measured limitations, including several that contradict their documentation
 - [platforms.md](docs/platforms.md) for GitHub and GitLab integration, and what only a real platform can measure
 - [backlog.md](docs/backlog.md) for known gaps and planned work
 
@@ -137,7 +76,7 @@ Sample                                            | Stack                     | 
 
 Targets **Linux**, including WSL2, written for `bash`.
 The harness is Node.js and bash only.
-Python appears solely as sample code to be scanned.
+Python appears as sample code to be scanned, and as the runtime of Semgrep and Bandit.
 
 `sast` and `sca` are measured.
 The case format reserves `secrets` and `iac` for later.

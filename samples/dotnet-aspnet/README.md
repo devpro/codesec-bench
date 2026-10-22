@@ -15,7 +15,7 @@ Case                                                    | Difficulty            
 [ssrf-crossfile](cases/ssrf-crossfile/)                 | 4 cross-file             | CWE-918          | A call into another class
 [path-guard-startswith](cases/path-guard-startswith/)   | 5 framework or sanitizer | CWE-22           | Judging a prefix comparison
 
-Measured detection results are in [docs/matrix.md](../../docs/matrix.md).
+Run `task report` to see which tools find these cases, as in the [example run](../../README.md#example-run).
 
 ## What this sample shows
 

@@ -2,7 +2,7 @@
 
 The bench runs tools locally and on real platforms.
 
-Local runs produce the committed SARIF that every number in [matrix.md](matrix.md) is generated from.
+Local runs produce the SARIF that every number of a summary is generated from.
 Platform runs exercise features that cannot be reproduced locally at all: push protection, Ultimate tier taint analysis, and the difference between a product's default configuration and its full capability.
 
 ## GitHub
@@ -39,9 +39,9 @@ A plaintext production database password in a variable named `DATABASE_PASSWORD`
 
 The secret is **not** removed, and its value is **not** weakened.
 
-The bench's core rule is that every published number is generated from committed SARIF that matches committed source.
-`results/python-flask/semgrep-community.sarif` contains that literal because Semgrep reported it.
-Mutating the source until no detector matches would delete the finding the case exists to measure, and would leave the committed scan output disagreeing with the code it came from.
+The bench's core rule is that every number comes from scanning the committed source.
+Semgrep reports that literal on the Python sample.
+Mutating the source until no detector matches would delete the finding the case exists to measure.
 
 The correct resolution is the one GitHub documents: follow the unblock URL in the rejection message and allow the secret as **used in tests**.
 One bypass covers all five locations, because they are one value.
@@ -103,14 +103,14 @@ A tool that reaches level 4 and stops at level 5 would sharpen the ladder consid
 ### Results are converted, not screenshotted
 
 GitLab analyzers emit `gl-sast-report.json` rather than SARIF.
-`scripts/import_gitlab_sast.mjs` converts it and splits the findings by sample, so Advanced SAST is scored by the same engine as every local tool and lands in the same generated matrix.
+`scripts/import_gitlab_sast.mjs` converts it and splits the findings by sample, so Advanced SAST is scored by the same engine as every local tool and lands in the same summary.
 
 Without that step its findings would exist only in the GitLab UI, where they could not be checked against the case manifests, and the comparison would come down to trusting a screenshot.
 
 ### Status
 
 Wired but not yet measured.
-The pipeline has not run, so no Advanced SAST column exists in the matrix.
+The pipeline has not run, so no summary has an Advanced SAST row yet.
 Nothing in this repository claims a result before a scan output exists to back it.
 
 ## Other platform features worth using
