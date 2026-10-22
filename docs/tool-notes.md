@@ -10,7 +10,7 @@ The pipeline installs the same versions, with the actions of [github-workflow-pa
 ## Installing the tools
 
 ```bash
-# Semgrep 1.180.0 and Bandit 1.9.4, with every package they need, each checked against the hashes of tools/requirements.txt
+# Semgrep 1.180.0 and Bandit 1.9.4 with its SARIF output, with every package they need, each checked against the hashes of tools/requirements.txt
 python3 -m venv .venv
 .venv/bin/pip install --require-hashes -r tools/requirements.txt
 export PATH="$PWD/.venv/bin:$PATH"
