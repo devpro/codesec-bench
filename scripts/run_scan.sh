@@ -104,6 +104,10 @@ case "${TOOL}" in
     CODEQL_DB="${SAMPLE_DIR}/.codeql-db"
     rm -rf "${CODEQL_DB}"
 
+    # The C# extractor is a .NET program, which aborts on a machine without the ICU library, as a slim image is.
+    # Invariant globalization runs it without ICU, and changes nothing of what it extracts from the code.
+    export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
     run codeql database create "${CODEQL_DB}" \
       --language="${CODEQL_LANGUAGE}" \
       --build-mode=none \
