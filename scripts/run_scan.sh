@@ -114,8 +114,15 @@ case "${TOOL}" in
       --source-root="${SAMPLE_DIR}" \
       --overwrite
 
+    # CodeQL sizes its memory from the machine, and a container limited below it leaves the queries short of heap.
+    # Three quarters of the limit go to CodeQL, the rest to the extractor and the system.
+    RAM_ARGS=()
+    if [ -r /sys/fs/cgroup/memory.max ] && [ "$(cat /sys/fs/cgroup/memory.max)" != max ]; then
+      RAM_ARGS=(--ram="$(( $(cat /sys/fs/cgroup/memory.max) / 1048576 * 3 / 4 ))")
+    fi
+
     if [ "${RUN_STATUS}" -eq 0 ]; then
-      run codeql database analyze "${CODEQL_DB}" ${ARGS} \
+      run codeql database analyze "${CODEQL_DB}" ${ARGS} "${RAM_ARGS[@]}" \
         --format=sarif-latest --output="${TMP}" --threads=0
     fi
 
