@@ -49,7 +49,8 @@ export function extractCwes(...blobs) {
     if (blob === null || blob === undefined) continue;
     const text = typeof blob === "string" ? blob : JSON.stringify(blob);
     for (const match of text.matchAll(CWE_PATTERN)) {
-      const tag = `CWE-${match[1]}`;
+      // CodeQL tags external/cwe/cwe-089 where the manifests say CWE-89, so the number is read without its leading zeros.
+      const tag = `CWE-${Number(match[1])}`;
       if (!found.includes(tag)) found.push(tag);
     }
   }
