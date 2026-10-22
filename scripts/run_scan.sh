@@ -25,6 +25,10 @@ SAMPLE="${1:?usage: run_scan.sh <sample> <tool>}"
 TOOL="${2:?usage: run_scan.sh <sample> <tool>}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# Semgrep, Opengrep and Bandit are Python programs, which read a file with the encoding of the locale, ASCII where none is set, as in a slim image.
+# UTF-8 mode reads the rules and the sources as UTF-8 whatever the locale.
+export PYTHONUTF8=1
 SAMPLE_DIR="${REPO_ROOT}/samples/${SAMPLE}"
 OUT_DIR="${REPO_ROOT}/report/${SAMPLE}"
 
