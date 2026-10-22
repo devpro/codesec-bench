@@ -315,6 +315,9 @@ Only the absent output file does, which is why `scripts/run_scan.sh` refuses to 
 
 After installing Maven and running `mvn dependency:resolve` once to warm `~/.m2`, the same command reported 70 findings and detected Log4Shell at `pom.xml:47`.
 
+The scan now runs with `--offline-scan`, set in the `sample.yaml` of the sample.
+Trivy then reads `pom.xml` alone, still finds Log4Shell and the three other advisories of log4j-core 2.14.1, 7 findings in all, and never reaches Maven Central, whose rate limit a shared runner address hits as easily as a workstation.
+
 The lesson is about the harness as much as the tool.
 A dependency scan can fail for reasons that have nothing to do with the code, and a harness that records the empty result would publish a clean bill of health for a manifest containing the most consequential vulnerability of the last decade.
 

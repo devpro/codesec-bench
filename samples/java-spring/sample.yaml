@@ -14,7 +14,10 @@ scan_roots:
 # A tool absent from this map is skipped for this sample.
 # The community column is configured at its broadest, so that a miss cannot be blamed on rule selection.
 tools:
-  trivy: []
+  # Offline, Trivy reads the pom.xml alone rather than the parent POM from Maven Central, which rate limits shared addresses and makes the scan fail.
+  # It still finds Log4Shell, which the pom.xml pins, and leaves out the advisories of the transitive dependencies only the parent brings in.
+  trivy:
+    - --offline-scan
   codeql:
     - codeql/java-queries:codeql-suites/java-security-extended.qls
   semgrep-community:
