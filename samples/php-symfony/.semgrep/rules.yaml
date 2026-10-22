@@ -1,16 +1,16 @@
 rules:
-  # ─── CWE-918: Server-Side Request Forgery ────────────────────────────────────
+  # CWE-918: Server-Side Request Forgery
   #
   # Strategy: match any HTTP client method call where the URL argument contains a string concatenation.
   # We don't care about the specific client library ($CLIENT covers Symfony, Guzzle, cURL wrappers, etc.) or the HTTP method.
-  # The dangerous pattern is the concatenation itself — any variable joined to a base string before being passed as a URL.
+  # The dangerous pattern is the concatenation itself: any variable joined to a base string before being passed as a URL.
   #
   # More generic than before: the original matched only "$BASE . $ENDPOINT".
   # This version also catches:
   #   - $client->get($base . $path)
   #   - $http->post($host . $userInput, ...)
   #   - $guzzle->request('PUT', $url . $suffix)
-  #   - $curl->send($base . $input . $extra)  ← multi-concat via pattern-either
+  #   - $curl->send($base . $input . $extra)  # multi-concat via pattern-either
 
   - id: ssrf-http-client-url-concatenation
     pattern-either:
@@ -31,16 +31,16 @@ rules:
       references:
         - https://owasp.org/Top10/A10_2021-Server-Side_Request_Forgery_%28SSRF%29/
 
-  # ─── CWE-532: Sensitive Information in Log Files ─────────────────────────────
+  # CWE-532: Sensitive Information in Log Files
   #
   # Strategy: catch any logger call (error, warning, info, debug, critical, etc.) where an exception message is interpolated into the log string, either via sprintf() or via string concatenation.
   # The original only matched sprintf().
   #
   # More generic than before: also catches:
-  #   - $logger->error($e->getMessage())          ← direct pass
-  #   - $logger->warning("failed: " . $e->getMessage())  ← concatenation
-  #   - $this->logger->critical($e->getMessage(), [...])  ← with context array
-  #   - $log->info(sprintf('...%s', $e->getMessage()))    ← sprintf variant
+  #   - $logger->error($e->getMessage())  # direct pass
+  #   - $logger->warning("failed: " . $e->getMessage())  # concatenation
+  #   - $this->logger->critical($e->getMessage(), [...])  # with context array
+  #   - $log->info(sprintf('...%s', $e->getMessage()))  # sprintf variant
 
   - id: sensitive-exception-message-in-log
     pattern-either:
@@ -58,11 +58,11 @@ rules:
       owasp: "A09:2021 - Security Logging and Monitoring Failures"
       confidence: HIGH
 
-  # ─── CWE-396: Catch of Generic Exception Type ────────────────────────────────
+  # CWE-396: Catch of Generic Exception Type
   #
   # Strategy: match catch blocks for both \Throwable and \Exception (the two overly broad base types in PHP).
   #
-  # \Exception misses Errors (type errors, OOM, etc.) but is still too broad in most contexts — both should be flagged and reviewed.
+  # \Exception misses Errors (type errors, OOM, etc.) but is still too broad in most contexts, so both should be flagged and reviewed.
   # The rule intentionally does NOT match specific subtypes like \RuntimeException or \InvalidArgumentException, which are acceptable.
 
   # Measured on Semgrep 1.104.0: PHP try/catch cannot be matched structurally.
