@@ -37,22 +37,24 @@ The SARIF of every scan and `report/summary.md` land in `report/`, which is not 
 
 ## Example run
 
-The summary of the last results committed before runs stopped being kept, with Semgrep 1.166.0, Opengrep 1.22.0 and Trivy 0.73.0.
-A cell is the expected findings a tool detected in a sample, out of all of them.
+A run of the pipeline on 2026-10-22, with the versions of the table above.
+A cell is the expected findings a tool detected in a sample, out of all of them, and false positives are findings in the safe counterpart of a case.
 
 Tool              | Version | dotnet-aspnet | java-spring | php-symfony | python-flask | typescript-express | False positives
 ------------------|---------|---------------|-------------|-------------|--------------|--------------------|----------------
-opengrep          | 1.22.0  | not run       | not run     | 3/5         | not run      | not run            | 1
-semgrep-community | 1.166.0 | 2/11          | 3/11        | 0/5         | 3/11         | 1/10               | 2
-semgrep-custom    | 1.166.0 | not run       | not run     | 3/5         | not run      | not run            | 1
-trivy             | 0.73.0  | 1/11          | 1/11        | not run     | 1/11         | 2/10               | 0
+bandit            | 1.9.4   | not run       | not run     | not run     | 4/11         | not run            | 2
+codeql            | 2.27.2  | 2/11          | 5/11        | not run     | 4/11         | 4/10               | 8
+opengrep          | 1.30.2  | not run       | not run     | 3/5         | not run      | not run            | 1
+semgrep-community | 1.180.0 | 2/11          | 3/11        | 0/5         | 3/11         | 1/10               | 2
+semgrep-custom    | 1.180.0 | not run       | not run     | 3/5         | not run      | not run            | 1
+trivy             | 0.76.0  | 1/11          | 1/11        | not run     | 1/11         | 2/10               | 0
 
-What runs like this one show:
+What this run shows:
 
-- No tool detects a defect that needs following data across files (level 4 of the [difficulty ladder](docs/methodology.md)), in any of the five languages.
-- Secrets are found by their vendor prefix, not by the variable holding them: a `Password=` in a connection string goes unreported.
-- SQL injection is reported at the call that runs the query, not at the line that builds it.
-- A dependency scanner sees nothing without a lock file.
+- Across files (level 4 of the [difficulty ladder](docs/methodology.md)), CodeQL reports where 3 of the 4 flows it can read end, in Java, Python and TypeScript, and never where they start.
+- Behind a guard (level 5), CodeQL reports the guarded call in all four languages it reads, but judges the guard itself only once, in TypeScript, and it reports 8 findings in safe counterparts.
+- Semgrep and CodeQL report a SQL injection at the call running the query, never at the line building it, where Bandit flags the f-string building it.
+- Bandit finds both Python secrets by the names of their variables, Semgrep only the token with a vendor prefix, and no tool the password of the .NET connection string, the Java signing key nor the TypeScript JWT secret.
 
 ## Samples
 
