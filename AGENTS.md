@@ -1,4 +1,4 @@
-# CLAUDE.md
+# codeset-bench: agent context
 
 Guidance for working in this repository.
 
@@ -6,15 +6,25 @@ Guidance for working in this repository.
 
 These rules apply to Markdown, code comments, commit messages, and any prose in scripts.
 
-**One sentence per line.**
-A line break only ever happens at the end of a sentence.
-Never wrap a sentence across two lines.
+**A comment says why, not what, and the why is timeless.**
+The code says what it does.
+A comment records only what cannot be read off it: the failure it prevents, the constraint that made the obvious shape wrong, the alternative rejected and why.
+It is written as if it had always been so.
+Never "used to", never "this replaced", never the story of the session that produced it: a comment is not a conversation log.
+The same rule decides what goes into this file: a decision and its reason, in one or two lines, never a walkthrough of the code.
+
+**One thought per line.**
+Every sentence starts on its own line.
+A long sentence breaks at a clause boundary, never mid-clause and never to fit a width.
 There is no maximum line length: screens are wide, and the 80 character convention is not used here.
 Wrapping is handled by the editor, not by hard newlines.
 
 **Never use the em dash (`—`) or the en dash (`–`).**
 Use a colon when introducing an explanation, a comma when joining clauses, or a full stop and a new sentence.
 This applies to prose, code comments, table cells, and error message strings.
+
+**Conventions are the repository's, never a person's preference.**
+A report states what the repository does, not what the reader asked for.
 
 **Never use the second person.**
 No "you", no "your", not even in placeholders such as `<your-token>`, which should read `<token>`.
