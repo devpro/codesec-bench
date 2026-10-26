@@ -55,6 +55,13 @@ Each sample README is self-sufficient for that sample and links out for anything
 
 Target platform is Linux, including WSL2, and `bash`.
 
+## Push gate
+
+`git push` is gated by [IstarCI](../istarci), a local daemon installed through `.git/hooks/pre-push`.
+It runs the pipelines of `.github/workflows` and `.gitlab-ci.yml` on each commit, and a set of security checks described in `../istarci/docs/security-checks.md`.
+Its secret check runs gitleaks on the commits not yet on any remote.
+gitleaks reads only the lines a commit adds, so a commit that deletes a copy of a planted secret passes the gate, while GitGuardian, which reads removed lines too, raises an incident on it.
+
 ## Hard rules
 
 **Never run a third party container image on this workstation.**

@@ -119,7 +119,7 @@ The samples are built for SAST, but the corpus supports more.
 
 Feature                          | Platform | Status
 ---------------------------------|----------|--------------------------------------------------
-Secret detection                 | Both     | Measured incidentally through push protection
+Secret detection                 | Both     | Measured incidentally through push protection and GitGuardian
 Dependency scanning              | GitLab   | Template included, no vulnerable dependency planted yet
 Container scanning               | Both     | No image built yet
 Security dashboard, MR widgets   | GitLab   | Available once a pipeline runs

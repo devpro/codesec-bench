@@ -268,6 +268,23 @@ It did not object to line 8, a plaintext production database password.
 That is a fifth independent confirmation of the secrets finding above, from a detector built by a different vendor on a different codebase.
 The full account, and why the secret was kept rather than removed, is in [platforms.md](platforms.md).
 
+## GitGuardian
+
+Measured incidentally, through an incident raised on the GitHub repository.
+
+It reported the `sk_live_` token from the Python sample in commit `4c7fa60`, in `results/python-flask/semgrep-community.sarif`.
+That commit deleted the file: GitGuardian scans the removed lines of a diff as well as the added ones, so deleting a copy of a secret raises an incident of its own.
+The literal in `samples/python-flask/src/config.py:9` stays in place, for the reasons given in [platforms.md](platforms.md).
+
+## gitleaks
+
+Measured on 8.30.1, run by IstarCI on each push and by hand on single commits.
+
+`gitleaks git` reads the patch of each commit and reports only the lines it adds.
+On `0fa7de2`, the commit that added the Python sample, the `stripe-access-token` rule reports the `sk_live_` token three times: `src/config.py:9`, the case README and `docs/tool-notes.md`.
+On `4c7fa60`, which deleted a SARIF file holding the same token, it reports nothing, while GitGuardian raised an incident on that commit.
+A secret that is only removed by a commit is therefore seen by GitGuardian and not by gitleaks.
+
 ## Trivy
 
 Measured on 0.73.0, dependency scanning only.
