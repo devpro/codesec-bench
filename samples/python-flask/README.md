@@ -10,12 +10,12 @@ Python has the strongest free tool coverage of any language here, so a miss on t
 
 ## Cases
 
-Case                                                          | Difficulty                 | CWE     | Requires
---------------------------------------------------------------|----------------------------|---------|-----------------------------
-[hardcoded-credential](cases/hardcoded-credential/)           | 1 syntax                   | CWE-798 | Nothing, a literal
-[sql-injection-fstring](cases/sql-injection-fstring/)         | 2 intra-procedural         | CWE-89  | Dataflow inside one function
-[command-injection-helper](cases/command-injection-helper/)   | 3 cross-function           | CWE-78  | A return value across a call
-[path-traversal-crossfile](cases/path-traversal-crossfile/)   | 4 cross-file               | CWE-22  | A call into another module
+Case                                                            | Difficulty               | CWE     | Requires
+----------------------------------------------------------------|--------------------------|---------|-----------------------------
+[hardcoded-credential](cases/hardcoded-credential/)             | 1 syntax                 | CWE-798 | Nothing, a literal
+[sql-injection-fstring](cases/sql-injection-fstring/)           | 2 intra-procedural       | CWE-89  | Dataflow inside one function
+[command-injection-helper](cases/command-injection-helper/)     | 3 cross-function         | CWE-78  | A return value across a call
+[path-traversal-crossfile](cases/path-traversal-crossfile/)     | 4 cross-file             | CWE-22  | A call into another module
 [sanitizer-bypass-traversal](cases/sanitizer-bypass-traversal/) | 5 framework or sanitizer | CWE-22  | Judging a guard inadequate
 
 Run `task report` to see which tools find these cases, as in the [example run](../../README.md#example-run).

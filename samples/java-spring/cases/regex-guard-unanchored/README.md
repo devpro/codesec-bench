@@ -33,7 +33,8 @@ The guard demonstrably rejects something, so it looks tested and correct.
 
 The tool must judge **how the pattern is applied**, not whether validation exists.
 
-`find` versus `matches` is a two character difference that completely changes the meaning, and the surrounding code is otherwise exemplary: a compiled constant `Pattern`, a properly escaped dot, a thrown exception on failure. Everything about it reads as careful.
+`find` versus `matches` is a two character difference that completely changes the meaning, and the surrounding code is otherwise exemplary: a compiled constant `Pattern`, a properly escaped dot, a thrown exception on failure.
+Everything about it reads as careful.
 
 ## What measuring it revealed
 

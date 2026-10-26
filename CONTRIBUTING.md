@@ -67,7 +67,6 @@ One sentence per line, no em dashes, no second person.
 The harness is Node.js and bash only.
 Python appears solely as sample code to be scanned, never as tooling.
 
-
 ## Run the pipeline locally
 
 [IstarCI](https://github.com/devpro/istarci) runs the GitHub Actions pipeline in Docker before the push.

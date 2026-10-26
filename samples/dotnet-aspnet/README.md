@@ -8,7 +8,7 @@ The defects live in the services those actions call, so the flows are genuinely 
 ## Cases
 
 Case                                                    | Difficulty               | CWE              | Requires
---------------------------------------------------------|--------------------------|------------------|-----------------------------
+--------------------------------------------------------|--------------------------|------------------|------------------------------
 [weak-crypto-and-secret](cases/weak-crypto-and-secret/) | 1 syntax                 | CWE-327, CWE-798 | Nothing, single expressions
 [sql-injection-concat](cases/sql-injection-concat/)     | 2 intra-procedural       | CWE-89           | Dataflow inside one method
 [xml-resolver-helper](cases/xml-resolver-helper/)       | 3 cross-function         | CWE-611          | A document across two methods
@@ -44,9 +44,9 @@ That last one is the fourth language in which a hardcoded secret goes unreported
 
 `xml-resolver-helper` is deliberately the mirror image of the Java XXE case.
 
-Sample        | Shape of the defect                             | Detected
---------------|-------------------------------------------------|---------
-java-spring   | **Absence** of hardening calls on the factory    | yes
+Sample        | Shape of the defect                                | Detected
+--------------|----------------------------------------------------|---------
+java-spring   | **Absence** of hardening calls on the factory      | yes
 dotnet-aspnet | **Presence** of a call removing platform hardening | no
 
 Both are single expressions, so both are reachable by a syntactic rule.

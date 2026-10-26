@@ -24,11 +24,11 @@ This is the only sample in the bench where nothing at level 1 is detected, and b
 
 `MD5.Create()` goes unreported here, while the equivalent is reported in other languages:
 
-Sample             | Weak algorithm call            | Detected
--------------------|--------------------------------|---------
-typescript-express | `createHash("md5")`            | yes
+Sample             | Weak algorithm call             | Detected
+-------------------|---------------------------------|-----------
+typescript-express | `createHash("md5")`             | yes
 java-spring        | `Cipher.getInstance("DES/ECB")` | yes, twice
-dotnet-aspnet      | `MD5.Create()`                 | no
+dotnet-aspnet      | `MD5.Create()`                  | no
 
 The same defect class, at the same ladder level, in three languages, with inconsistent coverage.
 Rule packs are not uniform across ecosystems, and a tool comparison run in one language does not transfer to another.

@@ -21,8 +21,8 @@ This is the mirror image of [java-spring/xxe-parser-helper](../../../java-spring
 
 Sample        | Shape of the defect                                | Detected
 --------------|----------------------------------------------------|---------
-java-spring   | **Absence** of hardening calls on the factory       | yes
-dotnet-aspnet | **Presence** of a call removing platform hardening  | no
+java-spring   | **Absence** of hardening calls on the factory      | yes
+dotnet-aspnet | **Presence** of a call removing platform hardening | no
 
 Both are single expressions with a named type, at the same ladder level, in the same vulnerability class.
 Both are reachable by a purely syntactic rule.

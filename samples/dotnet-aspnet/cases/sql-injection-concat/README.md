@@ -20,11 +20,11 @@ It does not report line 29, the concatenation that creates the injection.
 
 This is now the third language showing the same behaviour:
 
-Sample        | Reported                    | Not reported
---------------|-----------------------------|---------------------------
-python-flask  | `cursor.execute(query)`     | the f-string above it
+Sample        | Reported                      | Not reported
+--------------|-------------------------------|---------------------------
+python-flask  | `cursor.execute(query)`       | the f-string above it
 java-spring   | `statement.executeQuery(sql)` | the concatenation above it
-dotnet-aspnet | `new SqlCommand(sql, ...)`  | the concatenation above it
+dotnet-aspnet | `new SqlCommand(sql, ...)`    | the concatenation above it
 
 Three ecosystems, three rule packs, one pattern: **the finding lands on the sink, and the fix belongs on the line that was not flagged.**
 

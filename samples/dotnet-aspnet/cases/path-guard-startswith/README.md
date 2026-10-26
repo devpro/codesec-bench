@@ -39,10 +39,10 @@ It is not a detection in any meaningful sense.
 
 The rule that fires is `unsafe-path-combine`, and it fires in exactly two places:
 
-Location                              | Guarded correctly | Reported
---------------------------------------|-------------------|---------
-`src/ReportFileService.cs:30`         | no                | yes
-`src/Safe/SafeReportFileService.cs:26` | yes              | yes
+Location                               | Guarded correctly | Reported
+---------------------------------------|-------------------|---------
+`src/ReportFileService.cs:30`          | no                | yes
+`src/Safe/SafeReportFileService.cs:26` | yes               | yes
 
 The rule flags path operations indiscriminately.
 It reports the broken guard and the correct guard with equal confidence, because it is not reading the guard at all.
@@ -59,12 +59,12 @@ The false positive column is what carries the correction, and this is precisely 
 
 Every level 5 case in this bench is the same mistake wearing different clothes:
 
-Sample             | Broken guard                              | The fix
--------------------|-------------------------------------------|----------------------------------
-python-flask       | `name.replace("../", "")`                  | `os.path.realpath` then containment
+Sample             | Broken guard                                    | The fix
+-------------------|-------------------------------------------------|------------------------------------
+python-flask       | `name.replace("../", "")`                       | `os.path.realpath` then containment
 typescript-express | `target.startsWith("https://reports.internal")` | `new URL(target).hostname`
-java-spring        | `ALLOWED.matcher(target).find()`           | `URI.create(target).getHost()`
-dotnet-aspnet      | `fullPath.StartsWith(ReportsDirectory)`    | append the separator, then compare
+java-spring        | `ALLOWED.matcher(target).find()`                | `URI.create(target).getHost()`
+dotnet-aspnet      | `fullPath.StartsWith(ReportsDirectory)`         | append the separator, then compare
 
 Three of the four reason about **the shape of a string**.
 The fourth, this one, resolves correctly and then compares carelessly.

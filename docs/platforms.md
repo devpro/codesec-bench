@@ -25,9 +25,9 @@ Five locations were flagged, all the same value: the source literal, the two cop
 What matters is what was **not** flagged.
 `src/config.py` contains two credentials on adjacent lines:
 
-Line | Literal                        | Blocked
------|--------------------------------|--------
-8    | a plaintext production password | no
+Line | Literal                           | Blocked
+-----|-----------------------------------|--------
+8    | a plaintext production password   | no
 9    | a token with an `sk_live_` prefix | yes
 
 This is an independent confirmation of the strongest secrets finding in this repository.
@@ -62,10 +62,10 @@ This is a security repository, so a genuinely leaked credential is a real risk, 
 
 Running CodeQL both here and locally is deliberate, and the two are not expected to agree.
 
-Where            | Configuration                | Question it answers
------------------|------------------------------|-----------------------------------------------
-GitHub workflow  | Default query suite          | What is obtained by enabling code scanning
-Local CLI        | `security-extended` suite    | What the engine is capable of
+Where           | Configuration             | Question it answers
+----------------|---------------------------|-------------------------------------------
+GitHub workflow | Default query suite       | What is obtained by enabling code scanning
+Local CLI       | `security-extended` suite | What the engine is capable of
 
 The Semgrep pack measurements already showed how much configuration matters: `p/python` alone found one of ten expected findings on the Python sample, while adding `p/default` and `p/secrets` found five.
 Reporting a tool at its narrowest setting understates it, and reporting it at its broadest overstates what a team gets by ticking a box.
@@ -118,7 +118,7 @@ Nothing in this repository claims a result before a scan output exists to back i
 The samples are built for SAST, but the corpus supports more.
 
 Feature                          | Platform | Status
----------------------------------|----------|--------------------------------------------------
+---------------------------------|----------|--------------------------------------------------------------
 Secret detection                 | Both     | Measured incidentally through push protection and GitGuardian
 Dependency scanning              | GitLab   | Template included, no vulnerable dependency planted yet
 Container scanning               | Both     | No image built yet

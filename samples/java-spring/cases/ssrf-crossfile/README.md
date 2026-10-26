@@ -26,11 +26,11 @@ Because one measurement is an anecdote and three are a result.
 The PHP miss could be blamed on weak PHP tool support.
 The TypeScript miss removed that explanation, and this one removes the remaining doubt: **Java has the most mature free security tooling of any language here**, and the flow is missed at both the source and the sink.
 
-Ecosystem      | Tool maturity | ssrf-source | ssrf-sink
----------------|---------------|-------------|----------
-php-symfony    | Weak          | no          | no
-typescript-express | Strong    | no          | no
-java-spring    | Strongest     | no          | no
+Ecosystem          | Tool maturity | ssrf-source | ssrf-sink
+-------------------|---------------|-------------|----------
+php-symfony        | Weak          | no          | no
+typescript-express | Strong        | no          | no
+java-spring        | Strongest     | no          | no
 
 Level 4 is a property of the analysis, not of the ecosystem.
 Cross-file taint tracking is the boundary between the free and the commercial tier, and no amount of rule writing crosses it, because the rules are not the limitation.
