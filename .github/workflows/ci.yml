@@ -19,16 +19,16 @@ permissions:
 jobs:
   markup-lint:
     name: Markup
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@bf95c99bf5b5a0bc2d2991c81975488a16f16142
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-markup-lint.yml@1711cf6d760e89fe43e3673dbd8986e355876cca
 
   validate:
     name: Validate the cases
-    uses: devpro/github-workflow-parts/.github/workflows/reusable-node-quality.yml@bf95c99bf5b5a0bc2d2991c81975488a16f16142
+    uses: devpro/github-workflow-parts/.github/workflows/reusable-node-quality.yml@1711cf6d760e89fe43e3673dbd8986e355876cca
     with:
       # Every case manifest against the schema, the files it names and its line anchors, which drift when the code moves.
       custom-tests: node scripts/validate_cases.mjs
       job-name: Validate the cases
-      workflow-parts-version: bf95c99bf5b5a0bc2d2991c81975488a16f16142
+      workflow-parts-version: 1711cf6d760e89fe43e3673dbd8986e355876cca
 
   scan:
     name: Run every tool against every sample
@@ -47,7 +47,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Task
-        uses: devpro/github-workflow-parts/actions/task/setup@bf95c99bf5b5a0bc2d2991c81975488a16f16142
+        uses: devpro/github-workflow-parts/actions/task/setup@1711cf6d760e89fe43e3673dbd8986e355876cca
       # Each tool at the version its install pins, its download checked against a SHA256, rather than the latest one or a script run from a branch.
       - name: Install Semgrep and Bandit
         run: |
@@ -55,11 +55,11 @@ jobs:
           "${RUNNER_TEMP}/venv/bin/pip" install --quiet --require-hashes -r tools/requirements.txt
           echo "${RUNNER_TEMP}/venv/bin" >> "$GITHUB_PATH"
       - name: Install Opengrep
-        uses: devpro/github-workflow-parts/actions/opengrep/setup@bf95c99bf5b5a0bc2d2991c81975488a16f16142
+        uses: devpro/github-workflow-parts/actions/opengrep/setup@1711cf6d760e89fe43e3673dbd8986e355876cca
       - name: Install Trivy
-        uses: devpro/github-workflow-parts/actions/trivy/setup@bf95c99bf5b5a0bc2d2991c81975488a16f16142
+        uses: devpro/github-workflow-parts/actions/trivy/setup@1711cf6d760e89fe43e3673dbd8986e355876cca
       - name: Install CodeQL
-        uses: devpro/github-workflow-parts/actions/codeql/setup@bf95c99bf5b5a0bc2d2991c81975488a16f16142
+        uses: devpro/github-workflow-parts/actions/codeql/setup@1711cf6d760e89fe43e3673dbd8986e355876cca
       - name: Scan and score
         run: task report
       - name: Keep the report
