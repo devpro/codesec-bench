@@ -122,7 +122,7 @@ case "${TOOL}" in
     # Three quarters of the limit go to CodeQL, the rest to the extractor and the system.
     RAM_ARGS=()
     if [ -r /sys/fs/cgroup/memory.max ] && [ "$(cat /sys/fs/cgroup/memory.max)" != max ]; then
-      RAM_ARGS=(--ram="$(( $(cat /sys/fs/cgroup/memory.max) / 1048576 * 3 / 4 ))")
+      RAM_ARGS=(--ram="$(( $(cat /sys/fs/cgroup/memory.max) * 3 / 4 / 1048576 ))")
     fi
 
     if [ "${RUN_STATUS}" -eq 0 ]; then
