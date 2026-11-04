@@ -32,7 +32,7 @@ stages:
 # Without this the findings live only in the GitLab UI and cannot be scored against the case manifests.
 collect-sast-report:
   stage: report
-  image: node:20-alpine
+  image: node:24-alpine
   needs:
     - job: gitlab-advanced-sast
       artifacts: true
@@ -58,7 +58,7 @@ collect-sast-report:
 # a case manifest whose line anchors have drifted away from the code.
 validate-cases:
   stage: test
-  image: node:20-alpine
+  image: node:24-alpine
   script:
     - npm ci
     - node scripts/validate_cases.mjs
